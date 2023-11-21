@@ -1,5 +1,5 @@
 
-
+import numpy as np
 # --------
 def dsigmoid(a):
     return sigmoid(a) * (1 - sigmoid(a))
@@ -99,4 +99,6 @@ def grad_layer(Y_,W_,X_,B_,l,eta):
 
 
 
-grad_layer(Y,W,X,B,l,eta)
+#grad_layer(Y,W,X,B,l,eta)
+
+print(np.random(0,1))
