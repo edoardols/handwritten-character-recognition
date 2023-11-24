@@ -1,8 +1,7 @@
 
 import numpy as np
 # --------
-def dsigmoid(a):
-    return sigmoid(a) * (1 - sigmoid(a))
+
 
 # loss function: sum[y_i - sigma(a_i)]**2
 
@@ -21,15 +20,7 @@ def dsigmoid(a):
 #         sum = sum + least_square(y,w,x,b)
 #     return 1/2 * sum
 
-def delta_error(y,W,X,b):
-    a = activation(W,X,b)
-    return (y - sigmoid(a) ) * ( - dsigmoid(a))
 
-def gradient(y,w,x,b,l):
-    sum = 0
-    for i in range(0,l):
-        sum = sum + delta_error(y[i],w[i],x[i],b[i]) * x[i]
-    return sum
 
 # TODO recursive function
 
