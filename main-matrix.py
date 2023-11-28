@@ -20,11 +20,11 @@ dataset_ncolumn = dataset.shape[1]
 # Number of examples
 l = 100
 # parameters
-X = dataset.iloc[:l, 1:]
-X = X.to_numpy()
+X_D = dataset.iloc[:l, 1:]
+X = X_D.to_numpy()
 
-Y = dataset.iloc[:l, :1]
-Y = Y.to_numpy()
+Y_D = dataset.iloc[:l, :1]
+Y = Y_D[0].to_numpy()
 
 # dim input
 d = dataset_ncolumn - 1
@@ -42,6 +42,8 @@ B = []
 W = []
 
 # W list of matrices
+
+np.random.seed(42)
 
 for i in range(HLNN.shape[0]):
     if i == 0:
@@ -68,6 +70,12 @@ def map_input(X):
     x = (0) + ((float(X) - 0)*(1 - (0)))/(255 - 0)
     return x
 
+def map_label(y):
+    # one hot encode
+    Y = np.zeros(10, dtype = float)
+    Y[y] = 1
+    return Y
+
 # activation
 
 def sigmoid(a):
@@ -82,7 +90,7 @@ def output_layer(W,X,b):
     # K = #neurons layer i
     # N = #neurons layer i-1
     #A = np.full((W.shape[0],1), 0.)
-    A = np.zeros((W.shape[0],1), float)
+    A = np.zeros((W.shape[0],1), dtype = float)
     A = np.dot(W,np.transpose(X)) + np.transpose(b.flatten())
     for i in range(0, len(A)):
         A[i] = sigmoid(A[i])
@@ -109,7 +117,57 @@ def output_for_all_input(W,X,B):
         OUT_NN_ALL.append(output_NN(W,x,B))
     return OUT_NN_ALL
 
+def gradient_descent(W, eta, dfE):
+    # W is a LIST of matrices
+    for k in range(0,len(W)): 
+        # W[k] is a k-th matrix in the W LIST
+        for i in range(0,len(W[k])):
+            # W[k][i] is a i-th row in the k-th matrix
+            for j in range(0,len(W[k][i])):
+                # W[k][i][j] is the i,j element in the k-th matrix
+                W[k][i][j] = W[k][i][j] - eta*dfE
+    return W
+
+# TODO BACKPROP
+
+def epochs_gradient_descent(epochs, X, B, Y, eta):
+    global W
+    for i in range(0,epochs):
+        # calculate output NN
+        out = output_for_all_input(W,X,B)
+        #print(out)
+        # list of output NN for every label
+        Y_NN = []
+
+        # TODO move in the output function
+        for j in range(len(out)):
+            # output of the NN for the single input
+            y_nn = out[j][len(out[0])-1]
+            Y_NN.append(y_nn[0])
+    
+        #dfemprisk = empirical_risk(Y,Y_NN)
+        print('Empirical Risk step ' + str(i) + ' :'+ str(dfemprisk))
+        W = gradient_descent(W, eta, dfemprisk)
+        #print('---------- W ----------')
+        #print(W)
+
+def accuracy(Y,Y_NN):
+    a = 0
+    for i in range(0,len(Y)):
+        # index of the max element in the array
+        # what character the NN thiks it has recognized
+        y_nn = np.argmax(Y_NN[i])
+        y = Y[i]
+        if y_nn == y:
+            a = a + 1
+    a = (a/len(Y))*100
+    return a
+
+print('---------- Training ----------')
+
 #print(X[0])
+
+# This function map pixel input from range [0,255] to range [0,1] it is a normalizzation
 X_MAP = np.full((X.shape[0],X.shape[1]), 0.)
 #print(X_MAP)
 for i in range(0,X.shape[0]):
@@ -118,109 +176,38 @@ for i in range(0,X.shape[0]):
 
 #print(X_MAP[0])
 
+epochs_gradient_descent(10, X, B, Y, eta)
+
+print('---------- Validation ----------')
+
+
+# dataset
+validation_set = pd.read_csv('dataset\mnist_train.csv', header=None)
+
+# structor of the NN
+trainset_nrow = validation_set.shape[0]
+trainset_ncolumn = validation_set.shape[1]
+
+# Number of examples
+l = 100
+# parameters
+XV_D = validation_set.iloc[:l, 1:]
+XV = XV_D.to_numpy()
+
+YV_D = validation_set.iloc[:l, :1]
+YV = YV_D[0].to_numpy()
 
 out = output_for_all_input(W,X,B)
-# print(out[0][len(out[0])-1])
-# print('---------- Training ----------')
 
-Y_NN = []
+# list of output NN for every label
+YV_NN = []
 for j in range(len(out)):
     # output of the NN for the single input
     y_nn = out[j][len(out[0])-1]
-    Y_NN.append(y_nn)
-print(Y_NN)
+    YV_NN.append(y_nn[0])
 
-# # ---------- Training ----------
-
-# def gradient_descent(W, eta, dfE):
-#     # W is a LIST of matrices
-#     for k in range(0,len(W)): 
-#         # W[k] is a k-th matrix in the W LIST
-#         for i in range(0,len(W[k])):
-#             # W[k][i] is a i-th row in the k-th matrix
-#             for j in range(0,len(W[k][i])):
-#                 # W[k][i][j] is the i,j element in the k-th matrix
-#                 W[k][i][j] = W[k][i][j] - eta*dfE
-#     return W
-
-# def epochs_gradient_descent(epochs, X, B, Y, eta):
-#     global W
-#     for i in range(0,epochs):
-#         # calculate output NN
-#         out = output_for_all_input(W,X,B)
-#         #print(out)
-#         # list of output NN for every label
-#         Y_NN = []
-#         for j in range(len(out)):
-#             # output of the NN for the single input
-#             y_nn = out[j][len(out[0])-1]
-#             Y_NN.append(y_nn[0])
-    
-#         dfemprisk = dfempirical_risk(X,Y,Y_NN)
-#         print('Empirical Risk step ' + str(i) + ' :'+ str(dfemprisk))
-#         W = gradient_descent(W, eta, dfemprisk)
-
-
-# epochs_gradient_descent(15, X, B, Y, eta)
-# print('---------- Training ----------')
-
-# print(X[0])
-# for i in range(0,X.shape[0]):
-#     for j in range(0,X.shape[1]):
-#         X[i][j] = map_input(X[i][j])
-# print(X[0])
-
-# epochs_gradient_descent(15, X, B, Y, eta)
-
-# out = output_for_all_input(W,X,B)
-# # list of output NN for every label
-# Y_NN = []
-# for j in range(len(out)):
-#     # output of the NN for the single input
-#     y_nn = out[j][len(out[0])-1]
-#     Y_NN.append(y_nn[0])
-
-
-# # x = np.array(range(0, X.shape[0]))
-# # y = Y
-# # y_nn = Y_NN
-
-# # plt.title("Plotting Target")
-# # plt.xlabel("# Input")
-# # plt.ylabel("Target")
-
-# # plt.plot(x, y, color="red", marker="o", label="Y")
-# # plt.plot(x, y_nn, color="blue", marker="o", label="Y_NN")
-# # plt.legend()
-# # plt.show()
-
-# # ---------- Test ----------
-# print('---------- Test ----------')
-
-# # dataset
-# trainset = pd.read_csv('dataset\mnist_train.csv', header=None)
-
-# # structor of the NN
-# trainset_nrow = trainset.shape[0]
-# trainset_ncolumn = trainset.shape[1]
-
-# # Number of examples
-# l = 100
-# # parameters
-# X = trainset.iloc[:l, 1:]
-# X = X.to_numpy()
-
-# Y = trainset.iloc[:l, :1]
-# Y = Y.to_numpy()
-
-# out = output_for_all_input(W,X,B)
-# # list of output NN for every label
-# Y_NN = []
-# for j in range(len(out)):
-#     # output of the NN for the single input
-#     y_nn = out[j][len(out[0])-1]
-#     Y_NN.append(y_nn[0])
-
+acc = accuracy(YV,YV_NN)
+print(acc)
 
 # x = np.array(range(0, X.shape[0]))
 # y = Y
