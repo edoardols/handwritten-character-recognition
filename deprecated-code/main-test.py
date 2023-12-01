@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 
 # configuration file
 # HLNN have structure [num_layer][num_neuron]
-HLNN =  pd.read_csv('neural\HLNN.csv')
+HLNN =  pd.read_csv('../neural/HLNN.csv')
 # OLNN have structure [num:output]
-OLNN =  pd.read_csv('neural\OLNN.csv')
+OLNN =  pd.read_csv('../neural/OLNN.csv')
 
 # dataset
-dataset = pd.read_csv('dataset\mnist_train.csv', header=None)
+dataset = pd.read_csv('../dataset/mnist_train.csv', header=None)
 
 # structor of the NN
 dataset_nrow = dataset.shape[0]
@@ -30,7 +30,7 @@ Y = Y.to_numpy()
 d = dataset_ncolumn - 1
 
 # learning rate
-eta = 0.1
+eta = 0.01
 
 # output dim
 o = OLNN.iloc[0,1]
@@ -92,13 +92,14 @@ def map_sigmoid(X):
 def activation(W,X,b): # W and X are vectors, b is scalar
     a = 0
     for i in range(len(W)):
-        # a = a + W[i]*X[i]
-        a = a + W[i]*map_sigmoid(X[i])
+        a = a + W[i]*X[i]
+        #a = a + W[i]*map_sigmoid(X[i])
     a = a + b
     return a
 
 # signmoid function
 def sigmoid(a):
+    return a
     if a < -10:
         return 0.000045
     if a > 10:
@@ -162,14 +163,13 @@ def delta_error(y,y_nn):  # Y is the target, Y_NN in the output of the NN for a 
     #error = (y_comparable - sigmoid(a) )
     #error = (y - y_nn )
     #error = (y - map_output_NN(sigmoid(y_nn)) ) * ( - dsigmoid(y_nn))
-    error = (y - y_nn )
+    #error = (map_output(y) - y_nn )
     #y_nn = map_sigmoid(y_nn)
     #error = (map_output(y) - sigmoid(y_nn)) * ( - dsigmoid(y_nn))
+    error = (y - y_nn)
     return error
 
 def dfempirical_risk(X,Y, Y_NN):
-    print('---------- Y_NN ----------')
-    print(y_nn)
     sum = 0
     for i in range(0,X.shape[0]):
         sum = sum + (delta_error(Y[i], Y_NN[i]))**2
@@ -200,18 +200,22 @@ def epochs_gradient_descent(epochs, X, B, Y, eta):
             Y_NN.append(y_nn[0])
     
         dfemprisk = dfempirical_risk(X,Y,Y_NN)
+        if dfemprisk < 0.003:
+            break
         print('Empirical Risk step ' + str(i) + ' :'+ str(dfemprisk))
+        if dfemprisk > 100:
+            dfemprisk = 99
         W = gradient_descent(W, eta, dfemprisk)
 
 # ---------- Training ----------
 
 print('---------- Training ----------')
 
-print(X[0])
-for i in range(0,X.shape[0]):
-    for j in range(0,X.shape[1]):
-        X[i][j] = map_input(X[i][j])
-print(X[0])
+# print(X[0])
+# for i in range(0,X.shape[0]):
+#     for j in range(0,X.shape[1]):
+#         X[i][j] = map_input(X[i][j])
+# print(X[0])
 
 epochs_gradient_descent(15, X, B, Y, eta)
 
@@ -241,7 +245,7 @@ for j in range(len(out)):
 print('---------- Test ----------')
 
 # dataset
-trainset = pd.read_csv('dataset\mnist_train.csv', header=None)
+trainset = pd.read_csv('../dataset/mnist_train.csv', header=None)
 
 # structor of the NN
 trainset_nrow = trainset.shape[0]

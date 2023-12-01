@@ -2,14 +2,14 @@ import pandas as pd
 import numpy as np
 import math
 
-import matplotlib.pyplot as plt
-
 # configuration file
+# HLNN have structure [num_layer][num_neuron]
+HLNN = pd.read_csv('../neural/HLNN.csv')
 # OLNN have structure [num:output]
-OLNN =  pd.read_csv('neural\OLNN.csv')
+OLNN = pd.read_csv('../neural/OLNN.csv')
 
 # dataset
-dataset = pd.read_csv('dataset\mnist_train.csv', header=None)
+dataset = pd.read_csv('../dataset/mnist_train.csv', header=None)
 
 # structor of the NN
 dataset_nrow = dataset.shape[0]
@@ -28,22 +28,40 @@ Y = Y_D[0].to_numpy()
 d = dataset_ncolumn - 1
 
 # learning rate
-eta = 0.1
+eta = 0.01
 
 # output dim
 o = OLNN.iloc[0,1]
 # initialization output
 output_NN = [0] * o
-#Y_NN = np.zeros((o), dtype = float)
 
 # Layout Neural Network
 np.random.seed(42)
 
-# W is a matrix
-W = np.random.uniform(low=-1, high=1, size=(o,d))
+# Layout Neural Network
+# W is a list of matrix
+W = []
+# B is a list of vector
+B = []
 
-# B Vector
-B = np.full(o, -10.)
+for i in range(HLNN.shape[0]):
+    if i == 0:
+        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0,1],d))
+    else:
+        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[i, 1], HLNN.iloc[i - 1, 1]))
+    W.append(w)
+
+w = np.random.uniform(low=-1, high=1, size=(o,HLNN.iloc[HLNN.shape[0]-1,1]))
+W.append(w)
+
+# B list of vectors
+for i in range(HLNN.shape[0]):
+    b = np.full((HLNN.iloc[i, 1], 1), 0.)
+    B.append(b)
+
+# only for computational reasons
+b = np.full((len(output_NN),1), 0.)
+B.append(b)
 
 ############### FUNCTIONS ################
 
@@ -55,7 +73,7 @@ def map_input(X):
 
 def map_label(y):
     # one hot encoding
-    Y = np.zeros((10,1), dtype = float)
+    Y = np.zeros(10, dtype=float)
     Y[y] = 1
     return Y
 
@@ -67,7 +85,8 @@ def sigmoid(a):
     return 1 / (1 + math.exp(-a))
 
 def dsigmoid(a):
-    return sigmoid(a) * (1 - sigmoid(a))
+    ds = sigmoid(a) * (1 - sigmoid(a))
+    return ds
 
 sigMatrix = np.vectorize(sigmoid)
 dsigMatrix = np.vectorize(dsigmoid)
@@ -85,14 +104,8 @@ def delta_error(Y, W, X, B):
     # X is a single vector input
     A = np.zeros((len(W)), dtype = float)
     A = activation(W, X, B)
-    # print('Y: ', Y)
-    # print('W: ', W)
-    # print('X: ', X)
-    # print('B: ', B)
-    de = -(Y - sigMatrix(A) )*dsigMatrix(A)
-    #print('Y: ', Y)
-    #print('sig: ', sigMatrix(A))
-    #print('dsi: ', dsigMatrix(A))
+    y = map_label(Y)
+    de = -(y - sigMatrix(A) )*dsigMatrix(A)
     return de
 
 def empirical_risk(Y, W, X, B):
@@ -109,45 +122,39 @@ def loss_function(Y, W, X, B):
     # X is the batch of examples
     for i in range(0, len(X)):
         E = E + empirical_risk(Y[i], W, X[i], B)
-        # for i in range(0, len(E)):
-        #     print('E:', E[i])
     return E
 
 def gradient_descent(Y, W, X, B, eta):
     E = loss_function(Y, W, X, B)
-    #print('E:', E)
-    #print('W1:', W)
-    #W = W - np.dot(eta, E)
     W = W - eta*E
-    #print('W2:', W)
     return W
 
 def epochs_gradient_descent(epochs, Y, X, B, eta):
     global W
-    for i in range(0,epochs):
-        #print('i:', i)
+    for i in range(0, epochs):
+        print('epoch: ', i)
         W = gradient_descent(Y, W, X, B, eta)
 
 print('---------- Training ----------')
 
-#print(X[0])
-
-# This function map pixel input from range [0,255] to range [0,1] it is a normalizzation
+# This function map pixel input from range [0,255] to range [0,1] it is a normalization
 X_MAP = np.full((X.shape[0],X.shape[1]), 0.)
 #print(X_MAP)
 for i in range(0,X.shape[0]):
     for j in range(0,X.shape[1]):
         X_MAP[i][j] = map_input(X[i][j])
 
-#print(X_MAP[0])
+epochs = 100
+epochs_gradient_descent(epochs, Y, X_MAP, B, eta)
 
-epochs_gradient_descent(20, Y, X_MAP, B, eta)
+wdf = pd.DataFrame(W)
+
+wdf.to_csv("weight-post-" + str(epochs) + ".csv", encoding='utf-8', header=False, index=False)
 
 print('---------- Validation ----------')
 
-
 # dataset
-validation_set = pd.read_csv('dataset\mnist_train.csv', header=None)
+validation_set = pd.read_csv('../dataset/mnist_train.csv', header=None)
 
 # structor of the NN
 trainset_nrow = validation_set.shape[0]
@@ -163,7 +170,6 @@ YV_D = validation_set.iloc[:l, :1]
 YV = YV_D[0].to_numpy()
 
 XV_MAP = np.full((XV.shape[0],XV.shape[1]), 0.)
-#print(X_MAP)
 for i in range(0,XV.shape[0]):
     for j in range(0,XV.shape[1]):
         XV_MAP[i][j] = map_input(XV[i][j])
@@ -172,32 +178,16 @@ for i in range(0,XV.shape[0]):
 
 def accuracy(Y, W, X, B):
     a = 0
-    #print('len X:', len(X))
-    #print('len Y:', len(Y))
     for i in range(0,len(X)):
         A = activation(W,X[i],B)
         Y_NN = sigMatrix(A)
         # index of the max element in the array
-        # what character the NN thiks it has recognized
+        # what character the NN thinks it has recognized
         y_nn = np.argmax(Y_NN)
         if y_nn == Y[i]:
             a = a + 1
         a = (a/len(Y))*100
     return a
 
-
 acc = accuracy(YV, W, XV_MAP, B)
 print(acc)
-
-# x = np.array(range(0, X.shape[0]))
-# y = Y
-# y_nn = Y_NN
-
-# plt.title("Plotting Target")
-# plt.xlabel("# Input")
-# plt.ylabel("Target")
-
-# plt.plot(x, y, color="red", marker="o", label="Y")
-# plt.plot(x, y_nn, color="blue", marker="o", label="Y_NN")
-# plt.legend()
-# plt.show()

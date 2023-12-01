@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 
 # configuration file
 # OLNN have structure [num:output]
-OLNN =  pd.read_csv('neural\OLNN.csv')
+OLNN =  pd.read_csv('../neural/OLNN.csv')
 
 # dataset
-dataset = pd.read_csv('dataset\mnist_train.csv', header=None)
+dataset = pd.read_csv('../dataset/mnist_train.csv', header=None)
 
 # structor of the NN
 dataset_nrow = dataset.shape[0]
@@ -190,7 +190,7 @@ print('---------- Validation ----------')
 
 
 # dataset
-validation_set = pd.read_csv('dataset\mnist_train.csv', header=None)
+validation_set = pd.read_csv('../dataset/mnist_train.csv', header=None)
 
 # structor of the NN
 trainset_nrow = validation_set.shape[0]
