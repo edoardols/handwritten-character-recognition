@@ -2,11 +2,13 @@ import pandas as pd
 import numpy as np
 import math
 
+
 def map_input(X):
     # input [0,255]
     # sigmoid [0,1]
     x = (0) + ((float(X) - 0) * (1 - (0))) / (255 - 0)
     return x
+
 
 def sigmoid(a):
     if a < -10:
@@ -24,6 +26,7 @@ def dsigmoid(a):
 sigMatrix = np.vectorize(sigmoid)
 dsigMatrix = np.vectorize(dsigmoid)
 
+
 def activation(W, X, B):
     # W dxO is a matrix and X is a dx1 and B is a 0x1 vectors
     # O = #neurons in output
@@ -32,15 +35,15 @@ def activation(W, X, B):
     A = np.dot(W, np.transpose(X)) + B
     return A
 
+
 print('---------- Validation ----------')
 
 W = pd.read_csv('weight-post-1000.csv', header=None)
 
 B = np.full(10, -10.)
 
-
-# dataset 10000
-validation_set = pd.read_csv('../dataset/mnist_test.csv', header=None)
+# data 10000
+validation_set = pd.read_csv('../../../data/mnist_test.csv', header=None)
 
 # structure of the NN
 trainset_nrow = validation_set.shape[0]
@@ -50,10 +53,10 @@ trainset_ncolumn = validation_set.shape[1]
 l = 100
 # parameters
 XV_D = validation_set.iloc[:l, 1:]
-#XV_D = validation_set.iloc[:, 1:]
+# XV_D = validation_set.iloc[:, 1:]
 XV = XV_D.to_numpy()
 
-#YV_D = validation_set.iloc[:, :1]
+# YV_D = validation_set.iloc[:, :1]
 YV_D = validation_set.iloc[:l, :1]
 YV = YV_D[0].to_numpy()
 

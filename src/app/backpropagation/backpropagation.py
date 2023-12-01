@@ -4,12 +4,12 @@ import math
 
 # configuration file
 # HLNN have structure [num_layer][num_neuron]
-HLNN = pd.read_csv('../neural/HLNN.csv')
+HLNN = pd.read_csv('../structure_neural_network/forward/HLNN.csv')
 # OLNN have structure [num:output]
-OLNN = pd.read_csv('../neural/OLNN.csv')
+OLNN = pd.read_csv('../structure_neural_network/forward/OLNN.csv')
 
-# dataset
-dataset = pd.read_csv('../dataset/mnist_train.csv', header=None)
+# data
+dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # structor of the NN
 dataset_nrow = dataset.shape[0]
@@ -153,8 +153,8 @@ wdf.to_csv("weight-post-" + str(epochs) + ".csv", encoding='utf-8', header=False
 
 print('---------- Validation ----------')
 
-# dataset
-validation_set = pd.read_csv('../dataset/mnist_train.csv', header=None)
+# data
+validation_set = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # structor of the NN
 trainset_nrow = validation_set.shape[0]

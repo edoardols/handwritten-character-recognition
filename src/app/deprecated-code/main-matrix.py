@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 
 # configuration file
 # HLNN have structure [num_layer][num_neuron]
-HLNN =  pd.read_csv('../neural/HLNN.csv')
+HLNN =  pd.read_csv('../structure_neural_network/forward/HLNN.csv')
 # OLNN have structure [num:output]
-OLNN =  pd.read_csv('../neural/OLNN.csv')
+OLNN =  pd.read_csv('../structure_neural_network/forward/OLNN.csv')
 
-# dataset
-dataset = pd.read_csv('../dataset/mnist_train.csv', header=None)
+# data
+dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # structor of the NN
 dataset_nrow = dataset.shape[0]
@@ -181,8 +181,8 @@ epochs_gradient_descent(10, X, B, Y, eta)
 print('---------- Validation ----------')
 
 
-# dataset
-validation_set = pd.read_csv('../dataset/mnist_train.csv', header=None)
+# data
+validation_set = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # structor of the NN
 trainset_nrow = validation_set.shape[0]
