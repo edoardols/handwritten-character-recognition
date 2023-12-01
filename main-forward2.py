@@ -16,7 +16,7 @@ dataset_nrow = dataset.shape[0]
 dataset_ncolumn = dataset.shape[1]
 
 # Number of examples
-l = 1000
+l = 5000
 # parameters
 X_D = dataset.iloc[:l, 1:]
 X = X_D.to_numpy()
@@ -28,7 +28,7 @@ Y = Y_D[0].to_numpy()
 d = dataset_ncolumn - 1
 
 # learning rate
-eta = 0.01
+eta = 0.1
 
 # output dim
 o = OLNN.iloc[0,1]
@@ -40,7 +40,7 @@ output_NN = [0] * o
 np.random.seed(42)
 
 # W is a matrix
-W = np.random.uniform(low=-10, high=10, size=(o,d))
+W = np.random.uniform(low=-1, high=1, size=(o,d))
 
 # B Vector
 B = np.full(o, -10.)
@@ -80,96 +80,53 @@ def activation(W,X,B):
     A = np.dot(W,np.transpose(X)) + B
     return A
 
-# def output_NN(W,X,B):
-#     # W (KxN) is a matrix and X (Nx1) and b (Kx1) are vectors
-#     # K = #neurons layer i
-#     # N = #neurons layer i-1
-#     A = np.zeros((len(W)), dtype = float)
-#     A = np.dot(W,np.transpose(X)) + B
-#     return sigMatrix(A)
+def delta_error(Y, W, X, B):
+    # Y is a single label
+    # X is a single vector input
+    A = np.zeros((len(W)), dtype = float)
+    A = activation(W, X, B)
+    # print('Y: ', Y)
+    # print('W: ', W)
+    # print('X: ', X)
+    # print('B: ', B)
+    de = -(Y - sigMatrix(A) )*dsigMatrix(A)
+    #print('Y: ', Y)
+    #print('sig: ', sigMatrix(A))
+    #print('dsi: ', dsigMatrix(A))
+    return de
 
-def gradient_descent(W, X, eta, dfE):
-    # TODO
-    # W = W - eta*X*derror
-    # W is oxd
-    # X is 1xd
-    print('dfe ', dfE.shape)
-    print('X', X.shape)
-    print('W', W.shape)
-    #print(W)
-    for i in range(0,len(X)):
-        #W = W - eta*np.dot(np.transpose(X[i]),dfE[i])
-        #print(dfE)
-        d_dot = dfE[i].reshape(-1,1)
-        x_dot = X[i].reshape(1, -1)
-        Z = np.dot(d_dot, x_dot)
-        #print(np.size(Z))
-        W = W - eta*Z
-    #print(W)
-    # print(dfE)
-    # print('------')
-    # print(W)
-    # for i in range(0,len(W)):
-    #     # W[i] is a i-th row in the W matrix
-    #     for j in range(0,len(W[i])):
-    #         # W[i][j] is the i,j element in the W matrix
-    #         #print(W[i][j])
-    #         W[i][j] = W[i][j] - eta*dfE
+def empirical_risk(Y, W, X, B):
+    # X is a single input vector
+    de = delta_error(Y, W, X, B)
+    de = de.reshape(-1,1)
+    X = X.reshape(-1,1)
+    X = np.transpose(X)
+    e = np.dot(de, X)
+    return e
+
+def loss_function(Y, W, X, B):
+    E = 0
+    # X is the batch of examples
+    for i in range(0, len(X)):
+        E = E + empirical_risk(Y[i], W, X[i], B)
+        # for i in range(0, len(E)):
+        #     print('E:', E[i])
+    return E
+
+def gradient_descent(Y, W, X, B, eta):
+    E = loss_function(Y, W, X, B)
+    #print('E:', E)
+    #print('W1:', W)
+    #W = W - np.dot(eta, E)
+    W = W - eta*E
+    #print('W2:', W)
     return W
 
-def delta_error(Y, W, X, B):
-    A = activation(W,X,B)
-    E = (Y - sigMatrix(A) )*dsigMatrix(A)
-    d_error = np.dot(E,X)
-    #print('---')
-    #print(sigMatrix(A))
-    #print(np.sum(d_error))
-    print('--- derror')
-    print(d_error)
-    return d_error
-    #print(d_error)
-    return np.sum(d_error)
-
-# TEST
-# X_MAP = np.full((X.shape[0],X.shape[1]), 0.)
-# #print(X_MAP)
-# for i in range(0,X.shape[0]):
-#     for j in range(0,X.shape[1]):
-#         X_MAP[i][j] = map_input(X[i][j])
-
-# test = output_NN(W,X_MAP[0],B)
-
-# o = delta_error(Y, W, X_MAP[0], B)
-
-# print(o)
-
-
-
-
-def epochs_gradient_descent(epochs, X, B, Y, eta):
+def epochs_gradient_descent(epochs, Y, X, B, eta):
     global W
-    for j in range(0,epochs):
-        de = 0
-        for i in range(0,len(X)):
-            y = map_label(Y[i])
-            de = de + delta_error(y, W, X[i], B)
-            W = gradient_descent(W, X, eta, de)
-        #print('Empirical Risk step ' + str(j) + ' :'+ str(de))
-        
-        # print('---------- W ----------')
-        # print(W)
-
-def accuracy(Y,Y_NN):
-    a = 0
-    for i in range(0,len(Y)):
-        # index of the max element in the array
-        # what character the NN thiks it has recognized
-        y_nn = np.argmax(Y_NN[i])
-        y = Y[i]
-        if y_nn == y:
-            a = a + 1
-    a = (a/len(Y))*100
-    return a
+    for i in range(0,epochs):
+        #print('i:', i)
+        W = gradient_descent(Y, W, X, B, eta)
 
 print('---------- Training ----------')
 
@@ -184,7 +141,7 @@ for i in range(0,X.shape[0]):
 
 #print(X_MAP[0])
 
-epochs_gradient_descent(50, X_MAP, B, Y, eta)
+epochs_gradient_descent(20, Y, X_MAP, B, eta)
 
 print('---------- Validation ----------')
 
@@ -212,13 +169,24 @@ for i in range(0,XV.shape[0]):
         XV_MAP[i][j] = map_input(XV[i][j])
 
 # list of output NN for every label
-YV_NN = []
-for i in range(len(XV)):
-    # output of the NN for the single input
-    y_nn = sigMatrix(activation(W,XV_MAP[i],B))
-    YV_NN.append(y_nn)
 
-acc = accuracy(YV,YV_NN)
+def accuracy(Y, W, X, B):
+    a = 0
+    #print('len X:', len(X))
+    #print('len Y:', len(Y))
+    for i in range(0,len(X)):
+        A = activation(W,X[i],B)
+        Y_NN = sigMatrix(A)
+        # index of the max element in the array
+        # what character the NN thiks it has recognized
+        y_nn = np.argmax(Y_NN)
+        if y_nn == Y[i]:
+            a = a + 1
+        a = (a/len(Y))*100
+    return a
+
+
+acc = accuracy(YV, W, XV_MAP, B)
 print(acc)
 
 # x = np.array(range(0, X.shape[0]))
