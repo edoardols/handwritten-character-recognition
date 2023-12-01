@@ -1,14 +1,12 @@
 import pandas as pd
 import numpy as np
 
-from src.lib.mapping import input_normalization, one_hot_encode
-from src.lib.sigmoid import sigmoid, dsigmoid
-from src.lib.mean_square_error import delta_error, empirical_risk, loss_function
-from src.lib.activation import activation
+from src.lib.mapping import input_normalization_Matrix
+from src.lib.gradient import gradient_descent
 
 # configuration file
 # OLNN have structure [num:output]
-OLNN = pd.read_csv('../structure_neural_network/forward/OLNN.csv')
+OLNN = pd.read_csv('OLNN.csv')
 
 # data 60000
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
@@ -18,18 +16,19 @@ dataset_nrow = dataset.shape[0]
 dataset_ncolumn = dataset.shape[1]
 
 # Number of examples
-# l = 5000
+l = 5000
 # parameters
-# X_D = data.iloc[:l, 1:]
-X_D = dataset.iloc[:, 1:]
+X_D = dataset.iloc[:l, 1:]
+#X_D = dataset.iloc[:, 1:]
 X = X_D.to_numpy()
 
-# Y_D = data.iloc[:l, :1]
-Y_D = dataset.iloc[:, :1]
+Y_D = dataset.iloc[:l, :1]
+#Y_D = dataset.iloc[:, :1]
 Y = Y_D[0].to_numpy()
 
 # dim input
-d = dataset_ncolumn - 1
+#d = dataset_ncolumn - 1
+d = len(X)
 
 # learning rate
 eta = 0.01
@@ -50,23 +49,6 @@ W = pd.read_csv('weight-pre.csv', header=None)
 # B Vector
 B = np.full(o, -10.)
 
-
-############### FUNCTIONS ################
-
-
-
-
-
-
-
-
-
-def gradient_descent(Y, W, X, B, eta):
-    E = loss_function(Y, W, X, B)
-    W = W - eta * E
-    return W
-
-
 def epochs_gradient_descent(epochs, Y, X, B, eta):
     global W
     for i in range(0, epochs):
@@ -77,14 +59,16 @@ def epochs_gradient_descent(epochs, Y, X, B, eta):
 print('---------- Training ----------')
 
 # This function map pixel input from range [0,255] to range [0,1] it is a normalization
-X_MAP = np.full((X.shape[0], X.shape[1]), 0.)
+#X_MAP = np.full((X.shape[0], X.shape[1]), 0.)
 # print(X_MAP)
-for i in range(0, X.shape[0]):
-    for j in range(0, X.shape[1]):
-        X_MAP[i][j] = input_normalization(X[i][j])
+#for i in range(0, X.shape[0]):
+#    for j in range(0, X.shape[1]):
+#        X_MAP[i][j] = input_normalization(X[i][j])
+
+X = input_normalization_Matrix(X)
 
 epochs = 1000
-epochs_gradient_descent(epochs, Y, X_MAP, B, eta)
+epochs_gradient_descent(epochs, Y, X, B, eta)
 
 wdf = pd.DataFrame(W)
 

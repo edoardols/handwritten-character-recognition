@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 # configuration file
 # OLNN have structure [num:output]
-OLNN =  pd.read_csv('../structure_neural_network/forward/OLNN.csv')
+OLNN =  pd.read_csv('../forward/OLNN.csv')
 
 # data
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
