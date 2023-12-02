@@ -4,7 +4,7 @@ import math
 
 # configuration file
 # OLNN have structure [num:output]
-OLNN = pd.read_csv('OLNN.csv')
+OLNN = pd.read_csv('../forward/OLNN.csv')
 
 # data 60000
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
@@ -41,7 +41,7 @@ np.random.seed(42)
 # W is a matrix
 # W = np.random.uniform(low=-1, high=1, size=(o,d))
 
-W = pd.read_csv('weight-pre.csv', header=None)
+W = pd.read_csv('../forward/weight-pre.csv', header=None)
 
 # B Vector
 B = np.full(o, -10.)
