@@ -128,8 +128,6 @@ def gradient_descent(W, eta, dfE):
                 W[k][i][j] = W[k][i][j] - eta*dfE
     return W
 
-# TODO BACKPROP
-
 def epochs_gradient_descent(epochs, X, B, Y, eta):
     global W
     for i in range(0,epochs):
@@ -139,7 +137,7 @@ def epochs_gradient_descent(epochs, X, B, Y, eta):
         # list of output NN for every label
         Y_NN = []
 
-        # TODO move in the output function
+
         for j in range(len(out)):
             # output of the NN for the single input
             y_nn = out[j][len(out[0])-1]

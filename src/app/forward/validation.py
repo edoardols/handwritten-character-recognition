@@ -26,4 +26,4 @@ file_name = 'W-1L-F-batch-l=5000-epoch=1000.csv'
 W = pd.read_csv('weight-csv/' + file_name, header=None)
 B = np.full(10, -10.)
 
-print(accuracy(YV, W, XV, B))
+print(accuracy(YV, W, XV, B), "%")

@@ -15,4 +15,4 @@ def accuracy(Y, W, X, B):
         if y_nn == Y[i]:
             a = a + 1
         a = (a / len(Y)) * 100
-    return a
+    return int(a)

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 from src.lib.mapping import input_normalization_Matrix
-from src.lib.gradient import gradient_descent
+from src.lib.forward.gradient import gradient_descent_algorithm
 
 # configuration file
 # OLNN have structure [num:output]
@@ -46,7 +46,7 @@ X = input_normalization_Matrix(X)
 epochs = 1000
 learning_mode = 'batch'
 
-W = gradient_descent(Y, W, X, B, ETA, epochs)
+W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
 
 weight = pd.DataFrame(W)
 # W-1L-batch-epochs

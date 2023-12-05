@@ -89,7 +89,6 @@ def activation(W,X,B):
 #     return sigMatrix(A)
 
 def gradient_descent(W, X, eta, dfE):
-    # TODO
     # W = W - eta*X*derror
     # W is oxd
     # X is 1xd

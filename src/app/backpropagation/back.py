@@ -1,8 +1,6 @@
 import pandas as pd
 import numpy as np
-
-from src.lib.mapping import input_normalization_Matrix
-from src.lib.backprop.gradient import gradient_descent_algorithm
+import math
 
 # configuration file
 # HLNN have structure [num_layer][num_neuron]
@@ -10,27 +8,32 @@ HLNN = pd.read_csv('../forward/HLNN.csv')
 # OLNN have structure [num:output]
 OLNN = pd.read_csv('../forward/OLNN.csv')
 
+# data
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
+
+# structor of the NN
+dataset_nrow = dataset.shape[0]
+dataset_ncolumn = dataset.shape[1]
 
 # Number of examples
 l = 5000
-
+# parameters
 X_D = dataset.iloc[:l, 1:]
-#X_D = dataset.iloc[:, 1:]
 X = X_D.to_numpy()
 
 Y_D = dataset.iloc[:l, :1]
-#Y_D = dataset.iloc[:, :1]
 Y = Y_D[0].to_numpy()
 
 # dim input
-INPUT_DIMENSION = len(X[0])
+d = dataset_ncolumn - 1
 
 # learning rate
-ETA = 0.01
+eta = 0.01
 
 # output dim
-OUTPUT_DIMENSION = OLNN.iloc[0, 1]
+o = OLNN.iloc[0, 1]
+# initialization output
+output_NN = [0] * o
 
 # Layout Neural Network
 np.random.seed(42)
@@ -43,12 +46,12 @@ B = []
 
 for i in range(HLNN.shape[0]):
     if i == 0:
-        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0, 1], INPUT_DIMENSION))
+        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0,1], d))
     else:
         w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[i, 1], HLNN.iloc[i - 1, 1]))
     W.append(w)
 
-w = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, HLNN.iloc[HLNN.shape[0]-1, 1]))
+w = np.random.uniform(low=-1, high=1, size=(o,HLNN.iloc[HLNN.shape[0]-1,1]))
 W.append(w)
 
 # B list of vectors
@@ -57,23 +60,6 @@ for i in range(HLNN.shape[0]):
     B.append(b)
 
 # only for computational reasons
-b = np.full((OUTPUT_DIMENSION, 1), 0.)
+b = np.full((len(output_NN),1), 0.)
 B.append(b)
 
-print('---------- Training ----------')
-
-X = input_normalization_Matrix(X)
-
-epochs = 1000
-learning_mode = 'batch'
-
-
-
-W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
-
-weight = pd.DataFrame(W)
-# W-1L-batch-epochs
-
-file_name = 'W-1L-B-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs)
-
-weight.to_csv('weight-csv/' + file_name + '.csv', encoding='utf-8', header=False, index=False)
