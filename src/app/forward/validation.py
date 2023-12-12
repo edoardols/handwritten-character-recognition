@@ -10,14 +10,14 @@ print('---------- Validation ----------')
 validation_set = pd.read_csv('../../../data/mnist_test.csv', header=None)
 
 # Number of examples
-l = 100
+l = 10000
 # parameters
 XV_D = validation_set.iloc[:l, 1:]
-# XV_D = validation_set.iloc[:, 1:]
+#XV_D = validation_set.iloc[:, 1:]
 XV = XV_D.to_numpy()
 
-# YV_D = validation_set.iloc[:, :1]
 YV_D = validation_set.iloc[:l, :1]
+#YV_D = validation_set.iloc[:, :1]
 YV = YV_D[0].to_numpy()
 
 XV = input_normalization_Matrix(XV)

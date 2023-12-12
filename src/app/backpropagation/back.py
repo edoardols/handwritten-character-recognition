@@ -46,7 +46,7 @@ B = []
 
 for i in range(HLNN.shape[0]):
     if i == 0:
-        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0,1], d))
+        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0, 1], d))
     else:
         w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[i, 1], HLNN.iloc[i - 1, 1]))
     W.append(w)

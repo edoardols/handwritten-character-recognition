@@ -10,8 +10,17 @@ def gradient_descent_algorithm(Y, W, X, B, ETA, epochs=1):
     # W and B are list of matrix
     for e in range(0, epochs):
         for i in range(0, len(W)):
+            indexLayer = i
+            # Check for which layer we are in
+            layer = 'hidden'
+            if i == 0:
+                layer = 'output'
+            if i == len(W)-1:
+                layer = 'input'
+
             # gradient descent
-            layer_index = i
-            E = empirical_risk(Y, W, X, B, layer_index)
+            # W is a matrix
+            # B is a vector
+            E = empirical_risk(Y, W[i], X, B[i], indexLayer, layer)
             W[i] = W[i] - ETA * E
     return W

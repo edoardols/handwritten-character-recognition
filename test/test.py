@@ -30,3 +30,10 @@ def sum():
 print(a)
 sum()
 print(a)
+
+
+v = [[1, 2], [2, 3]]
+u = [[1, 2], [2, 3]]
+
+z = v[1] - u[1]
+print(z)

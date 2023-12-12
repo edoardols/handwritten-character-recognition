@@ -14,5 +14,5 @@ def accuracy(Y, W, X, B):
         y_nn = np.argmax(Y_NN)
         if y_nn == Y[i]:
             a = a + 1
-        a = (a / len(Y)) * 100
+    a = (a / len(Y)) * 100
     return int(a)

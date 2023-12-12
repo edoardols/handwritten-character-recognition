@@ -26,6 +26,7 @@ def empirical_risk(Y, W, X, B):
 
 
 def loss_function(Y, W, X, B):
+    # TODO swap name
     E = 0
     # X is the batch of examples
     for i in range(0, len(X)):

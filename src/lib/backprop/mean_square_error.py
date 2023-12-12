@@ -20,72 +20,82 @@ def output(W, X, B):
         Y_NN[i] = sigMatrix(A)
     return Y_NN
 
-def delta_error(Y, W, X, B, Y_NN):
+def delta_error(Y, W, X, B, Y_NN, DE, indexLayer, layer):
     # X is single example
     # W is a matrix
     # B is a vector
 
     # OUTPUT "for i=0"
+    A = np.zeros((len(W)), dtype=float)
+    A = activation(W, X, B)
+    if layer == 'output':
 
-
-    if i == 'output':
-        A = np.zeros((len(W)), dtype=float)
-        A = activation(W, X, B)
+        #X = Y_NN[i-1]
+        #A = activation(W, X, B)
         y = one_hot_encode(Y)
         de = -(y - sigMatrix(A)) * dsigMatrix(A)
 
-    if i == 'hidden':
-        A = np.zeros((len(W)), dtype=float)
-        A = activation(W, X, B)
 
-    if i == 'input'
+    if layer == 'hidden':
 
+        #X = Y_NN[i-1]
+        #A = activation(W, X, B)
 
-    #TODO IF layer output => "classic delta error"
-    #TODO ELSE layer hidden i => de = needs de i-1
-    # Y is a single label
-    # X is a single vector input
+        de = dsigMatrix(A) * np.dot(W, DE[i+1])
+
+    if layer == 'input':
+
+        #X = X
+        #A = activation(W, X, B)
+        de = dsigMatrix(A) * np.dot(W, DE[i+1])
 
     return de
 
 
-def loss_function(Y, W, X, B):
-    # X is a single input vector
+def loss_function(Y, W, X, B, indexLayer, layer):
+    # X is single example, Y is a scalar
+    # return a vector
+    e = np.zeros((1, len(W)))
 
+    # W is a matrix
+    # B is a vector
 
-    # OUTPUT Y fixed
-
-    # if i == len(W)-1:
-    #     x = Y_NN[i-1]
-    #     E = loss_function(Y, W[i], X, B[i], i)
-
-    # FIRST_HIDDEN X fixed
-    # elif i == 0:
-    #     Y = Y_NN[i]
-    #     E = loss_function(Y, W[i], X, B[i])
-
-    # HIDDEN Y and X vary
-
-
-    #TODO IF layer output => "forward error"
-    #TODO ELSE layer hidden i => X = "Y-1" output layer i-1
+    # OUTPUT "for i=0"
 
     Y_NN = output(W, X, B)
 
-    de = delta_error(Y, W, X, B)
+    i = indexLayer
+
+    if layer == 'output':
+
+        X = Y_NN[i-1]
+        de = delta_error(Y, W, X, B, Y_NN, DE, indexLayer, layer)
+
+    if layer == 'hidden':
+
+        X = Y_NN[i-1]
+        de = delta_error(Y, W, X, B, Y_NN, DE, indexLayer, layer)
+
+    if layer == 'input':
+
+        X = X
+        de = delta_error(Y, W, X, B, Y_NN, DE, indexLayer, layer)
+
+    DE[i] = de
 
     de = de.reshape(-1, 1)
     X = X.reshape(-1, 1)
     X = np.transpose(X)
     e = np.dot(de, X)
+
     return e
 
-def empirical_risk(Y, W, X, B):
-    E = 0
+def empirical_risk(Y, W, X, B, indexLayer, layer):
+    # E is a vector with dim W
+    E = np.zeros((1, len(W)))
     # X is the batch of examples
-    # W is a list of Matrices
-    # B is a list of Vectors
+    # W is a matrix
+    # B is a vector
     for i in range(0, len(X)):
-        # TODO INDEX LAYER
-        E = E + loss_function(Y[i], W, X[i], B)
+        E = E + loss_function(Y[i], W, X[i], B, indexLayer, layer)
     return E
