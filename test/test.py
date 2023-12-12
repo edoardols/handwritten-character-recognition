@@ -4,7 +4,7 @@ import math
 A = np.array([1,3,4,5,2,6,7,3,7,2])
 
 B = np.dot(A,5)
-print(A*B)
+#print(A*B)
 
 def sigmoid(a):
     if a < -10:
@@ -19,21 +19,23 @@ def dsigmoid(a):
 sigMatrix = np.vectorize(sigmoid)
 dsigMatrix = np.vectorize(dsigmoid)
 
-print(dsigMatrix(A))
+#print(dsigMatrix(A))
 
 a = 20
 
 def sum():
     global a
     a = a + 10
+    return 1, 2, 3
 
-print(a)
-sum()
-print(a)
+#print(a)
+a, b, c = sum()
+print(c)
+#print(a)
 
 
 v = [[1, 2], [2, 3]]
 u = [[1, 2], [2, 3]]
 
-z = v[1] - u[1]
-print(z)
+#z = v[1] - u[1]
+#print(z)

@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+from src.lib.learning_method import learning_method
 from src.lib.mapping import input_normalization_Matrix
 from src.lib.forward.gradient import gradient_descent_algorithm
 
@@ -14,11 +15,9 @@ dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 l = 5000
 
 X_D = dataset.iloc[:l, 1:]
-#X_D = dataset.iloc[:, 1:]
 X = X_D.to_numpy()
 
 Y_D = dataset.iloc[:l, :1]
-#Y_D = dataset.iloc[:, :1]
 Y = Y_D[0].to_numpy()
 
 # dim input
@@ -37,21 +36,24 @@ np.random.seed(42)
 W = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, INPUT_DIMENSION))
 
 # B Vector
-B = np.full(OUTPUT_DIMENSION, -10.)
+B = np.full((OUTPUT_DIMENSION,1), -10.)
 
 print('---------- Training ----------')
 
 X = input_normalization_Matrix(X)
-
 epochs = 1000
-learning_mode = 'batch'
+# learning_mode = 'batch'
+learning_mode = 'mini'
+# learning_mode = 'online'
 
-W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
+XB = learning_method(X, learning_mode)
+
+for i in range(0, len(XB)):
+    W = gradient_descent_algorithm(Y, W, XB[i], B, ETA, epochs)
 
 weight = pd.DataFrame(W)
+
 # W-1L-batch-epochs
-
-
 file_name = 'W-1L-F-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs)
 
 weight.to_csv('weight-csv/' + file_name + '.csv', encoding='utf-8', header=False, index=False)

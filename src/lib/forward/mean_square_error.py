@@ -17,10 +17,11 @@ def delta_error(Y, W, X, B):
 
 def empirical_risk(Y, W, X, B):
     # X is a single input vector
+    # X transpose
+    X = X.reshape(1, -1)
+
     de = delta_error(Y, W, X, B)
     de = de.reshape(-1, 1)
-    X = X.reshape(-1, 1)
-    X = np.transpose(X)
     e = np.dot(de, X)
     return e
 

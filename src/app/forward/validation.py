@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from src.lib.accuracy import accuracy
+from src.lib.forward.accuracy import accuracy
 from src.lib.mapping import input_normalization_Matrix
 
 print('---------- Validation ----------')
@@ -21,6 +21,10 @@ YV_D = validation_set.iloc[:l, :1]
 YV = YV_D[0].to_numpy()
 
 XV = input_normalization_Matrix(XV)
+
+XV = np.transpose(XV)
+
+XV = XV.reshape(-1, 1)
 
 file_name = 'W-1L-F-batch-l=5000-epoch=1000.csv'
 W = pd.read_csv('weight-csv/' + file_name, header=None)
