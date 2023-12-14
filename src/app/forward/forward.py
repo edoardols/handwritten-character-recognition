@@ -12,7 +12,7 @@ OLNN = pd.read_csv('OLNN.csv')
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # Number of examples
-l = 5000
+l = 6000
 
 X_D = dataset.iloc[:l, 1:]
 X = X_D.to_numpy()
@@ -36,21 +36,23 @@ np.random.seed(42)
 W = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, INPUT_DIMENSION))
 
 # B Vector
-B = np.full((OUTPUT_DIMENSION,1), -10.)
+B = np.full((OUTPUT_DIMENSION, 1), -10.)
 
 print('---------- Training ----------')
 
 X = input_normalization_Matrix(X)
 epochs = 1000
-# learning_mode = 'batch'
-learning_mode = 'mini'
+learning_mode = 'batch'
+#learning_mode = 'mini'
 # learning_mode = 'online'
 
-XB = learning_method(X, learning_mode)
+# TODO change
+#XB = learning_method(X, learning_mode)
 
-for i in range(0, len(XB)):
-    W = gradient_descent_algorithm(Y, W, XB[i], B, ETA, epochs)
+#for i in range(0, XB.shape(1)):
+#W = gradient_descent_algorithm(Y, W, XB[i], B, ETA, epochs)
 
+W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
 weight = pd.DataFrame(W)
 
 # W-1L-batch-epochs

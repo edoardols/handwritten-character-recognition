@@ -9,6 +9,7 @@ def activation(W, X, B):
     # ensure that this is a column vector
     X = X.reshape(-1, 1)
 
-    A = np.zeros((len(W)), dtype=float)
+    # TODO update on 14-12-2023 after fail validation forward
+    A = np.zeros((len(W), 1), dtype=float)
     A = np.dot(W, X) + B
     return A

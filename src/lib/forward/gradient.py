@@ -6,4 +6,5 @@ def gradient_descent_algorithm(Y, W, X, B, ETA, epochs=1):
         E = loss_function(Y, W, X, B)
         # gradient descent
         W = W - ETA * E
+        print('epoch: ', i)
     return W

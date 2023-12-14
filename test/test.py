@@ -39,3 +39,20 @@ u = [[1, 2], [2, 3]]
 
 #z = v[1] - u[1]
 #print(z)
+
+
+y = np.array([1, 2, 3])
+
+x = np.array([[1, 2],[2, 3],[3, 4]])
+
+print(y)
+print(x.T)
+#c = np.concatenate((x, y.T), axis=0)
+
+print(c)
+
+new_array = np.insert(x, 0, y, axis=1)
+
+#view updated array
+
+print(new_array)
