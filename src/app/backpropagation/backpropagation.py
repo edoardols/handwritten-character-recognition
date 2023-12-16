@@ -1,28 +1,35 @@
 import pandas as pd
 import numpy as np
 
-from src.lib.backprop.accuracy import accuracy
-from src.lib.mapping import input_normalization_Matrix
+import os
+
 from src.lib.backprop.gradient import gradient_descent_algorithm
+from src.lib.mapping import input_normalization_Matrix
+
+print('Loading dataset: Start')
+
+dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
+
+# Number of examples
+l = 60000
+
+X_D = dataset.iloc[:l, 1:]
+X = X_D.to_numpy()
+
+X = input_normalization_Matrix(X)
+
+Y_D = dataset.iloc[:l, :1]
+Y = Y_D[0].to_numpy()
+
+print('Loading dataset: Done')
+
+print('Neural Network: Start')
 
 # configuration file
 # HLNN have structure [num_layer][num_neuron]
 HLNN = pd.read_csv('../forward/HLNN.csv')
 # OLNN have structure [num:output]
 OLNN = pd.read_csv('../forward/OLNN.csv')
-
-dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
-
-# Number of examples
-l = 1000
-
-X_D = dataset.iloc[:l, 1:]
-#X_D = dataset.iloc[:, 1:]
-X = X_D.to_numpy()
-
-Y_D = dataset.iloc[:l, :1]
-#Y_D = dataset.iloc[:, :1]
-Y = Y_D[0].to_numpy()
 
 # dim input
 INPUT_DIMENSION = len(X[0])
@@ -39,9 +46,8 @@ np.random.seed(42)
 # Layout Neural Network
 # W is a list of matrix
 W = []
-# B is a list of vector
-B = []
 
+# TODO refactor with a method that pass a matrix nx2 that specify the layout of the NN
 for i in range(HLNN.shape[0]):
     if i == 0:
         w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0, 1], INPUT_DIMENSION))
@@ -52,51 +58,48 @@ for i in range(HLNN.shape[0]):
 w = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, HLNN.iloc[HLNN.shape[0]-1, 1]))
 W.append(w)
 
-# B list of vectors
+# B is a list of vector
+B = []
+
 for i in range(HLNN.shape[0]):
-    b = np.full((HLNN.iloc[i, 1], 1), -10.)
+    b = np.full((HLNN.iloc[i, 1], 1), 0.)
     B.append(b)
 
-# only for computational reasons
-b = np.full((OUTPUT_DIMENSION, 1), -10.)
+b = np.full((OUTPUT_DIMENSION, 1), 0.)
 B.append(b)
 
-print('---------- Training ----------')
+print('Neural Network: Done')
 
-X = input_normalization_Matrix(X)
+print('Training: Start')
 
-epochs = 200
-learning_mode = 'batch'
+epochs = 5
+# learning_mode = 'batch'
+learning_mode = 'mini'
+# learning_mode = 'online'
 
-W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
+for e in range(0, epochs):
+    W = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
 
-#weight = pd.DataFrame(W)
-# W-1L-batch-epochs
+print('Training: Done')
 
-#file_name = 'W-BP-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs)
+print('Saving: Start')
 
-#weight.to_csv('weight-csv/' + file_name + '.csv', encoding='utf-8', header=False, index=False)
+folder_name = 'W-BP-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs) + '/'
 
-print('---------- Validation ----------')
+folder_path = os.path.join(os.getcwd(), 'weight-csv/' + folder_name)
+# Check if the folder already exists
+if not os.path.exists(folder_path):
+    # Create the folder if it doesn't exist
+    os.makedirs(folder_path)
 
-# data 10000
-validation_set = pd.read_csv('../../../data/mnist_test.csv', header=None)
+for i in range(0, len(W)):
+    # 0 is the input layer
+    weight = pd.DataFrame(W[i])
+    weight.to_csv(folder_path + 'W' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
 
-# Number of examples
-l = 5000
-# parameters
-XV_D = validation_set.iloc[:l, 1:]
-#XV_D = validation_set.iloc[:, 1:]
-XV = XV_D.to_numpy()
+for i in range(0, len(B)):
+    # 0 is the input layer
+    bias = pd.DataFrame(B[i])
+    bias.to_csv(folder_path + 'B' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
 
-YV_D = validation_set.iloc[:l, :1]
-#YV_D = validation_set.iloc[:, :1]
-YV = YV_D[0].to_numpy()
-
-XV = input_normalization_Matrix(XV)
-
-# file_name = 'W-1L-F-batch-l=5000-epoch=1000.csv'
-# W = pd.read_csv('weight-csv/' + file_name, header=None)
-# B = np.full(10, -10.)
-
-print(accuracy(YV, W, XV, B), "%")
+print('Saving: Done')

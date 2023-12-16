@@ -1,15 +1,18 @@
 
 from src.lib.backprop.mean_square_error import *
+from src.lib.learning_method import learning_method
 
 
-# TODO implement mode type for gradient descent: batch, online, mini-batch
-def gradient_descent_algorithm(Y, W, X, B, ETA, epochs=1):
+def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
     # W is a list of matrices
     # B is list of vectors
-    for e in range(0, epochs):
+    YB, XB = learning_method(Y, X, learning_mode, 128)
+
+    for i in range(0, len(XB)):
         # Create E are list of matrix
-        print('epochs: ', e)
-        E = empirical_risk(Y, W, X, B)
-        for i in range(0, len(W)):
-            W[i] = W[i] - ETA * E[i]
+        E = empirical_risk(YB[i], W, XB[i], B)
+
+        for j in range(0, len(W)):
+            W[j] = W[j] - ETA * E[j]
+        print('epoch: ', e+1, 'Batch: ', i+1)
     return W

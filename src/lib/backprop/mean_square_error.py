@@ -1,5 +1,7 @@
 import numpy as np
 
+import copy
+
 from src.lib.activation import activation
 from src.lib.mapping import one_hot_encode
 from src.lib.sigmoid import sigMatrix, dsigMatrix
@@ -39,12 +41,12 @@ def loss_function(W, X, A, de):
 
 
 def empirical_risk(Y, W, X, B):
-    E = W
+    E = copy.deepcopy(W)
     for i in range(0, len(E)):
         E[i] = E[i]*0
 
     for k in range(0, len(X)):
-        A = np.zeros((len(W)), dtype=float)
+        #A = np.zeros((len(W)), dtype=float)
         x = X[k]
         x = x.reshape(1, -1)
         Y_NN = output(W, x, B)

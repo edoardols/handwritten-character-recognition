@@ -12,7 +12,7 @@ OLNN = pd.read_csv('OLNN.csv')
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # Number of examples
-l = 6000
+l = 60000
 
 X_D = dataset.iloc[:l, 1:]
 X = X_D.to_numpy()
@@ -32,6 +32,8 @@ OUTPUT_DIMENSION = OLNN.iloc[0, 1]
 # Layout Neural Network
 np.random.seed(42)
 
+# TODO refactor with a method that pass a matrix nx2 that specify the layout of the NN
+
 # W is a matrix
 W = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, INPUT_DIMENSION))
 
@@ -41,18 +43,17 @@ B = np.full((OUTPUT_DIMENSION, 1), -10.)
 print('---------- Training ----------')
 
 X = input_normalization_Matrix(X)
-epochs = 1000
-learning_mode = 'batch'
-#learning_mode = 'mini'
+epochs = 100
+#learning_mode = 'batch'
+learning_mode = 'mini'
 # learning_mode = 'online'
 
-# TODO change
-#XB = learning_method(X, learning_mode)
+YB, XB = learning_method(Y, X, learning_mode, 100)
+for i in range(0, len(XB)):
+    batch_iteration = i
+    W = gradient_descent_algorithm(YB[i], W, XB[i], B, ETA, epochs, batch_iteration)
 
-#for i in range(0, XB.shape(1)):
-#W = gradient_descent_algorithm(Y, W, XB[i], B, ETA, epochs)
-
-W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
+#W = gradient_descent_algorithm(Y, W, X, B, ETA, epochs)
 weight = pd.DataFrame(W)
 
 # W-1L-batch-epochs
