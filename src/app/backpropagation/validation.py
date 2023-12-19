@@ -1,15 +1,15 @@
 import pandas as pd
-import numpy as np
 
 from src.lib.backprop.accuracy import accuracy
 from src.lib.mapping import input_normalization_Matrix
 
 print('---------- Validation ----------')
 
-dataset = 'mnist_test'
+# dataset = 'mnist_test'
 # dataset = 'salt_pepper/mnist_test-sp-s-0.3-p-0.2'
 # dataset = 'salt_pepper/mnist_test-sp-s-0.5-p-0.6'
 # dataset = 'salt_pepper/mnist_test-sp-s-1-p-0.6'
+dataset = 'blob/mnist_test-bl-p-0.2'
 validation_set = pd.read_csv('../../../data/' + dataset + '.csv', header=None)
 
 # parameters

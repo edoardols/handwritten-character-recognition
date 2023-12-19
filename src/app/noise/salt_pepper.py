@@ -39,22 +39,23 @@ def bound(pixel):
     if pixel < 0:
         return 0
     return pixel
-image = X[0].reshape(28, 28)
-for l in range(0, 1):
-    #image = X[l].reshape(28, 28)
+
+
+for l in range(0, len(X)):
+    image = X[l].reshape(28, 28)
     for p in range(0, pixelPercentage):
         i = np.random.randint(0, pixelHeight)
         j = np.random.randint(0, pixelWidth)
         pixel = np.random.uniform(low=int(-255*severity), high=int(255*severity))
         image[i][j] = bound(image[i][j] + pixel)
-    #X[l] = image.reshape(1, -1)
+    X[l] = image.reshape(1, -1)
 
 plt.imshow(255 - image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
 plt.show()
 
-#sp = pd.DataFrame(np.insert(X, 0, Y, axis=1))
+# sp = pd.DataFrame(np.insert(X, 0, Y, axis=1))
 
 # W-1L-batch-epochs
-#new_file_name = file_name + '-' + 'sp-s-' + str(severity) + '-p-' + str(percentage)
+# new_file_name = file_name + '-' + 'sp-s-' + str(severity) + '-p-' + str(percentage)
 
-#sp.to_csv('../../../data/salt_pepper/' + new_file_name + '.csv', encoding='utf-8', header=False, index=False)
+# sp.to_csv('../../../data/salt_pepper/' + new_file_name + '.csv', encoding='utf-8', header=False, index=False)

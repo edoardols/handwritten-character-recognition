@@ -8,20 +8,21 @@ print('---------- Validation ----------')
 
 # data 10000
 # dataset = 'mnist_test'
-dataset = 'salt_pepper/mnist_test-sp-s-0.3-p-0.2'
+# dataset = 'salt_pepper/mnist_test-sp-s-0.3-p-0.2'
 # dataset = 'salt_pepper/mnist_test-sp-s-0.5-p-0.6'
 # dataset = 'salt_pepper/mnist_test-sp-s-1-p-0.6'
+
+# dataset = 'blob/mnist_test-bl-p-0.2'
+
+dataset = 'thickness/mnist_test-th-step=-3'
 validation_set = pd.read_csv('../../../data/' + dataset + '.csv', header=None)
 
 # Number of examples
-l = 10000
 # parameters
-XV_D = validation_set.iloc[:l, 1:]
-# XV_D = validation_set.iloc[:, 1:]
+XV_D = validation_set.iloc[:, 1:]
 XV = XV_D.to_numpy()
 
-YV_D = validation_set.iloc[:l, :1]
-# YV_D = validation_set.iloc[:, :1]
+YV_D = validation_set.iloc[:, :1]
 YV = YV_D[0].to_numpy()
 
 XV = input_normalization_Matrix(XV)

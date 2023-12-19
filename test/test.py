@@ -56,3 +56,10 @@ new_array = np.insert(x, 0, y, axis=1)
 #view updated array
 
 print(new_array)
+
+
+print(int(np.sqrt(28*28/math.pi)))
+
+center = np.random.randint(28, size=(2))
+
+print(center)
