@@ -3,10 +3,12 @@ from src.lib.backprop.mean_square_error import *
 from src.lib.learning_method import learning_method
 
 
-def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
+# def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
+def gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode):
     # W is a list of matrices
     # B is list of vectors
-    YB, XB = learning_method(Y, X, learning_mode, 128)
+    # YB, XB = learning_method(Y, X, learning_mode, 128)
+    YB, XB = learning_method(dataset, learning_mode, 128)
 
     E_epoch = 0
     for i in range(0, len(XB)):

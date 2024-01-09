@@ -3,8 +3,9 @@ from src.lib.forward.mean_square_error import loss_function
 from src.lib.learning_method import learning_method
 
 
-def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
-    YB, XB = learning_method(Y, X, learning_mode, 128)
+# def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
+def gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode):
+    YB, XB = learning_method(dataset, learning_mode, 128)
 
     E_epoch = 0
     for i in range(0, len(XB)):

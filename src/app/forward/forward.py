@@ -11,15 +11,16 @@ print('Loading dataset: Start')
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # Number of examples
-l = 60
+l = 505
+dataset = dataset.iloc[:l, :]
 
-X_D = dataset.iloc[:l, 1:]
-X = X_D.to_numpy()
-
-X = input_normalization_Matrix(X)
-
-Y_D = dataset.iloc[:l, :1]
-Y = Y_D[0].to_numpy()
+# X_D = dataset.iloc[:l, 1:]
+# X = X_D.to_numpy()
+#
+# X = input_normalization_Matrix(X)
+#
+# Y_D = dataset.iloc[:l, :1]
+# Y = Y_D[0].to_numpy()
 
 print('Loading dataset: Done')
 
@@ -30,7 +31,8 @@ print('Neural Network: Start')
 OLNN = pd.read_csv('OLNN.csv')
 
 # dim input
-INPUT_DIMENSION = len(X[0])
+# INPUT_DIMENSION = len(X[0])
+INPUT_DIMENSION = 28*28
 
 # learning rate
 ETA = 0.01
@@ -59,7 +61,8 @@ learning_mode = 'mini'
 E = np.zeros(epochs, dtype=float)
 
 for e in range(0, epochs):
-    W, E_epoch = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
+    # W, E_epoch = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
+    W, E_epoch = gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode)
     E[e] = E_epoch
 
 print('Training: Done')
