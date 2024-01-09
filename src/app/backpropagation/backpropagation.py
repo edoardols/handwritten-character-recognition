@@ -3,6 +3,8 @@ import numpy as np
 
 import os
 
+from matplotlib import pyplot as plt
+
 from src.lib.backprop.gradient import gradient_descent_algorithm
 from src.lib.mapping import input_normalization_Matrix
 
@@ -11,7 +13,7 @@ print('Loading dataset: Start')
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # Number of examples
-l = 60000
+l = 600
 
 X_D = dataset.iloc[:l, 1:]
 X = X_D.to_numpy()
@@ -72,13 +74,16 @@ print('Neural Network: Done')
 
 print('Training: Start')
 
-epochs = 5
+epochs = 100
 # learning_mode = 'batch'
 learning_mode = 'mini'
 # learning_mode = 'online'
 
+E = np.zeros(epochs, dtype=float)
+
 for e in range(0, epochs):
-    W = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
+    W, E_epoch = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
+    E[e] = E_epoch
 
 print('Training: Done')
 
@@ -101,5 +106,20 @@ for i in range(0, len(B)):
     # 0 is the input layer
     bias = pd.DataFrame(B[i])
     bias.to_csv(folder_path + 'B' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
+
+# plot
+x = np.arange(0, epochs, 1)
+y = E
+plt.plot(x, y)
+
+plt.xlabel('Epochs')
+plt.ylabel('Empirical risk')
+annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
+                     + '#Patterns = ' + str(l) + '\n'
+                     + 'Learning mode = ' + learning_mode + '\n')
+
+plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
+
+plt.savefig('weight-csv/' + folder_name + 'E')
 
 print('Saving: Done')

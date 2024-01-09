@@ -1,7 +1,7 @@
 # Task
 
 - change resolution, standard 28x28 vs smartphone resolution (upscaling and downscaling)
-- add noise ( lowering brightness, obscure part)
+- add noise ( obscure part)
 - test with graphics (plot number)
 - plot empirical risk among epochs
 - XOR
@@ -17,3 +17,12 @@ a = np.dot(w,x_i) + b
 x_i+1 = sigmoid(a)
 
 ReLU(a) = max(0,a)
+
+
+Forward and Backprop
+- example
+- epochs
+- eta
+
+=> save W
+=> save graph E
