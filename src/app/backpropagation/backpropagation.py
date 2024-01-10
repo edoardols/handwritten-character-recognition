@@ -13,8 +13,9 @@ print('Loading dataset: Start')
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # Number of examples
-l = 600
+l = 60
 dataset = dataset.iloc[:l, :]
+D = dataset.to_numpy()
 
 # X_D = dataset.iloc[:l, 1:]
 # X = X_D.to_numpy()
@@ -76,7 +77,7 @@ print('Neural Network: Done')
 
 print('Training: Start')
 
-epochs = 100
+epochs = 10
 # learning_mode = 'batch'
 learning_mode = 'mini'
 # learning_mode = 'online'
@@ -85,7 +86,7 @@ E = np.zeros(epochs, dtype=float)
 
 for e in range(0, epochs):
     # W, E_epoch = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
-    W, E_epoch = gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode)
+    W, E_epoch = gradient_descent_algorithm(D, W, B, ETA, e, learning_mode)
     E[e] = E_epoch
 
 print('Training: Done')

@@ -9,7 +9,9 @@ def accuracy(Y, W, X, B):
     error_label = []
     error_patter = []
     error_output_nn = []
+
     a = 0
+
     for i in range(0, len(X)):
         A = activation(W, X[i], B)
         Y_NN = sigMatrix(A)
