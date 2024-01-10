@@ -71,10 +71,10 @@ def forward_validation(validation_dataset_path, weight_and_biases_path):
 
     XV = input_normalization_Matrix(XV)
 
-    w = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + 'W.csv', header=None)
+    w = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + '/W.csv', header=None)
     W = w.to_numpy()
 
-    b = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + 'B.csv', header=None)
+    b = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + '/B.csv', header=None)
     B = b.to_numpy()
 
     percentage, error_label, images, error_output_nn = forward_accuracy(YV, W, XV, B)

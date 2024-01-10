@@ -9,6 +9,9 @@ from src.lib.forward.gradient import gradient_descent_algorithm
 
 def forward_training(l, ETA, desired_epochs, learning_mode):
 
+    STEP = 500
+    SUB_STEP = 100
+
     W = None
     B = None
     Etot = None
@@ -16,13 +19,13 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
     # check if previous step exist
 
     folder_not_found = True
-    q = desired_epochs // 5000
+    q = desired_epochs // STEP
 
     global epochs, path_to_new_folder
     epochs = 0
 
     while folder_not_found and q > 0:
-        previous_epochs = q * 5000
+        previous_epochs = q * STEP
         path_to_previous_folder = ('forward/weight-csv/' + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
                                    + str(previous_epochs) + '-eta=' + str(ETA) + '/')
 
@@ -31,9 +34,9 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
             for i in range(0, 5):
                 path_to_previous_epochs = (path_to_previous_folder + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
-                                           + str(previous_epochs - 1000 * i) + '-eta=' + str(ETA) + '/')
+                                           + str(previous_epochs - SUB_STEP * i) + '-eta=' + str(ETA) + '/')
                 if os.path.exists(path_to_previous_epochs):
-                    epochs = (previous_epochs - 1000 * i)
+                    epochs = (previous_epochs - SUB_STEP * i)
                     # Weights
                     w = pd.read_csv(path_to_previous_epochs + 'W.csv', header=None)
                     W = w.to_numpy()
@@ -84,25 +87,25 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
         Etot = []
 
     while epochs < desired_epochs:
-        E = np.zeros(min(desired_epochs, 1000), dtype=float)
+        E = np.zeros(min(desired_epochs, SUB_STEP), dtype=float)
 
-        for e in range(0, min(desired_epochs, 1000)):
+        for e in range(0, min(desired_epochs, SUB_STEP)):
             W, E_epoch = gradient_descent_algorithm(D, W, B, ETA, epochs + e, learning_mode)
             E[e] = E_epoch
 
         Etot = np.append(Etot, E)
 
         print('Saving: Start')
-        q = epochs // 5000
-        r = epochs % 5000
-        folder_epochs = q * 5000
+        q = epochs // STEP
+        r = epochs % STEP
+        folder_epochs = q * STEP
         if r >= 0 or q == 0:
-            folder_epochs = (q + 1) * 5000
+            folder_epochs = (q + 1) * STEP
 
         path_to_new_folder = ('forward/weight-csv/' + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
                               + str(folder_epochs) + '-eta=' + str(ETA) + '/')
 
-        sub_folder_path = (path_to_new_folder + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs + 1000)
+        sub_folder_path = (path_to_new_folder + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs + SUB_STEP)
                            + '-eta=' + str(ETA) + '/')
 
         sub_folder_path = os.path.join(os.getcwd(), sub_folder_path)
@@ -122,13 +125,13 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
         print('Saving: Done')
 
-        epochs = epochs + 1000
+        epochs = epochs + SUB_STEP
 
-        if epochs // 5000:
+        if epochs // STEP:
             # plot
             x = np.arange(0, epochs, 1)
             y = Etot
-            plt.plot(x, y, color='pal:cyan')
+            plt.plot(x, y, color='cyan')
 
             plt.xlabel('Epochs')
             plt.ylabel('Empirical risk')
@@ -145,7 +148,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
     # plot
     x = np.arange(0, desired_epochs, 1)
     y = Etot
-    plt.plot(x, y)
+    plt.plot(x, y, color='cyan')
 
     plt.xlabel('Epochs')
     plt.ylabel('Empirical risk')

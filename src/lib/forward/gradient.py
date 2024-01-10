@@ -1,3 +1,4 @@
+import numpy as np
 
 from src.lib.forward.mean_square_error import empirical_risk
 from src.lib.learning_method import learning_method
@@ -14,7 +15,7 @@ def gradient_descent_algorithm(D, W, B, ETA, e, learning_mode):
         # gradient descent
         W = W - ETA * E
 
-        E_epoch = E_epoch + E.sum()
+        E_epoch = E_epoch + np.sum(np.abs(E))
 
         print('epoch: ', e+1, 'Batch: ', i+1)
 
