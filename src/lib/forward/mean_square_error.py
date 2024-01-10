@@ -15,7 +15,7 @@ def delta_error(Y, W, X, B):
     return de
 
 
-def empirical_risk(Y, W, X, B):
+def loss_function(Y, W, X, B):
     # X is a single input vector
     # X transpose
     X = X.reshape(1, -1)
@@ -26,10 +26,14 @@ def empirical_risk(Y, W, X, B):
     return e
 
 
-def loss_function(Y, W, X, B):
-    # TODO swap name
+def empirical_risk(Y, W, X, B):
     E = 0
-    # X is the batch of examples
-    for i in range(0, len(X)):
-        E = E + empirical_risk(Y[i], W, X[i], B)
+
+    # TODO if X or Y is scalar skip
+    if np.isscalar(X) or np.isscalar(Y):
+        E = E + loss_function(Y, W, X, B)
+    else:
+        # X is the batch of examples
+        for i in range(0, len(X)):
+            E = E + loss_function(Y[i], W, X[i], B)
     return E

@@ -1,5 +1,5 @@
 
-from src.lib.forward.mean_square_error import loss_function
+from src.lib.forward.mean_square_error import empirical_risk
 from src.lib.learning_method import learning_method
 
 
@@ -10,7 +10,7 @@ def gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode):
     E_epoch = 0
     for i in range(0, len(XB)):
         # Create E are list of matrix
-        E = loss_function(YB[i], W, XB[i], B)
+        E = empirical_risk(YB[i], W, XB[i], B)
         # gradient descent
         W = W - ETA * E
 

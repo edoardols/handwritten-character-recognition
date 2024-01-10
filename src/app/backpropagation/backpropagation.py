@@ -30,9 +30,9 @@ print('Neural Network: Start')
 
 # configuration file
 # HLNN have structure [num_layer][num_neuron]
-HLNN = pd.read_csv('../forward/HLNN.csv')
+HLNN = pd.read_csv('../backpropagation/HLNN.csv')
 # OLNN have structure [num:output]
-OLNN = pd.read_csv('../forward/OLNN.csv')
+OLNN = pd.read_csv('../backpropagation/OLNN.csv')
 
 # dim input
 #INPUT_DIMENSION = len(X[0])
