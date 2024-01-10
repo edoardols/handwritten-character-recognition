@@ -11,7 +11,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
     W = None
     B = None
-    Epast = None
+    Etot = None
 
     # check if previous step exist
 
@@ -44,8 +44,8 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
                     # Empirical Risk
                     e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
-                    Epast = e.to_numpy()
-                    return
+                    Etot = e.to_numpy()
+                    break
         q = q - 1
 
     print('Loading dataset: Start')
@@ -79,9 +79,9 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
     print('Training: Start')
 
-    if Epast is None:
+    if Etot is None:
         # load past empirical risk
-        Epast = []
+        Etot = []
 
     while epochs < desired_epochs:
         E = np.zeros(min(desired_epochs, 1000), dtype=float)
@@ -90,13 +90,13 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
             W, E_epoch = gradient_descent_algorithm(D, W, B, ETA, epochs + e, learning_mode)
             E[e] = E_epoch
 
-        Epast.extend(E)
+        Etot = np.append(Etot, E)
 
         print('Saving: Start')
         q = epochs // 5000
         r = epochs % 5000
         folder_epochs = q * 5000
-        if r > 0 or q == 0:
+        if r >= 0 or q == 0:
             folder_epochs = (q + 1) * 5000
 
         path_to_new_folder = ('forward/weight-csv/' + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
@@ -117,16 +117,34 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
         bias = pd.DataFrame(B)
         bias.to_csv(sub_folder_path + 'B.csv', encoding='utf-8', header=False, index=False)
 
-        empirical = pd.DataFrame(E)
+        empirical = pd.DataFrame(Etot)
         empirical.to_csv(sub_folder_path + 'E.csv', encoding='utf-8', header=False, index=False)
 
         print('Saving: Done')
 
         epochs = epochs + 1000
 
+        if epochs // 5000:
+            # plot
+            x = np.arange(0, epochs, 1)
+            y = Etot
+            plt.plot(x, y, color='pal:cyan')
+
+            plt.xlabel('Epochs')
+            plt.ylabel('Empirical risk')
+            annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
+                                 + '#Patterns = ' + str(l) + '\n'
+                                 + 'Learning mode = ' + learning_mode + '\n')
+
+            plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
+
+            plt.savefig(path_to_new_folder + 'E')
+
+
+
     # plot
     x = np.arange(0, desired_epochs, 1)
-    y = Epast
+    y = Etot
     plt.plot(x, y)
 
     plt.xlabel('Epochs')
