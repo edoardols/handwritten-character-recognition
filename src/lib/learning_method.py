@@ -20,7 +20,9 @@ def learning_method(dataset, method='mini-batch', minibatch=16):
     x = []
     y = []
     if method == 'batch':
-        return y.append(label), x.append(dataset)
+        y.append(label)
+        x.append(dataset)
+        return y, x
 
     if method == 'mini':
         k = 0

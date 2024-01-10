@@ -11,7 +11,16 @@ print('Loading dataset: Start')
 dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
 
 # Number of examples
-l = 505
+l = 10000
+
+# Number of epochs
+epochs = 1000
+
+# type of learning
+# learning_mode = 'batch'
+learning_mode = 'mini'
+# learning_mode = 'online'
+
 dataset = dataset.iloc[:l, :]
 
 # X_D = dataset.iloc[:l, 1:]
@@ -52,11 +61,6 @@ B = np.full((OUTPUT_DIMENSION, 1), -10.)
 print('Neural Network: Done')
 
 print('Training: Start')
-
-epochs = 100
-# learning_mode = 'batch'
-learning_mode = 'mini'
-# learning_mode = 'online'
 
 E = np.zeros(epochs, dtype=float)
 
