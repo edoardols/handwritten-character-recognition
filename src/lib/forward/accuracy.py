@@ -5,6 +5,10 @@ from src.lib.activation import activation
 
 
 def accuracy(Y, W, X, B):
+    # error
+    error_label = []
+    error_patter = []
+    error_output_nn = []
     a = 0
     for i in range(0, len(X)):
         A = activation(W, X[i], B)
@@ -14,5 +18,10 @@ def accuracy(Y, W, X, B):
         y_nn = np.argmax(Y_NN)
         if y_nn == Y[i]:
             a = a + 1
+        else:
+            error_label.append(Y[i])
+            error_patter.append(X[i])
+            error_output_nn.append(y_nn)
+
     a = (a / len(Y)) * 100
-    return int(a)
+    return int(a), error_label, error_patter, error_output_nn

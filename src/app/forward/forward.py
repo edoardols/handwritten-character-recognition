@@ -53,6 +53,8 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
     dataset = pd.read_csv('../../data/mnist_train.csv', header=None)
     dataset = dataset.iloc[:l, :]
 
+    D = dataset.to_numpy()
+
     print('Loading dataset: Done')
 
     print('Neural Network: Start')
@@ -85,7 +87,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
         E = np.zeros(min(desired_epochs, 1000), dtype=float)
 
         for e in range(0, min(desired_epochs, 1000)):
-            W, E_epoch = gradient_descent_algorithm(dataset, W, B, ETA, epochs + e, learning_mode)
+            W, E_epoch = gradient_descent_algorithm(D, W, B, ETA, epochs + e, learning_mode)
             E[e] = E_epoch
 
         Epast.extend(E)

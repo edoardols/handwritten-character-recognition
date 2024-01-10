@@ -1,65 +1,27 @@
+import matplotlib.pyplot as plt
 import numpy as np
-import math
 
-A = np.array([1,3,4,5,2,6,7,3,7,2])
+# Assuming you have a list of 28x28 pixel images (represented as NumPy arrays)
+# Replace this with your actual list of images
+images = [np.random.rand(28, 28) for _ in range(5)]  # Example images
 
-B = np.dot(A,5)
-#print(A*B)
+fig, ax = plt.subplots()
+current_index = 0  # Initial index of the displayed image
 
-def sigmoid(a):
-    if a < -10:
-        return 0.000045
-    if a > 10:
-        return 0.999955
-    return 1 / (1 + math.exp(-a))
+# Display the first image
+img_plot = ax.imshow(images[current_index], cmap='gray')
 
-def dsigmoid(a):
-    return sigmoid(a) * (1 - sigmoid(a))
+def on_arrow_key(event):
+    global current_index
+    if event.key == 'right':
+        current_index = (current_index + 1) % len(images)
+    elif event.key == 'left':
+        current_index = (current_index - 1) % len(images)
+    img_plot.set_data(images[current_index])
+    fig.canvas.draw()
 
-sigMatrix = np.vectorize(sigmoid)
-dsigMatrix = np.vectorize(dsigmoid)
+# Connect the key press event to the function
+fig.canvas.mpl_connect('key_press_event', on_arrow_key)
 
-#print(dsigMatrix(A))
+plt.show()
 
-a = 20
-
-def sum():
-    global a
-    a = a + 10
-    return 1, 2, 3
-
-#print(a)
-a, b, c = sum()
-print(c)
-#print(a)
-
-
-v = [[1, 2], [2, 3]]
-u = [[1, 2], [2, 3]]
-
-#z = v[1] - u[1]
-#print(z)
-
-
-y = np.array([1, 2, 3])
-
-x = np.array([[1, 2],[2, 3],[3, 4]])
-
-print(y)
-print(x.T)
-#c = np.concatenate((x, y.T), axis=0)
-
-print(c)
-
-new_array = np.insert(x, 0, y, axis=1)
-
-#view updated array
-
-print(new_array)
-
-
-print(int(np.sqrt(28*28/math.pi)))
-
-center = np.random.randint(28, size=(2))
-
-print(center)

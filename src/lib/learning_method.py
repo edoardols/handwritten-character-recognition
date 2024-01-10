@@ -1,18 +1,24 @@
+import numpy as np
+
 from src.lib.mapping import input_normalization_Matrix
 
 
-def learning_method(dataset, method='mini', minibatch=16):
+def learning_method(D, method='mini', minibatch=16):
 
     # shuffle the dataset
-    dataset.sample(frac=1)
+    #dataset.sample(frac=1)
+    np.random.shuffle(D)
 
-    X_D = dataset.iloc[:, 1:]
-    X = X_D.to_numpy()
+    # X_D = dataset.iloc[:, 1:]
+    # X = X_D.to_numpy()
+    #
+    # X = input_normalization_Matrix(X)
+    #
+    # Y_D = dataset.iloc[:, :1]
+    # Y = Y_D[0].to_numpy()
 
-    X = input_normalization_Matrix(X)
-
-    Y_D = dataset.iloc[:, :1]
-    Y = Y_D[0].to_numpy()
+    X = D[:, 1:]
+    Y = D[:, :1]
 
     dataset = X
     label = Y

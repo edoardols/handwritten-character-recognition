@@ -1,40 +1,78 @@
 import pandas as pd
 import numpy as np
+from matplotlib import pyplot as plt
 
 from src.lib.forward.accuracy import accuracy
 from src.lib.mapping import input_normalization_Matrix
 
-print('---------- Validation ----------')
 
-# data 10000
-dataset = 'mnist_test'
-# dataset = 'salt_pepper/mnist_test-sp-s-0.3-p-0.2'
-# dataset = 'salt_pepper/mnist_test-sp-s-0.5-p-0.6'
-# dataset = 'salt_pepper/mnist_test-sp-s-1-p-0.6'
+global current_index
+current_index = 0
 
-# dataset = 'blob/mnist_test-bl-p-0.2'
 
-# dataset = 'thickness/mnist_test-th-step=-3'
-validation_set = pd.read_csv('../../../data/' + dataset + '.csv', header=None)
+def forward_validation(validation_dataset_path, weight_and_biases_path):
+    print('Validation: Start')
+    validation_dataset = pd.read_csv('../../data/' + validation_dataset_path, header=None)
 
-# Number of examples
-# parameters
-XV_D = validation_set.iloc[:, 1:]
-XV = XV_D.to_numpy()
+    XV_D = validation_dataset.iloc[:, 1:]
+    XV = XV_D.to_numpy()
 
-YV_D = validation_set.iloc[:, :1]
-YV = YV_D[0].to_numpy()
+    YV_D = validation_dataset.iloc[:, :1]
+    YV = YV_D[0].to_numpy()
 
-XV = input_normalization_Matrix(XV)
+    XV = input_normalization_Matrix(XV)
 
-# XV = np.transpose(XV)
+    w = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + 'W.csv', header=None)
+    W = w.to_numpy()
 
-# XV = XV.reshape(-1, 1)
+    b = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + 'B.csv', header=None)
+    B = b.to_numpy()
 
-file_name = 'W-1L-F-mini-l=10000-epoch=1000'
-#file_name = 'W-1L-F-batch-l=5000-epoch=1000'
-w = pd.read_csv('weight-csv/' + file_name + '.csv', header=None)
-W = w.to_numpy()
-B = np.full((10, 1), -10.)
+    percentage, error_label, images, error_output_nn = accuracy(YV, W, XV, B)
 
-print(accuracy(YV, W, XV, B), "%")
+    print('Validation: Done')
+
+    print('Accuracy: ' + str(percentage) + "%")
+
+    fig, ax = plt.subplots()
+
+    # Display the first image
+    img_plot = ax.imshow(1 - images[0].reshape(28, 28), cmap='gray')
+
+    annotation_string = ('Label = ' + str(error_label[0]) + '\n'
+                         + 'Output = ' + str(error_output_nn[0]) + '\n'
+                         + 'Error: ' + str(1) + ' of ' + str(len(images)))
+
+    annotation = ax.annotate(annotation_string, xy=(0.79, 0.13), xycoords='figure fraction',
+                             horizontalalignment='right')
+
+    def on_arrow_key(event,):
+        global current_index
+        if event.key == 'right':
+            current_index = (current_index + 1) % len(images)
+        elif event.key == 'left':
+            current_index = (current_index - 1) % len(images)
+
+        img_plot.set_data(1 - images[current_index].reshape(28, 28))
+
+        annotation.set_text('Label = ' + str(error_label[current_index]) + '\n'
+                            + 'Output = ' + str(error_output_nn[current_index]) + '\n'
+                            + 'Error: ' + str(current_index + 1) + ' of ' + str(len(images)))
+        fig.canvas.draw()
+
+    fig.canvas.mpl_connect('key_press_event', on_arrow_key)
+
+    plt.show()
+
+    data = error_label
+
+    # Create a histogram
+    plt.hist(data, bins=np.arange(1, 11), align='left', rwidth=0.8, alpha=0.7)
+
+    plt.xlabel('Numbers')
+    plt.ylabel('Frequency')
+    plt.title('Error distribution')
+    plt.xticks(np.arange(1, 10))
+
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    plt.show()
