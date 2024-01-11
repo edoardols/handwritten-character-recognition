@@ -8,122 +8,181 @@ from matplotlib import pyplot as plt
 from src.lib.backprop.gradient import gradient_descent_algorithm
 from src.lib.mapping import input_normalization_Matrix
 
-print('Loading dataset: Start')
+def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
-dataset = pd.read_csv('../../../dataset/mnist_train.csv', header=None)
+    STEP = 500
+    SUB_STEP = 100
 
-# Number of examples
-l = 60
-dataset = dataset.iloc[:l, :]
-D = dataset.to_numpy()
+    W = []
+    B = []
+    Etot = None
 
-# X_D = dataset.iloc[:l, 1:]
-# X = X_D.to_numpy()
-#
-# X = input_normalization_Matrix(X)
-#
-# Y_D = dataset.iloc[:l, :1]
-# Y = Y_D[0].to_numpy()
+    # configuration file
+    # HLNN have structure [num_layer][num_neuron]
+    HLNN = pd.read_csv('backpropagation/HLNN.csv')
 
-print('Loading dataset: Done')
+    # check if previous step exist
 
-print('Neural Network: Start')
+    folder_not_found = True
+    q = desired_epochs // STEP
 
-# configuration file
-# HLNN have structure [num_layer][num_neuron]
-HLNN = pd.read_csv('../backpropagation/HLNN.csv')
-# OLNN have structure [num:output]
-OLNN = pd.read_csv('../backpropagation/OLNN.csv')
+    global epochs, path_to_new_folder
+    epochs = 0
 
-# dim input
-#INPUT_DIMENSION = len(X[0])
-INPUT_DIMENSION = 28*28
+    while folder_not_found and q > 0:
+        previous_epochs = q * STEP
+        path_to_previous_folder = ('backpropagation/weight-csv/' + 'W-B-' + learning_mode + '-l=' + str(l) + '-epoch='
+                                   + str(previous_epochs) + '-eta=' + str(ETA) + '/')
 
-# learning rate
-ETA = 0.01
+        if os.path.exists(path_to_previous_folder):
+            folder_not_found = False
 
-# output dim
-OUTPUT_DIMENSION = OLNN.iloc[0, 1]
+            for i in range(0, 5):
+                path_to_previous_epochs = (path_to_previous_folder + 'W-B-' + learning_mode + '-l=' + str(l) + '-epoch='
+                                           + str(previous_epochs - SUB_STEP * i) + '-eta=' + str(ETA) + '/')
+                if os.path.exists(path_to_previous_epochs):
+                    epochs = (previous_epochs - SUB_STEP * i)
+                    for i in range(0, 3):
+                        # Biases
+                        b = pd.read_csv(path_to_previous_epochs + 'B' + str(i) + '.csv', header=None)
+                        b = b[0].to_numpy()
+                        B.append(b.reshape(-1, 1))
 
-# Layout Neural Network
-np.random.seed(42)
+                        # Weights
+                        w = pd.read_csv(path_to_previous_epochs + 'W' + str(i) + '.csv', header=None)
+                        W.append(w.to_numpy())
 
-# Layout Neural Network
-# W is a list of matrix
-W = []
+                    # Empirical Risk
+                    e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
+                    Etot = e.to_numpy()
+                    break
+        q = q - 1
 
-# TODO refactor with a method that pass a matrix nx2 that specify the layout of the NN
-for i in range(HLNN.shape[0]):
-    if i == 0:
-        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0, 1], INPUT_DIMENSION))
-    else:
-        w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[i, 1], HLNN.iloc[i - 1, 1]))
-    W.append(w)
+    print('Loading dataset: Start')
 
-w = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, HLNN.iloc[HLNN.shape[0]-1, 1]))
-W.append(w)
+    dataset = pd.read_csv('../../data/mnist_train.csv', header=None)
+    dataset = dataset.iloc[:l, :]
 
-# B is a list of vector
-B = []
+    D = dataset.to_numpy()
 
-for i in range(HLNN.shape[0]):
-    b = np.full((HLNN.iloc[i, 1], 1), 0.)
-    B.append(b)
+    print('Loading dataset: Done')
 
-b = np.full((OUTPUT_DIMENSION, 1), 0.)
-B.append(b)
+    print('Neural Network: Start')
 
-print('Neural Network: Done')
+    # input dim
+    INPUT_DIMENSION = 28 * 28
 
-print('Training: Start')
+    # output dim
+    OUTPUT_DIMENSION = 10
 
-epochs = 10
-# learning_mode = 'batch'
-learning_mode = 'mini'
-# learning_mode = 'online'
+    #region Layout Neural Network
+    np.random.seed(42)
+    if len(W) == 0:
+        # W is a list
+        for i in range(HLNN.shape[0]):
+            if i == 0:
+                w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[0, 1], INPUT_DIMENSION))
+            else:
+                w = np.random.uniform(low=-1, high=1, size=(HLNN.iloc[i, 1], HLNN.iloc[i - 1, 1]))
+            W.append(w)
 
-E = np.zeros(epochs, dtype=float)
+        w = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, HLNN.iloc[HLNN.shape[0] - 1, 1]))
+        W.append(w)
 
-for e in range(0, epochs):
-    # W, E_epoch = gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode)
-    W, E_epoch = gradient_descent_algorithm(D, W, B, ETA, e, learning_mode)
-    E[e] = E_epoch
+    if len(B) == 0:
+        # B is a list
+        for i in range(HLNN.shape[0]):
+            b = np.full((HLNN.iloc[i, 1], 1), 0.)
+            B.append(b)
 
-print('Training: Done')
+        b = np.full((OUTPUT_DIMENSION, 1), 0.)
+        B.append(b)
+    #endregion
+    print('Neural Network: Done')
 
-print('Saving: Start')
+    print('Training: Start')
 
-folder_name = 'W-BP-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs) + '/'
+    if Etot is None:
+        # load past empirical risk
+        Etot = []
 
-folder_path = os.path.join(os.getcwd(), 'weight-csv/' + folder_name)
-# Check if the folder already exists
-if not os.path.exists(folder_path):
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_path)
+    while epochs < desired_epochs:
+        E = np.zeros(min(desired_epochs, SUB_STEP), dtype=float)
 
-for i in range(0, len(W)):
-    # 0 is the input layer
-    weight = pd.DataFrame(W[i])
-    weight.to_csv(folder_path + 'W' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
+        for e in range(0, min(desired_epochs, SUB_STEP)):
+            W, E_epoch = gradient_descent_algorithm(D, W, B, ETA, epochs + e, learning_mode)
+            E[e] = E_epoch
 
-for i in range(0, len(B)):
-    # 0 is the input layer
-    bias = pd.DataFrame(B[i])
-    bias.to_csv(folder_path + 'B' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
+        Etot = np.append(Etot, E)
 
-# plot
-x = np.arange(0, epochs, 1)
-y = E
-plt.plot(x, y)
+        print('Saving: Start')
+        q = epochs // STEP
+        r = epochs % STEP
+        folder_epochs = q * STEP
+        if r > 0 or q == 0:
+            folder_epochs = (q + 1) * STEP
 
-plt.xlabel('Epochs')
-plt.ylabel('Empirical risk')
-annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
-                     + '#Patterns = ' + str(l) + '\n'
-                     + 'Learning mode = ' + learning_mode + '\n')
+        path_to_new_folder = ('backpropagation/weight-csv/' + 'W-B-' + learning_mode + '-l=' + str(l) + '-epoch='
+                              + str(folder_epochs) + '-eta=' + str(ETA) + '/')
 
-plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
+        sub_folder_path = (path_to_new_folder + 'W-B-' + learning_mode + '-l=' + str(l) + '-epoch=' + str(epochs + SUB_STEP)
+                           + '-eta=' + str(ETA) + '/')
 
-plt.savefig('weight-csv/' + folder_name + 'E')
+        sub_folder_path = os.path.join(os.getcwd(), sub_folder_path)
+        # Check if the folder already exists
+        if not os.path.exists(sub_folder_path):
+            # Create the folder if it doesn't exist
+            os.makedirs(sub_folder_path)
 
-print('Saving: Done')
+        for i in range(0, len(W)):
+            # 0 is the input layer
+            weight = pd.DataFrame(W[i])
+            weight.to_csv(sub_folder_path + 'W' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
+
+        for i in range(0, len(B)):
+            # 0 is the input layer
+            bias = pd.DataFrame(B[i])
+            bias.to_csv(sub_folder_path + 'B' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
+
+        empirical = pd.DataFrame(E)
+        empirical.to_csv(sub_folder_path + 'E.csv', encoding='utf-8', header=False, index=False)
+
+        print('Saving: Done')
+
+        epochs = epochs + SUB_STEP
+
+        if epochs // STEP:
+            # plot
+            x = np.arange(0, epochs, 1)
+            y = Etot
+            plt.plot(x, y, color='cyan')
+
+            plt.xlabel('Epochs')
+            plt.ylabel('Empirical risk')
+            annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
+                                 + '#Patterns = ' + str(l) + '\n'
+                                 + 'Learning mode = ' + learning_mode + '\n')
+
+            plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
+
+            plt.savefig(path_to_new_folder + 'E')
+
+    #region plot
+    x = np.arange(0, desired_epochs, 1)
+    y = Etot
+    plt.plot(x, y, color='cyan')
+
+    plt.xlabel('Epochs')
+    plt.ylabel('Empirical risk')
+    annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
+                         + '#Patterns = ' + str(l) + '\n'
+                         + 'Learning mode = ' + learning_mode + '\n')
+
+    plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
+
+    plt.savefig(path_to_new_folder + 'E')
+
+    plt.show()
+
+    #endregion
+    print('Training: Done')

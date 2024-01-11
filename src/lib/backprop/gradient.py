@@ -18,7 +18,7 @@ def gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode):
         for j in range(0, len(W)):
             W[j] = W[j] - ETA * E[j]
 
-        E_epoch = E_epoch + E[len(E)-1].sum()
+        E_epoch = E_epoch + np.sum(np.abs(E[len(E)-1]))
 
         print('epoch: ', e+1, 'Batch: ', i+1)
     return W, E_epoch

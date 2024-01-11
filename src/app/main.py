@@ -1,28 +1,46 @@
 from app.forward.forward import forward_training
+from app.backpropagation.backpropagation import backpropagation_training
 
 from app.validation import forward_validation
 from app.validation import backprop_validation
 
+#region Settings
 
-### Parameters
+# Parameters
 l = 60000  # Number of examples
 ETA = 0.001  # learning rate
-epochs = 500  # epochs
+epochs = 100  # epochs
 
+# Learning method
 # learning_mode = 'batch'
-# learning_mode = 'mini'
-learning_mode = 'online'
+learning_mode = 'mini'
+# learning_mode = 'online'
 
-### Forward Training
-forward_training(l, ETA, epochs, learning_mode)
-
+# Validation dataset
 validation_dataset = 'mnist_test.csv'
 
-### Forward Validation
-# weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
-weight_and_biases_path ='W-F-online-l=60000-epoch=500-eta=0.001/W-F-online-l=60000-epoch=500-eta=0.001'
-forward_validation(validation_dataset, weight_and_biases_path)
+#endregion
 
-### Backpropagation Validation
-# weight_and_biases_path = 'W-BP-mini-l=60-epoch=10'
-# backprop_validation(validation_dataset, weight_and_biases_path)
+#region Forward
+#
+# # Training
+# forward_training(l, ETA, epochs, learning_mode)
+#
+# # Validation
+# # weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
+# weight_and_biases_path ='W-F-online-l=60000-epoch=500-eta=0.001/W-F-online-l=60000-epoch=500-eta=0.001'
+# forward_validation(validation_dataset, weight_and_biases_path)
+
+#endregion
+
+#region Backpropagation
+
+# Training
+# backpropagation_training(l, ETA, epochs, learning_mode)
+
+# Validation
+weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'
+backprop_validation(validation_dataset, weight_and_biases_path)
+
+#endregion
+
