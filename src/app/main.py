@@ -7,14 +7,14 @@ from app.validation import backprop_validation
 #region Settings
 
 # Parameters
-l = 60000  # Number of examples
+l = 6  # Number of examples
 ETA = 0.001  # learning rate
 epochs = 100  # epochs
 
 # Learning method
 # learning_mode = 'batch'
-learning_mode = 'mini'
-# learning_mode = 'online'
+# learning_mode = 'mini'
+learning_mode = 'online'
 
 # Validation dataset
 validation_dataset = 'mnist_test.csv'
@@ -36,11 +36,11 @@ validation_dataset = 'mnist_test.csv'
 #region Backpropagation
 
 # Training
-# backpropagation_training(l, ETA, epochs, learning_mode)
+backpropagation_training(l, ETA, epochs, learning_mode)
 
 # Validation
-weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'
-backprop_validation(validation_dataset, weight_and_biases_path)
+# weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'
+# backprop_validation(validation_dataset, weight_and_biases_path)
 
 #endregion
 

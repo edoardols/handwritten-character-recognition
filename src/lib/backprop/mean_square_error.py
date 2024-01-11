@@ -42,46 +42,89 @@ def loss_function(W, X, A, de):
 
 def empirical_risk(Y, W, X, B):
     E = copy.deepcopy(W)
-    for i in range(0, len(E)):
-        E[i] = E[i]*0
 
-    for k in range(0, len(X)):
-        #A = np.zeros((len(W)), dtype=float)
-        x = X[k]
-        x = x.reshape(1, -1)
-        Y_NN = output(W, x, B)
+    if len(Y) == 1:
+        for i in range(0, len(E)):
+            E[i] = E[i] * 0
 
-        # first step backprop
+            # A = np.zeros((len(W)), dtype=float)
+            x = X
+            x = x.reshape(1, -1)
+            Y_NN = output(W, x, B)
 
-        # x is the input of the last layer (for eval dsigMatrix)
-        x = Y_NN[(len(Y_NN)-1) -1]
-        # A = activation(W, X, B)
-        A = activation(W[len(W)-1], x, B[len(W)-1])
-        y = one_hot_encode(Y[k])
-        de = -(y - sigMatrix(A)) * dsigMatrix(A)
+            # first step backprop
 
-        ek = np.dot(de, np.transpose(x))
+            # x is the input of the last layer (for eval dsigMatrix)
+            x = Y_NN[(len(Y_NN) - 1) - 1]
+            # A = activation(W, X, B)
+            A = activation(W[len(W) - 1], x, B[len(W) - 1])
+            y = one_hot_encode(Y)
+            de = -(y - sigMatrix(A)) * dsigMatrix(A)
 
-        # E[len(E) - 1] = 0
-        E[len(E)-1] = ek
-        # backprop step >1
-        for i in reversed(range(1, len(W)-1)):
-            # Iteration over layers
+            ek = np.dot(de, np.transpose(x))
 
-            x = Y_NN[i-1]
-            A = activation(W[i], x, B[i])
+            # E[len(E) - 1] = 0
+            E[len(E) - 1] = ek
+            # backprop step >1
+            for i in reversed(range(1, len(W) - 1)):
+                # Iteration over layers
 
-            ek, de = loss_function(W[i+1], x, A, de)
-            E[i] = E[i] + ek
-        # last step backprop
-        x = X[k]
-        x = x.reshape(1, -1)
-        # A = activation(W, X, B)
-        A = activation(W[0], x, B[0])
-        de = dsigMatrix(A) * np.dot(np.transpose(W[1]), de)
+                x = Y_NN[i - 1]
+                A = activation(W[i], x, B[i])
 
-        ek = np.dot(de, x)
+                ek, de = loss_function(W[i + 1], x, A, de)
+                E[i] = E[i] + ek
+            # last step backprop
+            x = X
+            x = x.reshape(1, -1)
+            # A = activation(W, X, B)
+            A = activation(W[0], x, B[0])
+            de = dsigMatrix(A) * np.dot(np.transpose(W[1]), de)
 
-        E[0] = E[0] + ek
+            ek = np.dot(de, x)
+
+            E[0] = E[0] + ek
+    else:
+        for i in range(0, len(E)):
+            E[i] = E[i]*0
+
+        for k in range(0, len(X)):
+            #A = np.zeros((len(W)), dtype=float)
+            x = X[k]
+            x = x.reshape(1, -1)
+            Y_NN = output(W, x, B)
+
+            # first step backprop
+
+            # x is the input of the last layer (for eval dsigMatrix)
+            x = Y_NN[(len(Y_NN)-1) -1]
+            # A = activation(W, X, B)
+            A = activation(W[len(W)-1], x, B[len(W)-1])
+            y = one_hot_encode(Y[k])
+            de = -(y - sigMatrix(A)) * dsigMatrix(A)
+
+            ek = np.dot(de, np.transpose(x))
+
+            # E[len(E) - 1] = 0
+            E[len(E)-1] = ek
+            # backprop step >1
+            for i in reversed(range(1, len(W)-1)):
+                # Iteration over layers
+
+                x = Y_NN[i-1]
+                A = activation(W[i], x, B[i])
+
+                ek, de = loss_function(W[i+1], x, A, de)
+                E[i] = E[i] + ek
+            # last step backprop
+            x = X[k]
+            x = x.reshape(1, -1)
+            # A = activation(W, X, B)
+            A = activation(W[0], x, B[0])
+            de = dsigMatrix(A) * np.dot(np.transpose(W[1]), de)
+
+            ek = np.dot(de, x)
+
+            E[0] = E[0] + ek
 
     return E
