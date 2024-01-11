@@ -19,7 +19,7 @@ forward_training(l, ETA, epochs, learning_mode)
 validation_dataset = 'mnist_test.csv'
 
 ### Forward Validation
-#weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
+# weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
 weight_and_biases_path ='W-F-online-l=60000-epoch=500-eta=0.001/W-F-online-l=60000-epoch=500-eta=0.001'
 forward_validation(validation_dataset, weight_and_biases_path)
 
