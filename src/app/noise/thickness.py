@@ -9,7 +9,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 file_name = 'mnist_test'
-dataset = pd.read_csv('../../../data/' + file_name + '.csv', header=None)
+dataset = pd.read_csv('../../../dataset/' + file_name + '.csv', header=None)
 
 # Number of examples
 X_D = dataset.iloc[:, 1:]
@@ -78,7 +78,7 @@ if step != 0:
 
     new_file_name = file_name + '-' + 'th-step=' + str(step)
 
-    folder_path = '../../../data/thickness/'
+    folder_path = '../../../dataset/thickness/'
 
     if not os.path.exists(folder_path):
         # Create the folder if it doesn't exist

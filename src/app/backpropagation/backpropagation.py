@@ -10,7 +10,7 @@ from src.lib.mapping import input_normalization_Matrix
 
 print('Loading dataset: Start')
 
-dataset = pd.read_csv('../../../data/mnist_train.csv', header=None)
+dataset = pd.read_csv('../../../dataset/mnist_train.csv', header=None)
 
 # Number of examples
 l = 60

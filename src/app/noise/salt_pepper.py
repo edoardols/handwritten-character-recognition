@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 file_name = 'mnist_test'
-dataset = pd.read_csv('../../../data/' + file_name + '.csv', header=None)
+dataset = pd.read_csv('../../../dataset/' + file_name + '.csv', header=None)
 
 # Number of examples
 
@@ -58,4 +58,4 @@ plt.show()
 # W-1L-batch-epochs
 # new_file_name = file_name + '-' + 'sp-s-' + str(severity) + '-p-' + str(percentage)
 
-# sp.to_csv('../../../data/salt_pepper/' + new_file_name + '.csv', encoding='utf-8', header=False, index=False)
+# sp.to_csv('../../../dataset/salt_pepper/' + new_file_name + '.csv', encoding='utf-8', header=False, index=False)

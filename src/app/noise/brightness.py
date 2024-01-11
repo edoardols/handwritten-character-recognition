@@ -6,7 +6,7 @@ import os
 from matplotlib import pyplot as plt
 
 file_name = 'mnist_test'
-dataset = pd.read_csv('../../../data/' + file_name + '.csv', header=None)
+dataset = pd.read_csv('../../../dataset/' + file_name + '.csv', header=None)
 
 # Number of examples
 
@@ -41,7 +41,7 @@ br = pd.DataFrame(np.insert(X, 0, Y, axis=1))
 
 new_file_name = file_name + '-' + 'br-p=' + str(percentage)
 
-folder_path = '../../../data/brightness/'
+folder_path = '../../../dataset/brightness/'
 
 if not os.path.exists(folder_path):
     # Create the folder if it doesn't exist

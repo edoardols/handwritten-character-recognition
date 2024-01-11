@@ -30,7 +30,7 @@ def empirical_risk(Y, W, X, B):
     E = 0
 
     # TODO if X or Y is scalar skip
-    if np.isscalar(X) or np.isscalar(Y):
+    if X.ndim == 1 or len(Y) == 1:
         E = E + loss_function(Y, W, X, B)
     else:
         # X is the batch of examples

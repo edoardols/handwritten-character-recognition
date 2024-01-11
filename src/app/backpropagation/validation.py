@@ -10,7 +10,7 @@ print('---------- Validation ----------')
 # dataset = 'salt_pepper/mnist_test-sp-s-0.5-p-0.6'
 # dataset = 'salt_pepper/mnist_test-sp-s-1-p-0.6'
 dataset = 'blob/mnist_test-bl-p-0.2'
-validation_set = pd.read_csv('../../../data/' + dataset + '.csv', header=None)
+validation_set = pd.read_csv('../../../dataset/' + dataset + '.csv', header=None)
 
 # parameters
 XV_D = validation_set.iloc[:, 1:]

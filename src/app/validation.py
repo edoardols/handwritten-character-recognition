@@ -61,7 +61,7 @@ def display_validation(percentage, error_label, images, error_output_nn):
 
 def forward_validation(validation_dataset_path, weight_and_biases_path):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../data/' + validation_dataset_path, header=None)
+    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
@@ -86,7 +86,7 @@ def forward_validation(validation_dataset_path, weight_and_biases_path):
 
 def backprop_validation(validation_dataset_path, weight_and_biases_path):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../data/' + validation_dataset_path, header=None)
+    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
