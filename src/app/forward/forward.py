@@ -25,6 +25,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
     epochs = 0
 
     while folder_not_found and q > 0:
+        # previous_epochs = (q + 1) * STEP
         previous_epochs = q * STEP
         path_to_previous_folder = ('forward/weight-csv/' + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
                                    + str(previous_epochs) + '-eta=' + str(ETA) + '/')
@@ -33,22 +34,23 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
             folder_not_found = False
 
             for i in range(0, 5):
-                path_to_previous_epochs = (path_to_previous_folder + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
-                                           + str(previous_epochs - SUB_STEP * i) + '-eta=' + str(ETA) + '/')
-                if os.path.exists(path_to_previous_epochs):
-                    epochs = (previous_epochs - SUB_STEP * i)
-                    # Weights
-                    w = pd.read_csv(path_to_previous_epochs + 'W.csv', header=None)
-                    W = w.to_numpy()
+                # if previous_epochs - SUB_STEP * i <= desired_epochs:
+                    path_to_previous_epochs = (path_to_previous_folder + 'W-F-' + learning_mode + '-l=' + str(l) + '-epoch='
+                                               + str(previous_epochs - SUB_STEP * i) + '-eta=' + str(ETA) + '/')
+                    if os.path.exists(path_to_previous_epochs):
+                        epochs = (previous_epochs - SUB_STEP * i)
+                        # Weights
+                        w = pd.read_csv(path_to_previous_epochs + 'W.csv', header=None)
+                        W = w.to_numpy()
 
-                    # Biases
-                    b = pd.read_csv(path_to_previous_epochs + 'B.csv', header=None)
-                    B = b.to_numpy()
+                        # Biases
+                        b = pd.read_csv(path_to_previous_epochs + 'B.csv', header=None)
+                        B = b.to_numpy()
 
-                    # Empirical Risk
-                    e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
-                    Etot = e.to_numpy()
-                    break
+                        # Empirical Risk
+                        e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
+                        Etot = e.to_numpy()
+                        break
         q = q - 1
 
     print('Loading dataset: Start')
@@ -96,6 +98,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
         Etot = np.append(Etot, E)
 
         print('Saving: Start')
+
         q = epochs // STEP
         r = epochs % STEP
         folder_epochs = q * STEP
@@ -142,8 +145,6 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
             plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
 
             plt.savefig(path_to_new_folder + 'E')
-
-
 
     # plot
     x = np.arange(0, desired_epochs, 1)

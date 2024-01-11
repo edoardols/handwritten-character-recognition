@@ -1,27 +1,46 @@
-import matplotlib.pyplot as plt
-import numpy as np
 
-# Assuming you have a list of 28x28 pixel images (represented as NumPy arrays)
-# Replace this with your actual list of images
-images = [np.random.rand(28, 28) for _ in range(5)]  # Example images
+from backpropagation.backpropagation import backpropagation_training
 
-fig, ax = plt.subplots()
-current_index = 0  # Initial index of the displayed image
+from app.validation import forward_validation
+from validation import backprop_validation
 
-# Display the first image
-img_plot = ax.imshow(images[current_index], cmap='gray')
+#region Settings
 
-def on_arrow_key(event):
-    global current_index
-    if event.key == 'right':
-        current_index = (current_index + 1) % len(images)
-    elif event.key == 'left':
-        current_index = (current_index - 1) % len(images)
-    img_plot.set_data(images[current_index])
-    fig.canvas.draw()
+# Parameters
+l = 60000  # Number of examples
+ETA = 0.001  # learning rate
+epochs = 200  # epochs
 
-# Connect the key press event to the function
-fig.canvas.mpl_connect('key_press_event', on_arrow_key)
+# Learning method
+# learning_mode = 'batch'
+learning_mode = 'mini'
+# learning_mode = 'online'
 
-plt.show()
+# Validation dataset
+validation_dataset = 'XOR_val.csv'
+
+#endregion
+
+#region Forward
+#
+# # Training
+# forward_training(l, ETA, epochs, learning_mode)
+#
+# # Validation
+# # weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
+# weight_and_biases_path ='W-F-online-l=60000-epoch=500-eta=0.001/W-F-online-l=60000-epoch=500-eta=0.001'
+# forward_validation(validation_dataset, weight_and_biases_path)
+
+#endregion
+
+#region Backpropagation
+
+# Training
+#backpropagation_training(l, ETA, epochs, learning_mode)
+
+# Validation
+weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'
+backprop_validation(validation_dataset, weight_and_biases_path)
+
+#endregion
 
