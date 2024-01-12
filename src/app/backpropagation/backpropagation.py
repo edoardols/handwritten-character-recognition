@@ -8,6 +8,7 @@ from matplotlib import pyplot as plt
 from src.lib.backprop.gradient import gradient_descent_algorithm
 from src.lib.mapping import input_normalization_Matrix
 
+
 def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
     STEP = 500
@@ -119,7 +120,7 @@ def backpropagation_training(l, ETA, desired_epochs, learning_mode):
         q = epochs // STEP
         r = epochs % STEP
         folder_epochs = q * STEP
-        if r > 0 or q == 0:
+        if r >= 0 or q == 0:
             folder_epochs = (q + 1) * STEP
 
         path_to_new_folder = ('backpropagation/weight-csv/' + 'W-B-' + learning_mode + '-l=' + str(l) + '-epoch='

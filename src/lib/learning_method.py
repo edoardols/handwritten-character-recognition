@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def learning_method(D, method='mini', minibatch=16):
+def learning_method(D, method='mini', minibatch=128):
 
     # shuffle the dataset
     np.random.shuffle(D)
