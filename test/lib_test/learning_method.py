@@ -3,7 +3,7 @@ import numpy as np
 from lib_test.mapping import input_normalization_Matrix
 
 
-def learning_method(D, method='mini', minibatch=16):
+def learning_method(D, method='mini', minibatch=128):
 
     # shuffle the dataset
     #dataset.sample(frac=1)
