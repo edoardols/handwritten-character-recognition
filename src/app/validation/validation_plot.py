@@ -76,6 +76,7 @@ def forward_validation(validation_dataset_path, learning_mode, pattern, epochs, 
         os.makedirs('validation/figure-forward/threshold=' + str(validation_threshold))
     plt.savefig(path_figure_folder + '.png')
 
+
     plt.show()
 
 
