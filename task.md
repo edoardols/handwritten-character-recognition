@@ -2,9 +2,8 @@
 
 - change resolution, standard 28x28 vs smartphone resolution (upscaling and downscaling)
 - add noise ( obscure part)
-- test with graphics (plot number)
-- plot empirical risk among epochs
-- XOR
+- XOR threshold 0.2 - 0.8
+- photo only for testing
 
 # Link
 [UCI Dataset]()
