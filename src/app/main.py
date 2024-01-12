@@ -7,9 +7,9 @@ from src.app.validation.validation_plot import forward_validation as for_val
 # region Settings
 
 # Parameters
-l = 60000  # Number of examples
+l = 60  # Number of examples
 ETA = 0.01  # learning rate
-epochs = 1000  # epochs
+epochs = 100  # epochs
 
 # Learning method
 # learning_mode = 'batch'
@@ -21,7 +21,7 @@ learning_mode = 'mini'
 # region Forward
 
 # Training
-forward_training(l, ETA, epochs, learning_mode)
+#forward_training(l, ETA, epochs, learning_mode)
 
 # Validation
 # weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
@@ -49,7 +49,7 @@ forward_training(l, ETA, epochs, learning_mode)
 # # region Backpropagation
 #
 # # Training
-# # backpropagation_training(l, ETA, epochs, learning_mode)
+backpropagation_training(l, ETA, epochs, learning_mode)
 #
 # # Validation
 # # weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'

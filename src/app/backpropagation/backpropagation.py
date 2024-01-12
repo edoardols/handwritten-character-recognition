@@ -11,8 +11,11 @@ from src.lib.mapping import input_normalization_Matrix
 
 def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
-    STEP = 500
-    SUB_STEP = 100
+    #STEP = 500
+    #SUB_STEP = 100
+    #ONLY FOR ONLINE MODE TO SAVE MORE FOLDERS
+    STEP = 50
+    SUB_STEP = 10
 
     W = []
     B = []

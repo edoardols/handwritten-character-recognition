@@ -10,15 +10,16 @@ def gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode):
     # YB, XB = learning_method(Y, X, learning_mode, 128)
     YB, XB = learning_method(dataset, learning_mode, 128)
 
-    E_epoch = 0
+    E_plot = 0
     for i in range(0, len(XB)):
         # Create E are list of matrix
-        E = empirical_risk(YB[i], W, XB[i], B)
+        E, E_plot_batch = empirical_risk(YB[i], W, XB[i], B)
 
         for j in range(0, len(W)):
             W[j] = W[j] - ETA * E[j]
 
-        E_epoch = E_epoch + np.sum(np.abs(E[len(E)-1]))
+        E_plot = E_plot + E_plot_batch
+        #E_epoch = E_epoch + np.sum(np.abs(E[len(E)-1]))
 
         print('epoch: ', e+1, 'Batch: ', i+1)
-    return W, E_epoch
+    return W, E_plot

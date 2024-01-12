@@ -42,8 +42,9 @@ def loss_function(W, X, A, de):
 
 def empirical_risk(Y, W, X, B):
     E = copy.deepcopy(W)
+    E_plot = 0
 
-    if len(Y) == 1:
+    if len(Y) == 1:  # for online mode
         for i in range(0, len(E)):
             E[i] = E[i] * 0
 
@@ -59,7 +60,11 @@ def empirical_risk(Y, W, X, B):
             # A = activation(W, X, B)
             A = activation(W[len(W) - 1], x, B[len(W) - 1])
             y = one_hot_encode(Y)
-            de = -(y - sigMatrix(A)) * dsigMatrix(A)
+            y_nn = sigMatrix(A)
+            de = -(y - y_nn) * dsigMatrix(A)
+            plot_loss = (y - y_nn)
+
+            E_plot = E_plot + 0.5 * np.sum(plot_loss * plot_loss)
 
             ek = np.dot(de, np.transpose(x))
 
@@ -101,7 +106,12 @@ def empirical_risk(Y, W, X, B):
             # A = activation(W, X, B)
             A = activation(W[len(W)-1], x, B[len(W)-1])
             y = one_hot_encode(Y[k])
-            de = -(y - sigMatrix(A)) * dsigMatrix(A)
+            y_nn = sigMatrix(A)
+            de = -(y - y_nn) * dsigMatrix(A)
+
+            plot_loss = (y - y_nn)
+
+            E_plot = E_plot + 0.5*np.sum(plot_loss*plot_loss)
 
             ek = np.dot(de, np.transpose(x))
 
@@ -127,4 +137,4 @@ def empirical_risk(Y, W, X, B):
 
             E[0] = E[0] + ek
 
-    return E
+    return E, E_plot
