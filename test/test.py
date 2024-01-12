@@ -1,4 +1,3 @@
-
 from backpropagation.backpropagation import backpropagation_training
 
 from app.validation import forward_validation
@@ -40,7 +39,6 @@ validation_dataset = 'XOR_val.csv'
 
 # Validation
 weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'
-backprop_validation(validation_dataset, weight_and_biases_path)
+#backprop_validation(validation_dataset, weight_and_biases_path)
 
 #endregion
-
