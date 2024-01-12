@@ -1,8 +1,8 @@
-from app.forward.forward import forward_training
-from app.backpropagation.backpropagation import backpropagation_training
+from src.app.forward.forward import forward_training
+from src.app.backpropagation.backpropagation import backpropagation_training
 
-from app.validation import forward_validation
-from app.validation import backprop_validation
+from src.app.validation import forward_validation
+from src.app.validation import backprop_validation
 
 # region Settings
 
