@@ -146,21 +146,6 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
             plt.savefig(path_to_new_folder + 'E')
 
-    # plot
-    x = np.arange(0, desired_epochs, 1)
-    y = Etot
-    plt.plot(x, y, color='cyan')
 
-    plt.xlabel('Epochs')
-    plt.ylabel('Empirical risk')
-    annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
-                         + '#Patterns = ' + str(l) + '\n'
-                         + 'Learning mode = ' + learning_mode + '\n')
-
-    plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
-
-    plt.savefig(path_to_new_folder + 'E')
-
-    plt.show()
 
     print('Training: Done')

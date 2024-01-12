@@ -1,8 +1,3 @@
-from backpropagation.backpropagation import backpropagation_training
-
-from app.validation import forward_validation
-from validation import backprop_validation
-
 #region Settings
 
 # Parameters
