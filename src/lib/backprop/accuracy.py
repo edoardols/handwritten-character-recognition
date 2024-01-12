@@ -26,7 +26,7 @@ def output(W, X, B):
     return Y_NN[len(Y_NN)-1]
 
 
-def accuracy(Y, W, X, B):
+def accuracy(Y, W, X, B, validation_threshold):
     # error
     error_label = []
     error_patter = []
@@ -39,7 +39,8 @@ def accuracy(Y, W, X, B):
         # index of the max element in the array
         # what character the NN thinks it has recognized
         y_nn = np.argmax(Y_NN)
-        if y_nn == Y[i]:
+        if y_nn == Y[i] and Y_NN[y_nn] >= validation_threshold:
+        # if y_nn == Y[i]:
             a = a + 1
         else:
             error_label.append(Y[i])
