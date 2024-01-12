@@ -6,7 +6,6 @@ from src.lib.forward.accuracy import accuracy as forward_accuracy
 from src.lib.backprop.accuracy import accuracy as backprop_accuracy
 from src.lib.mapping import input_normalization_Matrix
 
-
 global current_index
 current_index = 0
 
@@ -59,7 +58,7 @@ def display_validation(percentage, error_label, images, error_output_nn):
     plt.show()
 
 
-def forward_validation(validation_dataset_path, weight_and_biases_path):
+def forward_validation(validation_dataset_path, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
     validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
 
@@ -77,14 +76,14 @@ def forward_validation(validation_dataset_path, weight_and_biases_path):
     b = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + '/B.csv', header=None)
     B = b.to_numpy()
 
-    percentage, error_label, images, error_output_nn = forward_accuracy(YV, W, XV, B)
+    percentage, error_label, images, error_output_nn = forward_accuracy(YV, W, XV, B, validation_threshold)
 
     print('Validation: Done')
 
     display_validation(percentage, error_label, images, error_output_nn)
 
 
-def backprop_validation(validation_dataset_path, weight_and_biases_path):
+def backprop_validation(validation_dataset_path, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
     validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
 
@@ -107,7 +106,7 @@ def backprop_validation(validation_dataset_path, weight_and_biases_path):
         w = pd.read_csv('backpropagation/weight-csv/' + weight_and_biases_path + '/' + 'W' + str(i) + '.csv', header=None)
         W.append(w.to_numpy())
 
-    percentage, error_label, images, error_output_nn = backprop_accuracy(YV, W, XV, B)
+    percentage, error_label, images, error_output_nn = backprop_accuracy(YV, W, XV, B, validation_threshold)
 
     print('Validation: Done')
 

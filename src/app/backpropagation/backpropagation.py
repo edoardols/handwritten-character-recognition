@@ -144,7 +144,7 @@ def backpropagation_training(l, ETA, desired_epochs, learning_mode):
             bias = pd.DataFrame(B[i])
             bias.to_csv(sub_folder_path + 'B' + str(i) + '.csv', encoding='utf-8', header=False, index=False)
 
-        empirical = pd.DataFrame(E)
+        empirical = pd.DataFrame(Etot)
         empirical.to_csv(sub_folder_path + 'E.csv', encoding='utf-8', header=False, index=False)
 
         print('Saving: Done')
@@ -167,7 +167,7 @@ def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
             plt.savefig(path_to_new_folder + 'E')
 
-    #region plot
+    # region plot
     x = np.arange(0, desired_epochs, 1)
     y = Etot
     plt.plot(x, y, color='cyan')
@@ -184,5 +184,5 @@ def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
     plt.show()
 
-    #endregion
+    # endregion
     print('Training: Done')
