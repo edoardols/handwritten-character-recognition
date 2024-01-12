@@ -60,7 +60,7 @@ def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
     print('Loading dataset: Start')
 
-    dataset = pd.read_csv('../../data/mnist_train.csv', header=None)
+    dataset = pd.read_csv('../../dataset/mnist_train.csv', header=None)
     dataset = dataset.iloc[:l, :]
 
     D = dataset.to_numpy()
