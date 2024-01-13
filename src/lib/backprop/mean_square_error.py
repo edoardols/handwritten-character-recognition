@@ -17,7 +17,7 @@ def output(W, X, B):
         Y_NN.append(y_nn)
 
     # X is a single vector input step 0
-    A = np.zeros((len(W[0]), 1), dtype=float)
+    A = np.zeros((len(W[0]), 1), dtype=np.float32)
     A = activation(W[0], X, B[0])
     Y_NN[0] = sigMatrix(A)
 
