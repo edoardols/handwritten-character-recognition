@@ -1,10 +1,10 @@
 import numpy as np
 
-from src.lib.mapping import input_normalization_Matrix
+
 def learning_method(D, method='mini', minibatch=128):
 
     # shuffle the dataset
-    # np.random.shuffle(D)
+    np.random.shuffle(D)
 
     X = D[:, 1:]
     Y = D[:, :1]
