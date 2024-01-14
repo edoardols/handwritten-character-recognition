@@ -26,8 +26,8 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
     epochs = 0
 
     while folder_not_found and q > 0:
-        # previous_epochs = (q + 1) * STEP
-        previous_epochs = q * STEP
+        previous_epochs = (q + 1) * STEP
+        # previous_epochs = q * STEP
         path_to_previous_folder = ('forward/training/' + 'F-' + learning_mode + '-l=' + str(l) + '-eta=' + str(ETA) +
                                    '-epoch=' + str(previous_epochs) + '/')
 
@@ -36,7 +36,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
             for i in range(0, 5):
                 # if previous_epochs - SUB_STEP * i <= desired_epochs:
-                    path_to_previous_epochs = (path_to_previous_folder + '-epoch=' + str(previous_epochs - SUB_STEP * i)
+                    path_to_previous_epochs = (path_to_previous_folder + 'epoch=' + str(previous_epochs - SUB_STEP * i)
                                                + '/')
                     if os.path.exists(path_to_previous_epochs):
                         epochs = (previous_epochs - SUB_STEP * i)
