@@ -9,6 +9,7 @@ l = 60000  # Number of examples
 ETA = 0.01  # learning rate
 epochs = 2000  # epochs
 
+
 # Learning method
 # learning_mode = 'batch'
 learning_mode = 'mini'
