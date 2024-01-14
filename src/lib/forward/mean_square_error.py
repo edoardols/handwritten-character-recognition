@@ -34,6 +34,7 @@ def empirical_risk(Y, WB, X):
     if X.ndim == 1 or len(Y) == 1:
         loss, plot_loss = loss_function(Y, WB, X)
         E = E + loss
+        E_plot = E_plot + 0.5 * np.sum(plot_loss * plot_loss)
     else:
         # X is the batch of examples
         for i in range(0, len(X)):

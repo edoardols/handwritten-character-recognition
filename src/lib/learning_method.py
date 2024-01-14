@@ -12,8 +12,8 @@ def learning_method(D, method='mini', minibatch=128):
     x = []
     y = []
     if method == 'batch':
-        y.append(X)
-        x.append(Y)
+        y.append(Y)
+        x.append(X)
         return y, x
 
     if method == 'mini':

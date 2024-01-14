@@ -7,7 +7,7 @@ from src.app.validation.validation_plot import forward_validation_graph
 # Parameters
 l = 60000  # Number of examples
 ETA = 0.01  # learning rate
-epochs = 2000  # epochs
+epochs = 1000  # epochs
 
 # Learning method
 # learning_mode = 'batch'
