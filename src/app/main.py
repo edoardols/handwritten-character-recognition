@@ -1,60 +1,30 @@
 from src.app.forward.forward import forward_training
 from src.app.backpropagation.backpropagation import backpropagation_training
 
-from src.app.validation.validation import forward_validation
-from src.app.validation.validation_plot import forward_validation as for_val
-
-# region Settings
+from src.app.validation.validation import forward_validation_single
+from src.app.validation.validation_plot import forward_validation_graph
 
 # Parameters
 l = 60000  # Number of examples
 ETA = 0.01  # learning rate
-epochs = 2000  # epochs
+epochs = 900  # epochs
 
 # Learning method
 # learning_mode = 'batch'
 learning_mode = 'mini'
 # learning_mode = 'online'
 
-# endregion
-
-# region Forward
-
 # Training
-forward_training(l, ETA, epochs, learning_mode)
+# forward_training(l, ETA, epochs, learning_mode)
 # backpropagation_training(l, ETA, epochs, learning_mode)
 
 # Validation
-# weight_and_biases_path = 'W-F-mini-l=60000-epoch=500-eta=0.001/W-F-mini-l=60000-epoch=500-eta=0.001'
-# weight_and_biases_path = 'W-F-online-l=60000-epoch=500-eta=0.001/W-F-online-l=60000-epoch=400-eta=0.001'
-# forward_validation(validation_dataset, weight_and_biases_path, validation_threshold)
+validation_dataset = 'mnist_test'
+validation_threshold = 0.0
 
-# Validation dataset
-# validation_dataset = 'mnist_test'
+weight_and_biases_path = 'F-mini-l=60000-eta=0.01-epoch=1000/epoch=900'
+forward_validation_single(validation_dataset, weight_and_biases_path, validation_threshold)
+forward_validation_graph(validation_dataset, weight_and_biases_path, validation_threshold)
 
-# # Parameters
-# l = 60000  # Number of examples
-# ETA = 0.001  # learning rate
-# epochs = 2500  # epochs
-#
-# validation_threshold = 0.2
-#
-# # Learning method
-# # learning_mode = 'batch'
-# learning_mode = 'mini'
-# # learning_mode = 'online'
-#
-# for_val(validation_dataset, learning_mode, l, epochs, ETA, validation_threshold)
-# # endregion
-#
-# # region Backpropagation
-#
-# # Training
-#backpropagation_training(l, ETA, epochs, learning_mode)
-#
-# # Validation
-# # weight_and_biases_path = 'W-B-mini-l=60000-epoch=500-eta=0.001/W-B-mini-l=60000-epoch=100-eta=0.001'
-# # backprop_validation(validation_dataset, weight_and_biases_path, validation_threshold)
-#
-# # endregion
-
+# weight_and_biases_path = 'B-mini-l=60000-eta=0.001-epoch=500/epoch=100'
+# backprop_validation(validation_dataset, weight_and_biases_path, validation_threshold)

@@ -12,7 +12,7 @@ current_index = 0
 
 def display_validation(percentage, error_label, images, error_output_nn):
 
-    print('Accuracy: ' + str(percentage) + "%")
+    # print('Accuracy: ' + str(percentage) + "%")
 
     fig, ax = plt.subplots()
 
@@ -41,7 +41,7 @@ def display_validation(percentage, error_label, images, error_output_nn):
         fig.canvas.draw()
 
     fig.canvas.mpl_connect('key_press_event', on_arrow_key)
-
+    plt.title('Accuracy: ' + str(percentage) + '%')
     plt.show()
 
     data = error_label
@@ -58,9 +58,9 @@ def display_validation(percentage, error_label, images, error_output_nn):
     plt.show()
 
 
-def forward_validation(validation_dataset_path, weight_and_biases_path, validation_threshold):
+def forward_validation_single(validation_dataset_path, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
+    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
@@ -70,13 +70,20 @@ def forward_validation(validation_dataset_path, weight_and_biases_path, validati
 
     XV = input_normalization_Matrix(XV)
 
-    w = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + '/W.csv', header=None)
+    w = pd.read_csv('forward/training/' + weight_and_biases_path + '/W.csv', header=None)
     W = w.to_numpy()
 
-    b = pd.read_csv('forward/weight-csv/' + weight_and_biases_path + '/B.csv', header=None)
+    b = pd.read_csv('forward/training/' + weight_and_biases_path + '/B.csv', header=None)
     B = b.to_numpy()
 
-    percentage, error_label, images, error_output_nn = forward_accuracy(YV, W, XV, B, validation_threshold)
+    # Bias learnable
+    # Expand matrix W with a column B
+    WB = np.insert(W, W.shape[1], np.transpose(B), axis=1)
+
+    # Expand matrix X with a column of 1s
+    XV_hat = np.insert(XV, XV.shape[1], np.transpose(np.ones((XV.shape[0], 1), dtype=float)), axis=1)
+
+    percentage, error_label, images, error_output_nn = forward_accuracy(YV, WB, XV_hat, validation_threshold)
 
     print('Validation: Done')
 
@@ -85,7 +92,7 @@ def forward_validation(validation_dataset_path, weight_and_biases_path, validati
 
 def backprop_validation(validation_dataset_path, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
+    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
@@ -99,11 +106,11 @@ def backprop_validation(validation_dataset_path, weight_and_biases_path, validat
     B = []
 
     for i in range(0, 3):
-        b = pd.read_csv('backpropagation/weight-csv/' + weight_and_biases_path + '/' + 'B' + str(i) + '.csv', header=None)
+        b = pd.read_csv('backpropagation/training/' + weight_and_biases_path + '/' + 'B' + str(i) + '.csv', header=None)
         b = b[0].to_numpy()
         B.append(b.reshape(-1, 1))
 
-        w = pd.read_csv('backpropagation/weight-csv/' + weight_and_biases_path + '/' + 'W' + str(i) + '.csv', header=None)
+        w = pd.read_csv('backpropagation/training/' + weight_and_biases_path + '/' + 'W' + str(i) + '.csv', header=None)
         W.append(w.to_numpy())
 
     percentage, error_label, images, error_output_nn = backprop_accuracy(YV, W, XV, B, validation_threshold)

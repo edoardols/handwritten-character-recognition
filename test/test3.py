@@ -1,16 +1,17 @@
-import numpy as np
+weight_and_biases_path = 'F-mini-l=60000-eta=0.01-epoch=1000/epoch=900'
 
-# input dim
-INPUT_DIMENSION = 28 * 28
+folder = weight_and_biases_path.split('/')
+print(folder)
 
-# output dim
-OUTPUT_DIMENSION = 10
+parameters = folder[0].split('-')
+print(parameters)
 
-print('X: (',str(INPUT_DIMENSION), ', 1)')
-# W is a matrix
-W = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, INPUT_DIMENSION))
-print('W:', W.shape)
+l = parameters[2].split('=')[1]
+ETA = parameters[3].split('=')[1]
+learning_mode = parameters[1]
+epoch = folder[1].split('=')[1]
 
-# B is a vector
-B = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 1))
-print('B:', B.shape)
+print('l:', l)
+print('ETA:', ETA)
+print('mode:', learning_mode)
+print('epoch:', epoch)
