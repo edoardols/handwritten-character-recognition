@@ -25,7 +25,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
     epochs = 0
 
-    while folder_not_found and q > 0:
+    while folder_not_found and q >= 0:
         previous_epochs = (q + 1) * STEP
         # previous_epochs = q * STEP
         path_to_previous_folder = ('forward/training/' + 'F-' + learning_mode + '-l=' + str(l) + '-eta=' + str(ETA) +
