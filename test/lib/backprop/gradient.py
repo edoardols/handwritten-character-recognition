@@ -1,6 +1,4 @@
-
-from src.lib.backprop.mean_square_error import *
-from src.lib.learning_method import learning_method
+from handwrittencharacter.lib import learning_method
 
 
 # def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):

@@ -1,5 +1,5 @@
-from handwrittencharacter.lib import empirical_risk
-from handwrittencharacter.lib import learning_method
+from handwrittencharacter.lib.forward.mean_square_error import empirical_risk
+from handwrittencharacter.lib.learning_method import learning_method
 
 
 # def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):

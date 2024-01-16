@@ -2,9 +2,9 @@ import numpy as np
 
 import copy
 
-from src.lib.activation import activation
-from src.lib.mapping import one_hot_encode
-from src.lib.sigmoid import sigMatrix, dsigMatrix
+from handwrittencharacter.lib import activation
+from handwrittencharacter.lib import one_hot_encode
+from handwrittencharacter.lib import sigMatrix, dsigMatrix
 
 def output(W, X, B):
     # W is a list of matrices
@@ -104,7 +104,7 @@ def empirical_risk(Y, W, X, B):
             # x is the input of the last layer (for eval dsigMatrix)
             x = Y_NN[(len(Y_NN)-1) -1]
             # A = activation(W, X, B)
-            A = activation(W[len(W)-1], x, B[len(W)-1])
+            A = activation(W[len(W) - 1], x, B[len(W) - 1])
             y = one_hot_encode(Y[k])
             y_nn = sigMatrix(A)
             de = -(y - y_nn) * dsigMatrix(A)

@@ -1,7 +1,7 @@
 import numpy as np
 
-from handwrittencharacter.lib import sigMatrix
-from handwrittencharacter.lib import activation
+from handwrittencharacter.lib.sigmoid import sigMatrix
+from handwrittencharacter.lib.activation import activation
 
 
 def accuracy(Y, WB, X, validation_threshold):

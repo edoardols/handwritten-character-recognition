@@ -5,8 +5,7 @@ import os
 
 from matplotlib import pyplot as plt
 
-from src.lib.backprop.gradient import gradient_descent_algorithm
-from src.lib.mapping import input_normalization_Matrix
+from handwrittencharacter.lib import gradient_descent_algorithm
 
 
 def backpropagation_training(l, ETA, desired_epochs, learning_mode):

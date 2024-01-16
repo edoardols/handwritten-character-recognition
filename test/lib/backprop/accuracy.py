@@ -1,7 +1,8 @@
 import numpy as np
 
-from src.lib.sigmoid import sigMatrix
-from src.lib.activation import activation
+from handwrittencharacter.lib import sigMatrix
+from handwrittencharacter.lib import activation
+
 
 def output(W, X, B):
     # W is a list of matrices

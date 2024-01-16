@@ -1,8 +1,8 @@
 import numpy as np
 
-from handwrittencharacter.lib import activation
-from handwrittencharacter.lib import one_hot_encode
-from handwrittencharacter.lib import sigMatrix, dsigMatrix
+from handwrittencharacter.lib.activation import activation
+from handwrittencharacter.lib.mapping import one_hot_encode
+from handwrittencharacter.lib.sigmoid import sigMatrix, dsigMatrix
 
 
 def delta_error(Y, WB, X):
