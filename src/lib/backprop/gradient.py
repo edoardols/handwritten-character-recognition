@@ -4,22 +4,18 @@ from src.lib.learning_method import learning_method
 
 
 # def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
-def gradient_descent_algorithm(dataset, W, B, ETA, e, learning_mode):
-    # W is a list of matrices
-    # B is list of vectors
-    # YB, XB = learning_method(Y, X, learning_mode, 128)
+def gradient_descent_algorithm(dataset, WB0, WB1, WB2, ETA, e, learning_mode):
     YB, XB = learning_method(dataset, learning_mode, 128)
 
     E_plot = 0
     for i in range(0, len(XB)):
-        # Create E are list of matrix
-        E, E_plot_batch = empirical_risk(YB[i], W, XB[i], B)
+        E0, E1, E2, E_plot_batch = empirical_risk(YB[i], WB0, WB1, WB2, XB[i])
 
-        for j in range(0, len(W)):
-            W[j] = W[j] - ETA * E[j]
+        WB0 = WB0 - ETA * E0
+        WB1 = WB1 - ETA * E1
+        WB2 = WB2 - ETA * E2
 
         E_plot = E_plot + E_plot_batch
-        #E_epoch = E_epoch + np.sum(np.abs(E[len(E)-1]))
 
         print('epoch: ', e+1, 'Batch: ', i+1)
-    return W, E_plot
+    return WB0, WB1, WB2, E_plot

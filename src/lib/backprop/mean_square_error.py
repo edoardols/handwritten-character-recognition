@@ -6,33 +6,33 @@ from src.lib.activation import activation
 from src.lib.mapping import one_hot_encode
 from src.lib.sigmoid import sigMatrix, dsigMatrix
 
-def output(W, X, B):
-    # W is a list of matrices
-    # B is a list of vectors
-    # Y_NN list of vectors
-    Y_NN = []
-
-    for i in range(0, len(B)):
-        y_nn = np.zeros((len(B[i]), 1))
-        Y_NN.append(y_nn)
+def output(WB0, WB1, WB2, X):
 
     # X is a single vector input step 0
-    A = np.zeros((len(W[0]), 1), dtype=np.float32)
-    A = activation(W[0], X, B[0])
-    Y_NN[0] = sigMatrix(A)
+    A0 = activation(WB0, X)
+    Y0_NN = sigMatrix(A0)
 
-    for i in range(1, len(B)):
-        # X is a single vector input
-        x = Y_NN[i-1]
-        A = activation(W[i], x, B[i])
-        Y_NN[i] = sigMatrix(A)
-    return Y_NN
+    Y0_NN = np.insert(Y0_NN, Y0_NN.shape[0], np.transpose(1.0), axis=0)
+    #A0 = np.insert(A0, A0.shape[0], np.transpose(1.0), axis=0)
+
+    A1 = activation(WB1, Y0_NN)
+    Y1_NN = sigMatrix(A1)
+
+    Y1_NN = np.insert(Y1_NN, Y1_NN.shape[0], np.transpose(1.0), axis=0)
+    #A1 = np.insert(A1, A1.shape[0], np.transpose(1.0), axis=0)
+
+    A2 = activation(WB2, Y1_NN)
+    Y2_NN = sigMatrix(A2)
+    return Y0_NN, Y1_NN, Y2_NN, A0, A1, A2
 
 
-def loss_function(W, X, A, de):
+def loss_function(WB, X, A, de):
     # W and B are for a fixe layer
     # de step i
-    de = dsigMatrix(A) * np.dot(np.transpose(W), de)
+
+    # We have to drop the last column of WB because the bias doesn't have children and it doesn't participate
+    # in the calculation of the delta error (backward step)
+    de = dsigMatrix(A) * np.dot(np.transpose(WB[:, :WB.shape[1] - 1]), de)
 
     X = np.transpose(X)
     e = np.dot(de, X)
@@ -40,101 +40,44 @@ def loss_function(W, X, A, de):
     return e, de
 
 
-def empirical_risk(Y, W, X, B):
-    E = copy.deepcopy(W)
+def empirical_risk(Y, WB0, WB1, WB2, X):
+    E0 = copy.deepcopy(WB0 * 0)
+    E1 = copy.deepcopy(WB1 * 0)
+    E2 = copy.deepcopy(WB2 * 0)
+
     E_plot = 0
+    # TODO add case for ONLINE MODE
 
-    if len(Y) == 1:  # for online mode
-        for i in range(0, len(E)):
-            E[i] = E[i] * 0
+    for k in range(0, len(X)):
 
-            # A = np.zeros((len(W)), dtype=float)
-            x = X
-            x = x.reshape(1, -1)
-            Y_NN = output(W, x, B)
 
-            # first step backprop
+        x = X[k]
+        x = x.reshape(1, -1)
+        Y0_NN, Y1_NN, Y2_NN, A0, A1, A2 = output(WB0, WB1, WB2, x)
 
-            # x is the input of the last layer (for eval dsigMatrix)
-            x = Y_NN[(len(Y_NN) - 1) - 1]
-            # A = activation(W, X, B)
-            A = activation(W[len(W) - 1], x, B[len(W) - 1])
-            y = one_hot_encode(Y)
-            y_nn = sigMatrix(A)
-            de = -(y - y_nn) * dsigMatrix(A)
-            plot_loss = (y - y_nn)
+        # first step backprop (output layer)
 
-            E_plot = E_plot + 0.5 * np.sum(plot_loss * plot_loss)
+        y = one_hot_encode(Y[k])
+        de = -(y - Y2_NN) * dsigMatrix(A2)
+        ek = np.dot(de, np.transpose(Y1_NN))
 
-            ek = np.dot(de, np.transpose(x))
+        E2 = E2 + ek
 
-            # E[len(E) - 1] = 0
-            E[len(E) - 1] = ek
-            # backprop step >1
-            for i in reversed(range(1, len(W) - 1)):
-                # Iteration over layers
+        # second step backprop (top hidden layer)
 
-                x = Y_NN[i - 1]
-                A = activation(W[i], x, B[i])
+        ek, de = loss_function(WB2, Y0_NN, A1, de)
 
-                ek, de = loss_function(W[i + 1], x, A, de)
-                E[i] = E[i] + ek
-            # last step backprop
-            x = X
-            x = x.reshape(1, -1)
-            # A = activation(W, X, B)
-            A = activation(W[0], x, B[0])
-            de = dsigMatrix(A) * np.dot(np.transpose(W[1]), de)
+        E1 = E1 + ek
 
-            ek = np.dot(de, x)
+        # second step backprop (bottom hidden layer)
+        x = X[k]
+        x = x.reshape(-1, 1)
 
-            E[0] = E[0] + ek
-    else:
-        for i in range(0, len(E)):
-            E[i] = E[i]*0
+        ek, de = loss_function(WB1, x, A0, de)
 
-        for k in range(0, len(X)):
-            #A = np.zeros((len(W)), dtype=float)
-            x = X[k]
-            x = x.reshape(1, -1)
-            Y_NN = output(W, x, B)
+        E0 = E0 + ek
 
-            # first step backprop
+        plot_loss = (y - Y2_NN)
+        E_plot = E_plot + 0.5 * np.sum(plot_loss * plot_loss)
 
-            # x is the input of the last layer (for eval dsigMatrix)
-            x = Y_NN[(len(Y_NN)-1) -1]
-            # A = activation(W, X, B)
-            A = activation(W[len(W)-1], x, B[len(W)-1])
-            y = one_hot_encode(Y[k])
-            y_nn = sigMatrix(A)
-            de = -(y - y_nn) * dsigMatrix(A)
-
-            plot_loss = (y - y_nn)
-
-            E_plot = E_plot + 0.5*np.sum(plot_loss*plot_loss)
-
-            ek = np.dot(de, np.transpose(x))
-
-            # E[len(E) - 1] = 0
-            E[len(E)-1] = ek
-            # backprop step >1
-            for i in reversed(range(1, len(W)-1)):
-                # Iteration over layers
-
-                x = Y_NN[i-1]
-                A = activation(W[i], x, B[i])
-
-                ek, de = loss_function(W[i+1], x, A, de)
-                E[i] = E[i] + ek
-            # last step backprop
-            x = X[k]
-            x = x.reshape(1, -1)
-            # A = activation(W, X, B)
-            A = activation(W[0], x, B[0])
-            de = dsigMatrix(A) * np.dot(np.transpose(W[1]), de)
-
-            ek = np.dot(de, x)
-
-            E[0] = E[0] + ek
-
-    return E, E_plot
+    return E0, E1, E2, E_plot
