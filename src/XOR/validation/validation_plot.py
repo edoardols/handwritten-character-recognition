@@ -55,6 +55,8 @@ def XOR_validation_graph(validation_dataset_path, learning_mode, pattern, epochs
             WB1 = np.insert(W1, W1.shape[1], np.transpose(B1), axis=1)
             WB2 = np.insert(W2, W2.shape[1], np.transpose(B2), axis=1)
 
+            XV_hat = np.insert(XV, XV.shape[1], np.transpose(np.ones((XV.shape[0], 1), dtype=float)), axis=1)
+
             percentage, error_label, images, error_output_nn = backprop_accuracy(YV, WB0, WB1, WB2, XV, validation_threshold)
 
             accuracy[(j // 100) - 1] = percentage

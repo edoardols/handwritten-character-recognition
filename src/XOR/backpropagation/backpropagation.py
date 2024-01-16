@@ -8,7 +8,7 @@ from matplotlib import pyplot as plt
 from src.XOR.lib.gradient import gradient_descent_algorithm
 
 
-def backpropagation_training(l, ETA, desired_epochs, learning_mode):
+def XOR_training(l, ETA, desired_epochs, learning_mode):
 
     STEP = 500
     SUB_STEP = 100
@@ -63,7 +63,7 @@ def backpropagation_training(l, ETA, desired_epochs, learning_mode):
 
     print('Loading dataset: Start')
 
-    dataset = pd.read_csv('../../dataset/mnist_train.csv', header=None)
+    dataset = pd.read_csv('XOR_training.csv', header=None)
 
     pattern = dataset.iloc[:l, 1:]
     label = dataset.iloc[:l, :1]

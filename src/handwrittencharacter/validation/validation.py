@@ -123,7 +123,10 @@ def backpropagation_validation_single(validation_dataset_path, weight_and_biases
     WB1 = np.insert(W1, W1.shape[1], np.transpose(B1), axis=1)
     WB2 = np.insert(W2, W2.shape[1], np.transpose(B2), axis=1)
 
-    percentage, error_label, images, error_output_nn = backpropagation_accuracy(YV, WB0, WB1, WB2, XV, validation_threshold)
+    # Expand matrix X with a column of 1s
+    XV_hat = np.insert(XV, XV.shape[1], np.transpose(np.ones((XV.shape[0], 1), dtype=float)), axis=1)
+
+    percentage, error_label, images, error_output_nn = backpropagation_accuracy(YV, WB0, WB1, WB2, XV_hat, validation_threshold)
 
     print('Validation: Done')
 

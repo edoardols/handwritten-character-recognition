@@ -8,14 +8,14 @@ from src.handwrittencharacter.validation.validation import backpropagation_valid
 from src.handwrittencharacter.validation.validation_plot import backpropagation_validation_graph
 
 # Parameters
-l = 60000  # Number of examples
+l = 60  # Number of examples
 ETA = 0.01  # learning rate
 epochs = 100  # epochs
 
 # Learning method
 # learning_mode = 'batch'
-learning_mode = 'mini'
-# learning_mode = 'online'
+# learning_mode = 'mini'
+learning_mode = 'online'
 
 # Training
 # forward_training(l, ETA, epochs, learning_mode)

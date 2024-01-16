@@ -2,16 +2,13 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 
-from src.handwrittencharacter.lib.forward.accuracy import accuracy as forward_accuracy
-from src.handwrittencharacter.lib.backprop.accuracy import accuracy as backpropagation_accuracy
-from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
+from src.XOR.lib.accuracy import accuracy as XOR_accuracy
 
 global current_index
 current_index = 0
 
 
 def display_validation(percentage, error_label, images, error_output_nn):
-
     fig, ax = plt.subplots()
 
     # Display the first image
@@ -56,17 +53,15 @@ def display_validation(percentage, error_label, images, error_output_nn):
     plt.show()
 
 
-def XOR_validation_single(validation_dataset_path, weight_and_biases_path, validation_threshold):
+def XOR_validation_single(validation_dataset_path, weight_and_biases_path):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path + '.csv', header=None)
+    validation_dataset = pd.read_csv(validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
 
     YV_D = validation_dataset.iloc[:, :1]
     YV = YV_D[0].to_numpy()
-
-    XV = input_normalization_Matrix(XV)
 
     path = 'backpropagation/training/' + weight_and_biases_path + '/'
 
@@ -75,25 +70,25 @@ def XOR_validation_single(validation_dataset_path, weight_and_biases_path, valid
     W0 = w.to_numpy()
     w = pd.read_csv(path + 'W1.csv', header=None)
     W1 = w.to_numpy()
-    w = pd.read_csv(path + 'W2.csv', header=None)
-    W2 = w.to_numpy()
 
     # Biases
     b = pd.read_csv(path + 'B0.csv', header=None)
     B0 = b.to_numpy()
     b = pd.read_csv(path + 'B1.csv', header=None)
     B1 = b.to_numpy()
-    b = pd.read_csv(path + 'B2.csv', header=None)
-    B2 = b.to_numpy()
 
     # Expand matrix W with a column B
     WB0 = np.insert(W0, W0.shape[1], np.transpose(B0), axis=1)
     WB1 = np.insert(W1, W1.shape[1], np.transpose(B1), axis=1)
-    WB2 = np.insert(W2, W2.shape[1], np.transpose(B2), axis=1)
 
-    percentage, error_label, images, error_output_nn = backpropagation_accuracy(YV, WB0, WB1, WB2, XV, validation_threshold)
+    XV_hat = np.insert(XV, XV.shape[1], np.transpose(np.ones((XV.shape[0], 1), dtype=float)), axis=1)
+
+    percentage, unclassified, wrong_classified = XOR_accuracy(YV, WB0, WB1, XV_hat)
+
+    print('Accuracy: ' + str(percentage) + '%')
+    print('unclassified', unclassified)
+    print('wrong_classified', wrong_classified)
 
     print('Validation: Done')
 
-    display_validation(percentage, error_label, images, error_output_nn)
-
+    # display_validation(percentage, unclassified, wrong_classified)

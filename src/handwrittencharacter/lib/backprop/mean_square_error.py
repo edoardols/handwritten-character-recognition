@@ -47,14 +47,19 @@ def empirical_risk(Y, WB0, WB1, WB2, X):
 
     for k in range(0, len(X)):
 
-
-        x = X[k]
-        x = x.reshape(1, -1)
+        if len(Y) > 1:
+            x = X[k]
+            x = x.reshape(1, -1)
+        else:
+            x = X
         Y0_NN, Y1_NN, Y2_NN, A0, A1, A2 = output(WB0, WB1, WB2, x)
 
         # first step backprop (output layer)
+        if len(Y) > 1:
+            y = one_hot_encode(Y[k])
+        else:
+            y = one_hot_encode(Y)
 
-        y = one_hot_encode(Y[k])
         de = -(y - Y2_NN) * dsigMatrix(A2)
         ek = np.dot(de, np.transpose(Y1_NN))
 
@@ -67,9 +72,11 @@ def empirical_risk(Y, WB0, WB1, WB2, X):
         E1 = E1 + ek
 
         # second step backprop (bottom hidden layer)
-        x = X[k]
+        if len(Y) > 1:
+            x = X[k]
+        else:
+            x = X
         x = x.reshape(-1, 1)
-
         ek, de = loss_function(WB1, x, A0, de)
 
         E0 = E0 + ek
