@@ -12,7 +12,7 @@ global current_index
 current_index = 0
 
 
-def forward_validation_graph(validation_dataset_name, weight_and_biases_path, validation_threshold):
+def forward_validation_graph(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
 
     folders = weight_and_biases_path.split('/')
@@ -24,7 +24,7 @@ def forward_validation_graph(validation_dataset_name, weight_and_biases_path, va
     learning_mode = parameters[1]
     epochs = int(folders[1].split('=')[1])
 
-    validation_dataset_path = '../../dataset/' + validation_dataset_name + '.csv'
+    validation_dataset_path = PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_name + '.csv'
     validation_dataset = pd.read_csv(validation_dataset_path, header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
@@ -52,10 +52,10 @@ def forward_validation_graph(validation_dataset_name, weight_and_biases_path, va
             child_folder = 'epoch=' + str(j)
             weight_and_biases_path = parent_folder + '/' + child_folder
 
-            w = pd.read_csv('forward/training/' + weight_and_biases_path + '/W.csv', header=None)
+            w = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/W.csv', header=None)
             W = w.to_numpy()
 
-            b = pd.read_csv('forward/training/' + weight_and_biases_path + '/B.csv', header=None)
+            b = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/B.csv', header=None)
             B = b.to_numpy()
 
             # Bias learnable
@@ -87,7 +87,7 @@ def forward_validation_graph(validation_dataset_name, weight_and_biases_path, va
 
     plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
 
-    parent_figure_folder = ('validation/figure-forward/' + str(validation_dataset_name) + '/threshold='
+    parent_figure_folder = (PATH_MAIN_FILE + '/validation/figure-forward/' + str(validation_dataset_name) + '/threshold='
                             + str(validation_threshold) + '/')
 
     parent_figure_folder = os.path.join(os.getcwd(), parent_figure_folder)
@@ -103,9 +103,9 @@ def forward_validation_graph(validation_dataset_name, weight_and_biases_path, va
     plt.show()
 
 
-def backpropagation_validation_graph(validation_dataset_path, learning_mode, pattern, epochs, eta, validation_threshold):
+def backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset_path, learning_mode, pattern, epochs, eta, validation_threshold):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path, header=None)
+    validation_dataset = pd.read_csv(PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_path, header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
@@ -124,7 +124,7 @@ def backpropagation_validation_graph(validation_dataset_path, learning_mode, pat
             child_folder = 'epoch=' + str(j)
             weight_and_biases_path = parent_folder + '/' + child_folder
 
-            path = 'backpropagation/training/' + weight_and_biases_path + '/'
+            path = PATH_MAIN_FILE + '/backpropagation/training/' + weight_and_biases_path + '/'
 
             # Weights
             w = pd.read_csv(path + 'W0.csv', header=None)
@@ -167,13 +167,13 @@ def backpropagation_validation_graph(validation_dataset_path, learning_mode, pat
 
     plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
 
-    path_figure_folder = 'validation/figure-backpropagation/' + validation_dataset + '/threshold=' + str(
+    path_figure_folder = PATH_MAIN_FILE + '/validation/figure-backpropagation/' + validation_dataset + '/threshold=' + str(
         validation_threshold) + '/W-B-' + str(learning_mode) + '-l=' + str(pattern) + '-epoch=' + str(
         epochs) + '-eta=' + str(eta)
 
-    if not os.path.exists('validation/figure-backpropagation/threshold=' + str(validation_threshold)):
+    if not os.path.exists(PATH_MAIN_FILE + '/validation/figure-backpropagation/threshold=' + str(validation_threshold)):
         # Create the folder if it doesn't exist
-        os.makedirs('validation/figure-backpropagation/threshold=' + str(validation_threshold))
+        os.makedirs(PATH_MAIN_FILE + '/validation/figure-backpropagation/threshold=' + str(validation_threshold))
     plt.savefig(path_figure_folder + '.png')
 
     plt.show()

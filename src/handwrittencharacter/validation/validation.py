@@ -56,9 +56,9 @@ def display_validation(percentage, error_label, images, error_output_nn):
     plt.show()
 
 
-def forward_validation_single(validation_dataset_path, weight_and_biases_path, validation_threshold):
+def forward_validation_single(PATH_MAIN_FILE, validation_dataset_path, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path + '.csv', header=None)
+    validation_dataset = pd.read_csv(PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
@@ -68,10 +68,10 @@ def forward_validation_single(validation_dataset_path, weight_and_biases_path, v
 
     XV = input_normalization_Matrix(XV)
 
-    w = pd.read_csv('forward/training/' + weight_and_biases_path + '/W.csv', header=None)
+    w = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/W.csv', header=None)
     W = w.to_numpy()
 
-    b = pd.read_csv('forward/training/' + weight_and_biases_path + '/B.csv', header=None)
+    b = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/B.csv', header=None)
     B = b.to_numpy()
 
     # Bias learnable
@@ -88,9 +88,9 @@ def forward_validation_single(validation_dataset_path, weight_and_biases_path, v
     display_validation(percentage, error_label, images, error_output_nn)
 
 
-def backpropagation_validation_single(validation_dataset_path, weight_and_biases_path, validation_threshold):
+def backpropagation_validation_single(PATH_MAIN_FILE, validation_dataset_path, weight_and_biases_path, validation_threshold):
     print('Validation: Start')
-    validation_dataset = pd.read_csv('../../dataset/' + validation_dataset_path + '.csv', header=None)
+    validation_dataset = pd.read_csv(PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
     XV = XV_D.to_numpy()
@@ -100,7 +100,7 @@ def backpropagation_validation_single(validation_dataset_path, weight_and_biases
 
     XV = input_normalization_Matrix(XV)
 
-    path = 'backpropagation/training/' + weight_and_biases_path + '/'
+    path = PATH_MAIN_FILE + '/backpropagation/training/' + weight_and_biases_path + '/'
 
     # Weights
     w = pd.read_csv(path + 'W0.csv', header=None)

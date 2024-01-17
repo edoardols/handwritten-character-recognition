@@ -2,8 +2,8 @@ from src.handwrittencharacter.lib.learning_method import learning_method
 from src.handwrittencharacter.lib.backprop.mean_square_error import empirical_risk
 
 
-def gradient_descent_algorithm(dataset, WB0, WB1, WB2, ETA, e, learning_mode):
-    YB, XB = learning_method(dataset, learning_mode, 128)
+def gradient_descent_algorithm(dataset, WB0, WB1, WB2, ETA, e, learning_mode, batch_dimension):
+    YB, XB = learning_method(dataset, learning_mode, batch_dimension)
 
     E_plot = 0
     for i in range(0, len(XB)):

@@ -9,7 +9,8 @@ from handwrittencharacter.lib.mapping import input_normalization_Matrix
 
 global epochs, path_to_new_folder
 
-def forward_training(l, ETA, desired_epochs, learning_mode):
+
+def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
 
     STEP = 500
     SUB_STEP = 100
@@ -27,9 +28,12 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
     while folder_not_found and q >= 0:
         previous_epochs = (q + 1) * STEP
-        # previous_epochs = q * STEP
-        path_to_previous_folder = ('forward/training/' + 'F-' + learning_mode + '-l=' + str(l) + '-eta=' + str(ETA) +
-                                   '-epoch=' + str(previous_epochs) + '/')
+        if learning_mode == 'mini':
+            path_to_previous_folder = (PATH_MAIN_FILE + '/forward/training/' + 'F-' + learning_mode + '=' + str(batch_dimension) + '-l='
+                                       + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
+        else:
+            path_to_previous_folder = (PATH_MAIN_FILE + '/forward/training/' + 'F-' + learning_mode + '-l=' + str(l) + '-eta='
+                                       + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
 
         if os.path.exists(path_to_previous_folder):
             folder_not_found = False
@@ -56,7 +60,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
 
     print('Loading dataset: Start')
 
-    dataset = pd.read_csv('../../dataset/mnist_train.csv', header=None)
+    dataset = pd.read_csv(PATH_MAIN_FILE + '/../../dataset/mnist_train.csv', header=None)
 
     pattern = dataset.iloc[:l, 1:]
     label = dataset.iloc[:l, :1]
@@ -110,7 +114,7 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
         E = np.zeros(min(desired_epochs, SUB_STEP))
 
         for e in range(0, min(desired_epochs, SUB_STEP)):
-            WB, E_epoch = gradient_descent_algorithm(D, WB, ETA, epochs + e, learning_mode)
+            WB, E_epoch = gradient_descent_algorithm(D, WB, ETA, epochs + e, learning_mode, batch_dimension)
             E[e] = E_epoch
 
         Etot = np.append(Etot, E)
@@ -123,12 +127,15 @@ def forward_training(l, ETA, desired_epochs, learning_mode):
         if r >= 0 or q == 0:
             folder_epochs = (q + 1) * STEP
 
-        path_to_new_folder = ('forward/training/' + 'F-' + learning_mode + '-l=' + str(l) + '-eta=' + str(ETA) +
-                              '-epoch=' + str(folder_epochs) + '/')
+        if learning_mode == 'mini':
+            path_to_new_folder = (PATH_MAIN_FILE + '/forward/training/' + 'F-' + learning_mode + '=' + str(batch_dimension) + '-l='
+                                       + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(folder_epochs) + '/')
+        else:
+            path_to_new_folder = (PATH_MAIN_FILE + '/forward/training/' + 'F-' + learning_mode + '-l=' + str(l) + '-eta='
+                                       + str(ETA) + '-epoch=' + str(folder_epochs) + '/')
 
         sub_folder_path = (path_to_new_folder + 'epoch=' + str(epochs + SUB_STEP) + '/')
 
-        sub_folder_path = os.path.join(os.getcwd(), sub_folder_path)
         # Check if the folder already exists
         if not os.path.exists(sub_folder_path):
             # Create the folder if it doesn't exist

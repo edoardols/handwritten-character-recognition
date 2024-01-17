@@ -1,4 +1,4 @@
-weight_and_biases_path = 'F-mini-l=60000-eta=0.01-epoch=1000/epoch=900'
+weight_and_biases_path = 'F-mini=128-l=60000-eta=0.01-epoch=1000/epoch=900'
 
 folder = weight_and_biases_path.split('/')
 print(folder)

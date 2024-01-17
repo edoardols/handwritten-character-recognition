@@ -3,8 +3,8 @@ from handwrittencharacter.lib.learning_method import learning_method
 
 
 # def gradient_descent_algorithm(Y, W, X, B, ETA, e, learning_mode):
-def gradient_descent_algorithm(D, WB, ETA, e, learning_mode):
-    YB, XB = learning_method(D, learning_mode, 128)
+def gradient_descent_algorithm(D, WB, ETA, e, learning_mode, batch_dimension):
+    YB, XB = learning_method(D, learning_mode, batch_dimension)
 
     E_plot = 0
     for i in range(0, len(XB)):
