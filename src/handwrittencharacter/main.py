@@ -12,7 +12,7 @@ from src.handwrittencharacter.backpropagation.backpropagation import backpropaga
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # Parameters
-l = 100  # Number of examples
+l = 60000  # Number of examples
 ETA = 0.01  # learning rate
 epochs = 1  # epochs
 

@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 import numpy as np
+import torch
 from matplotlib import pyplot as plt
 
 from handwrittencharacter.lib.forward.gradient import gradient_descent_algorithm
@@ -46,11 +47,13 @@ def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batc
                         epochs = (previous_epochs - SUB_STEP * i)
                         # Weights
                         w = pd.read_csv(path_to_previous_epochs + 'W.csv', header=None)
-                        W = w.to_numpy()
+                        # W = w.to_numpy()
+                        W = torch.tensor(w.values, dtype=torch.float64)
 
                         # Biases
                         b = pd.read_csv(path_to_previous_epochs + 'B.csv', header=None)
-                        B = b.to_numpy()
+                        # B = b.to_numpy()
+                        B = torch.tensor(b.values, dtype=torch.float64)
 
                         # Empirical Risk
                         e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
@@ -69,7 +72,10 @@ def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batc
     X = pattern.to_numpy()
     # doing the input normalization here it is much faster because you do that just once
     X = input_normalization_Matrix(X)
+    X = torch.tensor(X, dtype=torch.float64)
+
     Y = label.to_numpy()
+    Y = torch.tensor(Y, dtype=torch.float64)
 
     print('Loading dataset: Done')
 
@@ -85,22 +91,28 @@ def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batc
     np.random.seed(42)
     if W is None:
         # W is a matrix
-        W = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, INPUT_DIMENSION))
+        # W = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, INPUT_DIMENSION))
+        W = torch.randn((OUTPUT_DIMENSION, INPUT_DIMENSION), dtype=torch.float64)
 
     if B is None:
         # B is a vector
         # B = np.full((OUTPUT_DIMENSION, 1), -10.)
-        B = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 1))
+        # B = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 1))
+        B = torch.randn((OUTPUT_DIMENSION, 1), dtype=torch.float64)
 
     # Bias learnable
     # Expand matrix W with a column B
-    WB = np.insert(W, W.shape[1], np.transpose(B), axis=1)
+    # WB = np.insert(W, W.shape[1], np.transpose(B), axis=1)
+    WB = torch.cat((W, B), dim=1)
 
     # Expand matrix X with a column of 1s
-    X_hat = np.insert(X, X.shape[1], np.transpose(np.ones((X.shape[0], 1), dtype=float)), axis=1)
+    # X_hat = np.insert(X, X.shape[1], np.transpose(np.ones((X.shape[0], 1), dtype=float)), axis=1)
+    X_hat = torch.cat((X, torch.ones((X.shape[0], 1), dtype=torch.float64)), dim=1)
 
     # Regroup the dataset
-    D = np.insert(X_hat, 0, np.transpose(Y), axis=1)
+    # D = np.insert(X_hat, 0, np.transpose(Y), axis=1)
+    Y_column = Y.view(-1, 1)
+    D = torch.cat((Y_column, X_hat), dim=1)
 
     print('Neural Network: Done')
 
