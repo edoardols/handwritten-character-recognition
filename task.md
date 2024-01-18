@@ -25,3 +25,11 @@ Forward and Backprop
 
 => save W
 => save graph E
+
+
+# Update Backprop
+
+Using 3 variables one for every later so we can remove the use of the list,
+trying to speed up the computation
+
+Maybe with the use of multithreading
