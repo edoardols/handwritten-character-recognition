@@ -5,7 +5,7 @@ import time
 # Function to perform the test
 def perform_test():
     # Create random matrices
-    size = 1000
+    size = 100
     np_matrix_a = np.random.rand(size, size)
     np_matrix_b = np.random.rand(size, size)
 
@@ -31,7 +31,7 @@ def perform_test():
     return np_time, torch_mm_time, torch_matmul_time
 
 # Repeat the test for 600 iterations
-num_iterations = 600
+num_iterations = 60000
 total_np_time, total_torch_mm_time, total_torch_matmul_time = 0, 0, 0
 
 for _ in range(num_iterations):

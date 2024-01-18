@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 
 
 def input_normalization(x):
@@ -10,7 +11,8 @@ def input_normalization(x):
 
 
 def one_hot_encode(y):
-    Y = np.zeros((10, 1), dtype=float)
+    # Y = np.zeros((10, 1), dtype=float)
+    Y = torch.zeros((10, 1), dtype=torch.float64)
     Y[int(y)] = 1
     return Y
 

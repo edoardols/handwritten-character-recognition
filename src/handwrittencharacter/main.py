@@ -1,18 +1,18 @@
 import os
 
-from src.handwrittencharacter.forward.forward import forward_training
+# from src.handwrittencharacter.forward.forward import forward_training
 from src.handwrittencharacter.backpropagation.backpropagation import backpropagation_training
 
-from src.handwrittencharacter.validation.validation import forward_validation_single
-from src.handwrittencharacter.validation.validation_plot import forward_validation_graph
+# from src.handwrittencharacter.validation.validation import forward_validation_single
+# from src.handwrittencharacter.validation.validation_plot import forward_validation_graph
 
-from src.handwrittencharacter.validation.validation import backpropagation_validation_single
-from src.handwrittencharacter.validation.validation_plot import backpropagation_validation_graph
+# from src.handwrittencharacter.validation.validation import backpropagation_validation_single
+# from src.handwrittencharacter.validation.validation_plot import backpropagation_validation_graph
 
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # Parameters
-l = 1000  # Number of examples
+l = 100  # Number of examples
 ETA = 0.01  # learning rate
 epochs = 1  # epochs
 
