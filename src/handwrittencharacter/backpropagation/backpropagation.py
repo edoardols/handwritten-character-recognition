@@ -9,7 +9,9 @@ from src.handwrittencharacter.lib.backprop.gradient import gradient_descent_algo
 from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
 
 
-def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
+def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension=128):
+
+    # np.show_config()
 
     STEP = 500
     SUB_STEP = 100
@@ -39,7 +41,7 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
                                        + '-l=' + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
         else:
             path_to_previous_folder = (PATH_MAIN_FILE +
-                        '/backpropagation/training/' + 'B-' + learning_mode + '=' + batch_dimension + '-l=' + str(l)
+                        '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l)
                         + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
 
         if os.path.exists(path_to_previous_folder):
@@ -82,8 +84,10 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     # D = dataset.iloc[:l, :]
 
     X = pattern.to_numpy()
+
     # doing the input normalization here it is much faster because you do that just once
     X = input_normalization_Matrix(X)
+
     Y = label.to_numpy()
 
     print('Loading dataset: Done')

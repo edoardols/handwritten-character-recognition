@@ -7,9 +7,9 @@ def activation(WB, X):
     # d = #neurons in input
 
     # ensure that this is a column vector
-    X = X.reshape(-1, 1)
+    #X = X.reshape(-1, 1)
 
     # A = np.zeros((len(W), 1), dtype=float)
     # A = np.dot(W, X) + B
-    A = np.dot(WB, X)
-    return A
+    #A = np.dot(WB, X)
+    return np.dot(WB, X.reshape(-1, 1))

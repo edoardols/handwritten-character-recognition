@@ -2,9 +2,10 @@ import numpy as np
 
 import copy
 
-from handwrittencharacter.lib.activation import activation
-from handwrittencharacter.lib.mapping import one_hot_encode
-from handwrittencharacter.lib.sigmoid import sigMatrix, dsigMatrix
+from src.handwrittencharacter.lib.activation import activation
+from src.handwrittencharacter.lib.mapping import one_hot_encode
+from src.handwrittencharacter.lib.sigmoid import sigMatrix, dsigMatrix
+
 
 def output(WB0, WB1, WB2, X):
 
@@ -20,6 +21,7 @@ def output(WB0, WB1, WB2, X):
 
     A2 = activation(WB2, Y1_NN)
     Y2_NN = sigMatrix(A2)
+
     return Y0_NN, Y1_NN, Y2_NN, A0, A1, A2
 
 
@@ -27,7 +29,7 @@ def loss_function(WB, X, A, de):
     # W and B are for a fixe layer
     # de step i
 
-    # We have to drop the last column of WB because the bias doesn't have children and it doesn't participate
+    # We have to drop the last column of WB because the bias doesn't have children, and it doesn't participate
     # in the calculation of the delta error (backward step)
     de = dsigMatrix(A) * np.dot(np.transpose(WB[:, :WB.shape[1] - 1]), de)
 
