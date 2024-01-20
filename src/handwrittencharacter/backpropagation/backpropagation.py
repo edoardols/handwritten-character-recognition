@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+import tensorflow as tf
+
 import os
 
 from matplotlib import pyplot as plt
@@ -35,11 +37,12 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     while folder_not_found and q >= 0:
         previous_epochs = (q + 1) * STEP
         if learning_mode == 'mini':
-            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '=' + str(batch_dimension)
-                                       + '-l=' + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
+            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '='
+                                       + str(batch_dimension) + '-l=' + str(l) + '-eta=' + str(ETA) + '-epoch='
+                                       + str(previous_epochs) + '/')
         else:
-            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l)
-                        + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
+            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l='
+                                       + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
 
         if os.path.exists(path_to_previous_folder):
             folder_not_found = False
@@ -52,19 +55,29 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
 
                     # Weights
                     w = pd.read_csv(path_to_previous_epochs + 'W0.csv', header=None)
-                    W0 = w.to_numpy()
+                    # W0 = w.to_numpy()
+                    W0 = tf.constant(w.values, dtype=tf.float64)
+
                     w = pd.read_csv(path_to_previous_epochs + 'W1.csv', header=None)
-                    W1 = w.to_numpy()
+                    # W1 = w.to_numpy()
+                    W1 = tf.constant(w.values, dtype=tf.float64)
+
                     w = pd.read_csv(path_to_previous_epochs + 'W2.csv', header=None)
-                    W2 = w.to_numpy()
+                    # W2 = w.to_numpy()
+                    W2 = tf.constant(w.values, dtype=tf.float64)
 
                     # Biases
                     b = pd.read_csv(path_to_previous_epochs + 'B0.csv', header=None)
-                    B0 = b.to_numpy()
+                    # B0 = b.to_numpy()
+                    B0 = tf.constant(b.values, dtype=tf.float64)
+
                     b = pd.read_csv(path_to_previous_epochs + 'B1.csv', header=None)
-                    B1 = b.to_numpy()
+                    # B1 = b.to_numpy()
+                    B1 = tf.constant(b.values, dtype=tf.float64)
+
                     b = pd.read_csv(path_to_previous_epochs + 'B2.csv', header=None)
-                    B2 = b.to_numpy()
+                    # B2 = b.to_numpy()
+                    B2 = tf.constant(b.values, dtype=tf.float64)
 
                     # Empirical Risk
                     e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
@@ -80,10 +93,13 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     label = dataset.iloc[:l, :1]
     # D = dataset.iloc[:l, :]
 
-    X = pattern.to_numpy()
+    # X = pattern.to_numpy()
+    X = tf.constant(pattern.values, dtype=tf.float64)
     # doing the input normalization here it is much faster because you do that just once
-    X = input_normalization_Matrix(X)
-    Y = label.to_numpy()
+    # X = input_normalization_Matrix(X)
+    X = X / 255.0
+    # Y = label.to_numpy()
+    Y = tf.constant(label.values, dtype=tf.float64)
 
     print('Loading dataset: Done')
 
