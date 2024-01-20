@@ -12,7 +12,7 @@ from src.handwrittencharacter.validation.validation_plot import backpropagation_
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # Parameters
-l = 100  # Number of examples
+l = 10  # Number of examples
 ETA = 0.01  # learning rate
 epochs = 1  # epochs
 

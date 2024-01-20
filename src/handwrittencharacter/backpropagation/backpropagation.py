@@ -13,6 +13,8 @@ from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
 
 def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
 
+    print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+
     STEP = 500
     SUB_STEP = 100
 
@@ -136,19 +138,19 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     # Bias learnable
     # Expand matrix W with a column B
     # WB0 = np.insert(W0, W0.shape[1], np.transpose(B0), axis=1)
-    WB0 = tf.concat([W0, tf.transpose(B0)], axis=1)
+    WB0 = tf.concat([W0, B0], axis=1)
     # WB1 = np.insert(W1, W1.shape[1], np.transpose(B1), axis=1)
-    WB1 = tf.concat([W1, tf.transpose(B1)], axis=1)
+    WB1 = tf.concat([W1, B1], axis=1)
     # WB2 = np.insert(W2, W2.shape[1], np.transpose(B2), axis=1)
-    WB2 = tf.concat([W2, tf.transpose(B2)], axis=1)
+    WB2 = tf.concat([W2, B2], axis=1)
 
     # Expand matrix X with a column of 1s
     # X_hat = np.insert(X, X.shape[1], np.transpose(np.ones((X.shape[0], 1), dtype=float)), axis=1)
-    X_hat = tf.concat([X, tf.ones((tf.shape(X)[0], 1), dtype=tf.float64)], axis=1)
+    X_hat = tf.concat([X, tf.ones((X.shape[0], 1), dtype=tf.float64)], axis=1)
 
     # Regroup the dataset
     # D = np.insert(X_hat, 0, np.transpose(Y), axis=1)
-    D = tf.concat([tf.transpose(Y), X_hat], axis=1)
+    D = tf.concat([Y, X_hat], axis=1)
     print('Neural Network: Done')
 
     print('Training: Start')

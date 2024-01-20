@@ -58,6 +58,8 @@ def empirical_risk(Y, WB0, WB1, WB2, X):
     E_plot = 0
     # TODO add case for ONLINE MODE
 
+    Y = tf.reshape(Y, (-1, 1))
+
     for k in range(0, len(X)):
 
         if len(Y) > 1:
@@ -71,11 +73,13 @@ def empirical_risk(Y, WB0, WB1, WB2, X):
         # first step backprop (output layer)
         if len(Y) > 1:
             y = one_hot_encode(Y[k])
+            y = tf.reshape(y, (-1, 1))
         else:
             y = one_hot_encode(Y)
+            y = tf.reshape(y, (-1, 1))
 
         # de = -(y - Y2_NN) * dsigMatrix(A2)
-        de = -(y - Y2_NN) * (tf.nn.sigmoid(A2)) * (1 - tf.nn.sigmoid(A2))
+        de = - (y - Y2_NN) * (tf.nn.sigmoid(A2) * (1 - tf.nn.sigmoid(A2)))
         # ek = np.dot(de, np.transpose(Y1_NN))
 
         ek = tf.matmul(de, tf.transpose(Y1_NN))
