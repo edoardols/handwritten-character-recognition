@@ -112,30 +112,43 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     OUTPUT_DIMENSION = 10
 
     # region Layout Neural Network
-    np.random.seed(42)
+    # np.random.seed(42)
+    tf.random.set_seed(42)
+
     if W0 is None or W1 is None or W2 is None:
-        W0 = np.random.uniform(low=-1, high=1, size=(16, INPUT_DIMENSION))
-        W1 = np.random.uniform(low=-1, high=1, size=(16, 16))
-        W2 = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 16))
+        # W0 = np.random.uniform(low=-1, high=1, size=(16, INPUT_DIMENSION))
+        W0 = tf.random.uniform(shape=(16, INPUT_DIMENSION), minval=-1, maxval=1, dtype=tf.float64)
+        # W1 = np.random.uniform(low=-1, high=1, size=(16, 16))
+        W1 = tf.random.uniform(shape=(16, 16), minval=-1, maxval=1, dtype=tf.float64)
+        # W2 = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 16))
+        W2 = tf.random.uniform(shape=(OUTPUT_DIMENSION, 16), minval=-1, maxval=1, dtype=tf.float64)
 
     if B0 is None or B1 is None or B2 is None:
-        B0 = np.random.uniform(low=-1, high=1, size=(16, 1))
-        B1 = np.random.uniform(low=-1, high=1, size=(16, 1))
-        B2 = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 1))
+        # B0 = np.random.uniform(low=-1, high=1, size=(16, 1))
+        B0 = tf.random.uniform(shape=(16, 1), minval=-1, maxval=1, dtype=tf.float64)
+        # B1 = np.random.uniform(low=-1, high=1, size=(16, 1))
+        B1 = tf.random.uniform(shape=(16, 1), minval=-1, maxval=1, dtype=tf.float64)
+        # B2 = np.random.uniform(low=-1, high=1, size=(OUTPUT_DIMENSION, 1))
+        B2 = tf.random.uniform(shape=(OUTPUT_DIMENSION, 1), minval=-1, maxval=1, dtype=tf.float64)
 
     # endregion
 
     # Bias learnable
     # Expand matrix W with a column B
-    WB0 = np.insert(W0, W0.shape[1], np.transpose(B0), axis=1)
-    WB1 = np.insert(W1, W1.shape[1], np.transpose(B1), axis=1)
-    WB2 = np.insert(W2, W2.shape[1], np.transpose(B2), axis=1)
+    # WB0 = np.insert(W0, W0.shape[1], np.transpose(B0), axis=1)
+    WB0 = tf.concat([W0, tf.transpose(B0)], axis=1)
+    # WB1 = np.insert(W1, W1.shape[1], np.transpose(B1), axis=1)
+    WB1 = tf.concat([W1, tf.transpose(B1)], axis=1)
+    # WB2 = np.insert(W2, W2.shape[1], np.transpose(B2), axis=1)
+    WB2 = tf.concat([W2, tf.transpose(B2)], axis=1)
 
     # Expand matrix X with a column of 1s
-    X_hat = np.insert(X, X.shape[1], np.transpose(np.ones((X.shape[0], 1), dtype=float)), axis=1)
+    # X_hat = np.insert(X, X.shape[1], np.transpose(np.ones((X.shape[0], 1), dtype=float)), axis=1)
+    X_hat = tf.concat([X, tf.ones((tf.shape(X)[0], 1), dtype=tf.float64)], axis=1)
 
     # Regroup the dataset
-    D = np.insert(X_hat, 0, np.transpose(Y), axis=1)
+    # D = np.insert(X_hat, 0, np.transpose(Y), axis=1)
+    D = tf.concat([tf.transpose(Y), X_hat], axis=1)
     print('Neural Network: Done')
 
     print('Training: Start')

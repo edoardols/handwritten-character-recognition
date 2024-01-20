@@ -1,10 +1,12 @@
 import numpy as np
+import tensorflow as tf
 
 
 def learning_method(D, method='mini', minibatch=128):
 
     # shuffle the dataset
-    np.random.shuffle(D)
+    # np.random.shuffle(D)
+    D = tf.random.shuffle(D)
 
     X = D[:, 1:]
     Y = D[:, :1]
