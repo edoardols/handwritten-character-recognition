@@ -12,9 +12,9 @@ from src.handwrittencharacter.validation.validation_plot import backpropagation_
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # Parameters
-l = 10  # Number of examples
+l = 60000  # Number of examples
 ETA = 0.01  # learning rate
-epochs = 1  # epochs
+epochs = 100  # epochs
 
 # Learning method
 # learning_mode = 'batch'
@@ -36,5 +36,6 @@ weight_and_biases_path = 'F-batch-l=60000-eta=0.00001-epoch=500/epoch=100'
 # forward_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
 
 weight_and_biases_path = 'B-mini=128-l=60000-eta=0.001-epoch=500/epoch=100'
+weight_and_biases_path = 'B-online-l=60000-eta=0.01-epoch=35/epoch=32'
 # backpropagation_validation_single(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
 # backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
