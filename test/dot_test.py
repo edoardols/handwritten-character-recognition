@@ -1,6 +1,6 @@
 import numpy as np
 import torch
-import cupy as cp
+# import cupy as cp
 import tensorflow as tf
 import time
 
@@ -14,11 +14,11 @@ def perform_test():
     torch_matrix_a = torch.rand(size, size)
     torch_matrix_b = torch.rand(size, size)
 
-    cupy_matrix_a = cp.asarray(np_matrix_a)
-    cupy_matrix_b = cp.asarray(np_matrix_b)
+    # cupy_matrix_a = cp.asarray(np_matrix_a)
+    # cupy_matrix_b = cp.asarray(np_matrix_b)
 
-    # tf_matrix_a = tf.constant(np_matrix_a)
-    # tf_matrix_b = tf.constant(np_matrix_b)
+    tf_matrix_a = tf.constant(np_matrix_a)
+    tf_matrix_b = tf.constant(np_matrix_b)
 
     # NumPy dot product
     start_time = time.time()
@@ -37,7 +37,7 @@ def perform_test():
 
     # CuPy dot product
     start_time = time.time()
-    cupy_dot_result = cp.dot(cupy_matrix_a, cupy_matrix_b)
+    # cupy_dot_result = cp.dot(cupy_matrix_a, cupy_matrix_b)
     cupy_time = time.time() - start_time
 
     # TensorFlow matrix multiplication
@@ -49,7 +49,7 @@ def perform_test():
     return np_time, torch_mm_time, torch_matmul_time, cupy_time, tf_time
 
 # Repeat the test for 600 iterations
-num_iterations = 600
+num_iterations = 60
 total_np_time, total_torch_mm_time, total_torch_matmul_time, total_cupy_time, total_tf_time = 0, 0, 0, 0, 0
 
 for _ in range(num_iterations):
