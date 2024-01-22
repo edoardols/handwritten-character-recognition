@@ -26,13 +26,13 @@ def loss_function(Y, WB, X):
     # X is a single input vector
     # X transpose
     # X = X.reshape(1, -1)
-    X = X.view(-1, 1)
+    x = X.unsqueeze(0)
 
     de, plot_loss = delta_error(Y, WB, X)
     # de = de.reshape(-1, 1)
     de = de.view(-1, 1)
     # e = np.dot(de, X)
-    e = torch.mm(de, X)
+    e = torch.mm(de, x)
 
     return e, plot_loss
 

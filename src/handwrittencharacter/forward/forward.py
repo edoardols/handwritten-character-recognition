@@ -72,6 +72,8 @@ def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batc
     X = pattern.to_numpy()
     # doing the input normalization here it is much faster because you do that just once
     X = input_normalization_Matrix(X)
+    # X = torch.div(X, 255.0)
+
     X = torch.tensor(X, dtype=torch.float64)
 
     Y = label.to_numpy()

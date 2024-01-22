@@ -1,30 +1,30 @@
 import os
 
-# from src.handwrittencharacter.forward.forward import forward_training
+from src.handwrittencharacter.forward.forward import forward_training
 from src.handwrittencharacter.backpropagation.backpropagation import backpropagation_training
 
-# from src.handwrittencharacter.validation.validation import forward_validation_single
-# from src.handwrittencharacter.validation.validation_plot import forward_validation_graph
+from src.handwrittencharacter.validation.validation import forward_validation_single
+from src.handwrittencharacter.validation.validation_plot import forward_validation_graph
 
-# from src.handwrittencharacter.validation.validation import backpropagation_validation_single
-# from src.handwrittencharacter.validation.validation_plot import backpropagation_validation_graph
+from src.handwrittencharacter.validation.validation import backpropagation_validation_single
+from src.handwrittencharacter.validation.validation_plot import backpropagation_validation_graph
 
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # Parameters
 l = 60000  # Number of examples
-ETA = 0.01  # learning rate
-epochs = 1  # epochs
+ETA = 0.0001  # learning rate
+epochs = 2500  # epochs
 
 # Learning method
 # learning_mode = 'batch'
-# learning_mode = 'mini'
+learning_mode = 'mini'
 batch_dimension = 128
-learning_mode = 'online'
+# learning_mode = 'online'
 
 # Training
-# forward_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
-backpropagation_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
+forward_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
+# backpropagation_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
 
 # Validation
 validation_dataset = 'mnist_test'
