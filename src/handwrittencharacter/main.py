@@ -12,19 +12,19 @@ from src.handwrittencharacter.validation.validation_plot import backpropagation_
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # Parameters
-l = 6  # Number of examples
+l = 100  # Number of examples
 ETA = 0.01  # learning rate
-epochs = 200  # epochs
+epochs = 1  # epochs
 
 # Learning method
 # learning_mode = 'batch'
-learning_mode = 'mini'
+# learning_mode = 'mini'
 batch_dimension = 128
-# learning_mode = 'online'
+learning_mode = 'online'
 
 # Training
-forward_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
-# backpropagation_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
+# forward_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
+backpropagation_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
 
 # Validation
 validation_dataset = 'mnist_test'

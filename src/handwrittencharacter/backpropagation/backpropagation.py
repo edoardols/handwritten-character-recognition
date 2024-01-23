@@ -35,11 +35,10 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     while folder_not_found and q >= 0:
         previous_epochs = (q + 1) * STEP
         if learning_mode == 'mini':
-            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '=' + batch_dimension
+            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '=' + str(batch_dimension)
                                        + '-l=' + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
         else:
-            path_to_previous_folder = (PATH_MAIN_FILE +
-                        '/backpropagation/training/' + 'B-' + learning_mode + '=' + batch_dimension + '-l=' + str(l)
+            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l)
                         + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
 
         if os.path.exists(path_to_previous_folder):
@@ -148,7 +147,7 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
 
         if learning_mode == 'mini':
             path_to_new_folder = (PATH_MAIN_FILE +
-                        '/backpropagation/training/' + 'B-' + learning_mode + '=' + batch_dimension + '-l=' + str(l) + '-eta=' + str(ETA) +
+                        '/backpropagation/training/' + 'B-' + learning_mode + '=' + str(batch_dimension) + '-l=' + str(l) + '-eta=' + str(ETA) +
                         '-epoch=' + str(folder_epochs) + '/')
         else:
             path_to_new_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l) + '-eta='
