@@ -23,8 +23,8 @@ batch_dimension = 512
 # learning_mode = 'online'
 
 # Training
-# forward_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
-# backpropagation_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
+forward_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
+backpropagation_training(PATH_MAIN_FILE, l, ETA, epochs, learning_mode, batch_dimension)
 
 # Validation
 validation_dataset = 'mnist_test'
@@ -32,9 +32,9 @@ validation_threshold = 0.0
 
 weight_and_biases_path = 'F-mini=128-l=60000-eta=0.01-epoch=1000/epoch=900'
 weight_and_biases_path = 'F-batch-l=60000-eta=0.00001-epoch=500/epoch=100'
-# forward_validation_single(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
-# forward_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
+forward_validation_single(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
+forward_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
 
 weight_and_biases_path = 'B-mini=512-l=60000-eta=0.01-epoch=500/epoch=500'
 backpropagation_validation_single(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
-# backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
+backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, validation_threshold)
