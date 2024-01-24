@@ -11,8 +11,8 @@ from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
 
 def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
 
-    STEP = 500
-    SUB_STEP = 100
+    STEP = 50
+    SUB_STEP = 10
 
     W0 = None
     W1 = None

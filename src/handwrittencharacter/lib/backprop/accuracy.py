@@ -39,7 +39,7 @@ def accuracy(Y, WB0, WB1, WB2, X, validation_threshold):
             a = a + 1
         else:
             error_label.append(Y[i])
-            error_patter.append(X[i])
+            error_patter.append(X[i][:len(X[i]) - 1])
             error_output_nn.append(y_nn)
 
     a = (a / len(Y)) * 100
