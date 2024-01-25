@@ -1,9 +1,7 @@
-import pandas as pd
-import numpy as np
-
 import os
 
-from matplotlib import pyplot as plt
+import pandas as pd
+import numpy as np
 
 from src.handwrittencharacter.lib.backprop.gradient import gradient_descent_algorithm
 from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
@@ -11,8 +9,7 @@ from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
 
 def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
 
-    STEP = 50
-    SUB_STEP = 10
+    STEP = 10
 
     W0 = None
     W1 = None
@@ -25,51 +22,55 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
     Etot = None
 
     # check if previous step exist
+    folder_found = False
 
-    folder_not_found = True
-    q = desired_epochs // STEP
-
-    global epochs, path_to_new_folder
     epochs = 0
 
-    while folder_not_found and q >= 0:
-        previous_epochs = (q + 1) * STEP
-        if learning_mode == 'mini':
-            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '=' + str(batch_dimension)
-                                       + '-l=' + str(l) + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
-        else:
-            path_to_previous_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l)
-                        + '-eta=' + str(ETA) + '-epoch=' + str(previous_epochs) + '/')
+    path_to_main_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l) + '-eta='
+                           + str(ETA) + '/')
 
-        if os.path.exists(path_to_previous_folder):
-            folder_not_found = False
+    if learning_mode == 'mini':
+        path_to_main_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '=' + str(batch_dimension)
+                               + '-l=' + str(l) + '-eta=' + str(ETA) + '/')
 
-            for i in range(0, 5):
-                path_to_previous_epochs = (path_to_previous_folder + 'epoch=' + str(previous_epochs - SUB_STEP * i)
-                                           + '/')
-                if os.path.exists(path_to_previous_epochs):
-                    epochs = (previous_epochs - SUB_STEP * i)
+    if os.path.exists(path_to_main_folder + 'epoch=' + str(desired_epochs)):
+        return
 
-                    # Weights
-                    w = pd.read_csv(path_to_previous_epochs + 'W0.csv', header=None)
-                    W0 = w.to_numpy()
-                    w = pd.read_csv(path_to_previous_epochs + 'W1.csv', header=None)
-                    W1 = w.to_numpy()
-                    w = pd.read_csv(path_to_previous_epochs + 'W2.csv', header=None)
-                    W2 = w.to_numpy()
+    if os.path.exists(path_to_main_folder):
+        folder_found = True
+    else:
+        os.makedirs(path_to_main_folder)
 
-                    # Biases
-                    b = pd.read_csv(path_to_previous_epochs + 'B0.csv', header=None)
-                    B0 = b.to_numpy()
-                    b = pd.read_csv(path_to_previous_epochs + 'B1.csv', header=None)
-                    B1 = b.to_numpy()
-                    b = pd.read_csv(path_to_previous_epochs + 'B2.csv', header=None)
-                    B2 = b.to_numpy()
+    # - 1 so skip the desired epochs value
+    q = (desired_epochs / STEP) - 1
 
-                    # Empirical Risk
-                    e = pd.read_csv(path_to_previous_epochs + 'E.csv', header=None)
-                    Etot = e.to_numpy()
-                    break
+    while folder_found and q >= 0:
+        path_to_existing_sub_folder = (path_to_main_folder + 'epoch=' + str(q * STEP) + '/')
+
+        if os.path.exists(path_to_existing_sub_folder):
+            epochs = (q * STEP)
+
+            # Weights
+            w = pd.read_csv(path_to_existing_sub_folder + 'W0.csv', header=None)
+            W0 = w.to_numpy()
+            w = pd.read_csv(path_to_existing_sub_folder + 'W1.csv', header=None)
+            W1 = w.to_numpy()
+            w = pd.read_csv(path_to_existing_sub_folder + 'W2.csv', header=None)
+            W2 = w.to_numpy()
+
+            # Biases
+            b = pd.read_csv(path_to_existing_sub_folder + 'B0.csv', header=None)
+            B0 = b.to_numpy()
+            b = pd.read_csv(path_to_existing_sub_folder + 'B1.csv', header=None)
+            B1 = b.to_numpy()
+            b = pd.read_csv(path_to_existing_sub_folder + 'B2.csv', header=None)
+            B2 = b.to_numpy()
+
+            # Empirical Risk
+            e = pd.read_csv(path_to_existing_sub_folder + 'E.csv', header=None)
+            Etot = e.to_numpy()
+            break
+
         q = q - 1
 
     print('Loading dataset: Start')
@@ -129,9 +130,9 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
         Etot = []
 
     while epochs < desired_epochs:
-        E = np.zeros(min(desired_epochs, SUB_STEP), dtype=float)
+        E = np.zeros(min(desired_epochs, STEP), dtype=float)
 
-        for e in range(0, min(desired_epochs, SUB_STEP)):
+        for e in range(0, min(desired_epochs, STEP)):
             WB0, WB1, WB2, E_epoch = gradient_descent_algorithm(D, WB0, WB1, WB2, ETA, epochs + e, learning_mode, batch_dimension)
             E[e] = E_epoch
 
@@ -139,69 +140,38 @@ def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mo
 
         print('Saving: Start')
 
-        q = epochs // STEP
-        r = epochs % STEP
-        folder_epochs = q * STEP
-        if r >= 0 or q == 0:
-            folder_epochs = (q + 1) * STEP
+        epochs = epochs + STEP
 
-        if learning_mode == 'mini':
-            path_to_new_folder = (PATH_MAIN_FILE +
-                        '/backpropagation/training/' + 'B-' + learning_mode + '=' + str(batch_dimension) + '-l=' + str(l) + '-eta=' + str(ETA) +
-                        '-epoch=' + str(folder_epochs) + '/')
-        else:
-            path_to_new_folder = (PATH_MAIN_FILE + '/backpropagation/training/' + 'B-' + learning_mode + '-l=' + str(l) + '-eta='
-                                  + str(ETA) + '-epoch=' + str(folder_epochs) + '/')
+        path_to_new_sub_folder = (path_to_main_folder + 'epoch=' + str(epochs) + '/')
 
-        sub_folder_path = (path_to_new_folder + 'epoch=' + str(epochs + SUB_STEP) + '/')
-
-        # Check if the folder already exists
-        if not os.path.exists(sub_folder_path):
+        if not os.path.exists(path_to_new_sub_folder):
             # Create the folder if it doesn't exist
-            os.makedirs(sub_folder_path)
+            os.makedirs(path_to_new_sub_folder)
 
         # W0 and B0
         weight = pd.DataFrame(WB0[:, :WB0.shape[1] - 1])
-        weight.to_csv(sub_folder_path + 'W0.csv', encoding='utf-8', header=False, index=False)
+        weight.to_csv(path_to_new_sub_folder + 'W0.csv', encoding='utf-8', header=False, index=False)
 
         bias = pd.DataFrame(WB0[:, WB0.shape[1] - 1:])
-        bias.to_csv(sub_folder_path + 'B0.csv', encoding='utf-8', header=False, index=False)
+        bias.to_csv(path_to_new_sub_folder + 'B0.csv', encoding='utf-8', header=False, index=False)
 
         # W1 and B1
         weight = pd.DataFrame(WB1[:, :WB1.shape[1] - 1])
-        weight.to_csv(sub_folder_path + 'W1.csv', encoding='utf-8', header=False, index=False)
+        weight.to_csv(path_to_new_sub_folder + 'W1.csv', encoding='utf-8', header=False, index=False)
 
         bias = pd.DataFrame(WB1[:, WB1.shape[1] - 1:])
-        bias.to_csv(sub_folder_path + 'B1.csv', encoding='utf-8', header=False, index=False)
+        bias.to_csv(path_to_new_sub_folder + 'B1.csv', encoding='utf-8', header=False, index=False)
 
         # W2 and B2
         weight = pd.DataFrame(WB2[:, :WB2.shape[1] - 1])
-        weight.to_csv(sub_folder_path + 'W2.csv', encoding='utf-8', header=False, index=False)
+        weight.to_csv(path_to_new_sub_folder + 'W2.csv', encoding='utf-8', header=False, index=False)
 
         bias = pd.DataFrame(WB2[:, WB2.shape[1] - 1:])
-        bias.to_csv(sub_folder_path + 'B2.csv', encoding='utf-8', header=False, index=False)
+        bias.to_csv(path_to_new_sub_folder + 'B2.csv', encoding='utf-8', header=False, index=False)
 
         empirical = pd.DataFrame(Etot)
-        empirical.to_csv(sub_folder_path + 'E.csv', encoding='utf-8', header=False, index=False)
+        empirical.to_csv(path_to_new_sub_folder + 'E.csv', encoding='utf-8', header=False, index=False)
 
         print('Saving: Done')
-
-        epochs = epochs + SUB_STEP
-
-        if epochs // STEP:
-            # plot
-            x = np.arange(0, epochs, 1)
-            y = Etot
-            plt.plot(x, y, color='cyan')
-
-            plt.xlabel('Epochs')
-            plt.ylabel('Empirical risk')
-            annotation_string = (r'$\eta$ = ' + str(ETA) + '\n'
-                                 + '#Patterns = ' + str(l) + '\n'
-                                 + 'Learning mode = ' + learning_mode + '\n')
-
-            plt.annotate(annotation_string, xy=(0.88, 0.72), xycoords='figure fraction', horizontalalignment='right')
-
-            plt.savefig(path_to_new_folder + 'E')
 
     print('Training: Done')
