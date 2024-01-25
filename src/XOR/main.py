@@ -21,7 +21,7 @@ learning_mode = 'mini'
 validation_dataset = 'XOR_test'
 validation_threshold = 0.0
 
-weight_and_biases_path = 'B-mini-l=60000-eta=0.01-epoch=500/epoch=100'
+weight_and_biases_path = 'B-mini=128-l=60000-eta=0.01-epoch=500/epoch=100'
 
 XOR_validation_single(validation_dataset, weight_and_biases_path)
 # XOR_validation_graph(validation_dataset, weight_and_biases_path)
