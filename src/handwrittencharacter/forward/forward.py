@@ -36,7 +36,7 @@ def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batc
         os.makedirs(path_to_main_folder)
 
     # - 1 so skip the desired epochs value
-    q = (desired_epochs / STEP) - 1
+    q = (desired_epochs // STEP) - 1
 
     while folder_found and q >= 0:
         path_to_existing_sub_folder = (path_to_main_folder + 'epoch=' + str(q * STEP) + '/')
