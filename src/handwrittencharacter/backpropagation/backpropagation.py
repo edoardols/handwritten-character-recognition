@@ -9,7 +9,7 @@ from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
 
 def backpropagation_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
 
-    STEP = 10
+    STEP = 1
 
     W0 = None
     W1 = None

@@ -22,7 +22,7 @@ program = 'graph'
 
 # Parameters
 l = 60000  # Number of examples
-ETA = 0.0001  # learning rate
+ETA = 0.001  # learning rate
 epochs = 500  # epochs
 STEP = 10  # for validation graph
 
