@@ -47,7 +47,7 @@ def forward_validation_single(PATH_MAIN_FILE, validation_dataset_path, weight_an
 
 
 def forward_validation_graph(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, validation_threshold):
-    print('Validation: Start')
+    print('Validation with ' + validation_dataset_name +': Start')
 
     folders = weight_and_biases_path.split('/')
 

@@ -13,7 +13,7 @@ current_index = 0
 
 
 def backpropagation_validation_single(PATH_MAIN_FILE, validation_dataset_path, weight_and_biases_path, validation_threshold):
-    print('Validation: Start')
+    print('Validation with ' + validation_dataset_path +': Start')
     validation_dataset = pd.read_csv(PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]
@@ -54,7 +54,7 @@ def backpropagation_validation_single(PATH_MAIN_FILE, validation_dataset_path, w
 
     print('Validation: Done')
 
-    display_validation(percentage, error_label, images, error_output_nn)
+    display_validation(percentage, error_label, images, error_output_nn, validation_dataset_path)
 
 
 def backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, STEP,
@@ -125,7 +125,7 @@ def backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset_name, we
 
         accuracy[(i // STEP) - 1] = percentage
 
-        progressing = i/(epochs) * 100
+        progressing = i/epochs * 100
         print('Validation graph progress: ' + str(int(progressing)) + ' %')
     # endregion
 
