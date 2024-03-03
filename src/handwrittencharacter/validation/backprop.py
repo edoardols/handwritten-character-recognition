@@ -13,7 +13,7 @@ current_index = 0
 
 
 def backpropagation_validation_single(PATH_MAIN_FILE, validation_dataset_path, weight_and_biases_path, validation_threshold):
-    print('Validation with ' + validation_dataset_path +': Start')
+    print('Validation with ' + validation_dataset_path + ': Start')
     validation_dataset = pd.read_csv(PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_path + '.csv', header=None)
 
     XV_D = validation_dataset.iloc[:, 1:]

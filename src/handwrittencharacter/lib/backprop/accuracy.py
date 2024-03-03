@@ -3,6 +3,7 @@ import numpy as np
 from handwrittencharacter.lib.sigmoid import sigMatrix
 from handwrittencharacter.lib.activation import activation
 
+
 def output(WB0, WB1, WB2, X):
 
     A0 = activation(WB0, X)

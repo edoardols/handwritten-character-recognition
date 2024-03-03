@@ -6,6 +6,7 @@ import numpy as np
 from handwrittencharacter.lib.forward.gradient import gradient_descent_algorithm
 from handwrittencharacter.lib.mapping import input_normalization_Matrix
 
+
 def forward_training(PATH_MAIN_FILE, l, ETA, desired_epochs, learning_mode, batch_dimension):
 
     STEP = 100

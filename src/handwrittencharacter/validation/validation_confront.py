@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 import matplotlib
-matplotlib.use("TkAgg") # Usa il backend TkAgg
+matplotlib.use("TkAgg")  # Usa il backend TkAgg
 from matplotlib import pyplot as plt
 
 from src.handwrittencharacter.lib.backprop.accuracy import accuracy as backpropagation_accuracy
@@ -20,10 +20,12 @@ def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array,
         weight_and_biases_path = nn_array[i]
 
         if 'F' in weight_and_biases_path:
-            coordinates.append(forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path,
-                                       validation_threshold))
+            x, y = forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, 100,
+                                       validation_threshold)
+            matrix = np.concatenate((x, y), axis=0)
+            coordinates.append(matrix)
         elif 'B' in weight_and_biases_path:
-            x, y = backprop(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, STEP,
+            x, y = backprop(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, 50,
                             validation_threshold)
             matrix = np.concatenate((x, y), axis=0)
             coordinates.append(matrix)
@@ -42,8 +44,11 @@ def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array,
     plt.show()
 
 # region FUNCTIONS
-def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, validation_threshold):
-    print('Validation with ' + validation_dataset_name +': Start')
+
+
+def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, STEP, validation_threshold):
+
+    print('Validation with ' + validation_dataset_name + ': Start')
 
     folders = weight_and_biases_path.split('/')
 
@@ -52,7 +57,6 @@ def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, val
     pattern = parameters[2].split('=')[1]
     eta = parameters[3].split('=')[1]
     learning_mode = parameters[1]
-    epochs = int(folders[1].split('=')[1])
 
     validation_dataset_path = PATH_MAIN_FILE + '/../../dataset/' + validation_dataset_name + '.csv'
     validation_dataset = pd.read_csv(validation_dataset_path, header=None)
@@ -65,41 +69,38 @@ def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, val
 
     XV = input_normalization_Matrix(XV)
 
-    accuracy = np.zeros(epochs // 100)
-    for i in range(500, epochs + 500, 500):
-        parent_folder = 'F-' + str(learning_mode) + '-l=' + str(pattern) + '-eta=' + str(eta) + '-epoch=' + str(i)
-        for j in range(i - 400, i + 100, 100):
-            if j > epochs:
-                break
-            child_folder = 'epoch=' + str(j)
-            weight_and_biases_path = parent_folder + '/' + child_folder
+    accuracy = np.zeros(epochs // STEP)
+    parent_folder = 'F-' + str(learning_mode) + '-l=' + str(pattern) + '-eta=' + str(eta)
+    for i in range(STEP, epochs + STEP, STEP):
+        child_folder = 'epoch=' + str(i)
+        weight_and_biases_path = parent_folder + '/' + child_folder
 
-            w = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/W.csv', header=None)
-            W = w.to_numpy()
+        w = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/W.csv', header=None)
+        W = w.to_numpy()
 
-            b = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/B.csv', header=None)
-            B = b.to_numpy()
+        b = pd.read_csv(PATH_MAIN_FILE + '/forward/training/' + weight_and_biases_path + '/B.csv', header=None)
+        B = b.to_numpy()
 
-            # Bias learnable
-            # Expand matrix W with a column B
-            WB = np.insert(W, W.shape[1], np.transpose(B), axis=1)
+        # Bias learnable
+        # Expand matrix W with a column B
+        WB = np.insert(W, W.shape[1], np.transpose(B), axis=1)
 
-            # Expand matrix X with a column of 1s
-            XV_hat = np.insert(XV, XV.shape[1], np.transpose(np.ones((XV.shape[0], 1), dtype=float)), axis=1)
+        # Expand matrix X with a column of 1s
+        XV_hat = np.insert(XV, XV.shape[1], np.transpose(np.ones((XV.shape[0], 1), dtype=float)), axis=1)
 
-            percentage, error_label, images, error_output_nn = forward_accuracy(YV, WB, XV_hat, validation_threshold)
+        percentage, error_label, images, error_output_nn = forward_accuracy(YV, WB, XV_hat, validation_threshold)
 
-            accuracy[(j // 100) - 1] = percentage
+        accuracy[(i // STEP) - 1] = percentage
 
-            # print('Validation: Done')
+        # print('Validation: Done')
 
-            # display_validation(percentage, error_label, images, error_output_nn)
+        # display_validation(percentage, error_label, images, error_output_nn)
 
     # plot
-    x = np.arange(100, epochs + 100, 100)
+    x = np.arange(STEP, epochs + STEP, STEP)
     y = accuracy
 
-    return x,y
+    return x, y
 
 
 def backprop(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, STEP, validation_threshold):
@@ -177,5 +178,5 @@ def backprop(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, ep
     x = np.arange(STEP, epochs + STEP, STEP)
     y = accuracy
 
-    return x,y
+    return x, y
 # endregion
