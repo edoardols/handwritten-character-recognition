@@ -90,13 +90,34 @@ PATH_MAIN_FILE = os.path.dirname(__file__)
 epochs = 500  # epochs
 STEP = 10  # for validation graph
 
+validation_dataset_name = 'mnist_test'
+
 validation_threshold_array = [0.0, 0.5, 0.9]
 
-nn1 = 'B-batch-l=60000-eta=0.01/epochs=' + str(epochs)
-nn2 = 'B-batch-l=60000-eta=0.001/epochs=' + str(epochs)
-nn3 = 'B-batch-l=60000-eta=0.0001/epochs=' + str(epochs)
+nn_array = [
+    #'B-batch-l=60000-eta=0.01',
+    #'B-batch-l=60000-eta=0.001',
+    #'B-batch-l=60000-eta=0.0001',
 
-nn_array = [nn1, nn2, nn3]
+    'B-mini=128-l=60000-eta=0.1',
+    #'B-mini=128-l=60000-eta=0.001',
+    'B-mini=128-l=60000-eta=0.0001',
+
+    #'B-mini=256-l=60000-eta=0.001',
+
+    #'B-mini=512-l=60000-eta=0.01',
+    #'B-mini=512-l=60000-eta=0.001',
+    #'B-mini=512-l=60000-eta=0.0001',
+
+    'B-mini=1024-l=60000-eta=0.01',
+    #'B-mini=1024-l=60000-eta=0.001',
+    'B-mini=1024-l=60000-eta=0.0001']
+
+#     'B-mini=512-l=60000-eta=0.1'
+#     'B-mini=256-l=60000-eta=0.0001',
+#     'B-mini=256-l=60000-eta=0.1',
+#     'B-mini=256-l=60000-eta=0.01',
+# 'F-mini=128-l=60000-eta=0.01',
 
 import csv
 
@@ -106,7 +127,7 @@ for nn in nn_array:
         validation_threshold = threshold
         weight_and_biases_path = nn
 
-        epochs_array, accuracy_array = backprop(PATH_MAIN_FILE + '/../', 'mnist_test', weight_and_biases_path, epochs, STEP, validation_threshold)
+        epochs_array, accuracy_array = backprop(PATH_MAIN_FILE + '/../', validation_dataset_name, weight_and_biases_path, epochs, STEP, validation_threshold)
 
         print(epochs_array)
         print(accuracy_array)
@@ -117,7 +138,7 @@ for nn in nn_array:
         row3 = accuracy_array
 
         # Specify the file name
-        filename = "data.csv"
+        filename = "B-data-" + validation_dataset_name + ".csv"
 
         # Open the file in 'a' mode to append
         with open(PATH_MAIN_FILE + '/' + filename, 'a', newline='') as csvfile:
