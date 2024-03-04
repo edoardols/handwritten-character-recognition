@@ -75,7 +75,7 @@ def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epo
 
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
-epochs = 2000  # epochs
+epochs = 200  # epochs
 STEP = 100  # for validation graph
 
 # validation_dataset_name = 'mnist_test'
@@ -117,34 +117,44 @@ nn_array = [
 
 import csv
 
-for nn in nn_array:
-    for threshold in validation_threshold_array:
-        validation_threshold = threshold
+for threshold in validation_threshold_array:
+    # Specify the file name
+    filename = "F-data-" + validation_dataset_name + ".csv"
+    validation_threshold = threshold
+
+    epochs_array = np.array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000,
+                    1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000])
+    # Data to append
+    row1 = np.insert(epochs_array, 0, 'validation_threshold=' + str(validation_threshold))
+
+    # Open the file in 'a' mode to append
+    with open(PATH_MAIN_FILE + '/' + filename, 'a', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile, delimiter=';')
+
+        # Append the rows
+        csvwriter.writerow(row1)
+
+    for nn in nn_array:
+
         weight_and_biases_path = nn
 
         epochs_array, accuracy_array = forward(PATH_MAIN_FILE + '/../', validation_dataset_name, weight_and_biases_path,
                                                epochs,
                                                STEP, validation_threshold)
-
-        print(epochs_array)
-        print(accuracy_array)
+        # print(epochs_array)
+        # print(accuracy_array)
 
         # Data to append
-        row1 = [weight_and_biases_path, 'validation_threshold=' + str(validation_threshold)]
-        row2 = epochs_array
-        row3 = accuracy_array
-
-        # Specify the file name
-        filename = "F-data-" + validation_dataset_name + ".csv"
+        #row1 = ['validation_threshold=' + str(validation_threshold), epochs_array]
+        row2 = [weight_and_biases_path, accuracy_array]
 
         # Open the file in 'a' mode to append
         with open(PATH_MAIN_FILE + '/' + filename, 'a', newline='') as csvfile:
-            # Create a CSV writer object
-            csvwriter = csv.writer(csvfile)
+            csvwriter = csv.writer(csvfile, delimiter=';')
 
             # Append the rows
-            csvwriter.writerow(row1)
+            # csvwriter.writerow(row1)
             csvwriter.writerow(row2)
-            csvwriter.writerow(row3)
+            # csvwriter.writerow(row3)
 
         print("Data appended to CSV file successfully!")

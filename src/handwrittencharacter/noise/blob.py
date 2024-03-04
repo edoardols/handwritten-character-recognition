@@ -24,7 +24,7 @@ pixelWidth = 28
 # plt.imshow(255 - image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
 # plt.show()
 
-percentage = 0.2
+percentage = 0.8
 
 # pi*r^2 = 10% * 28*28
 radiusBig = int(np.sqrt(28*28*percentage/math.pi))

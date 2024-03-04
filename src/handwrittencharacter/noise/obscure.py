@@ -103,13 +103,13 @@ fig, ax = plt.subplots()
 
 # Display the first image
 
-img_plot_gray = ax.imshow(255 - X[0].reshape(28, 28), cmap='gray')
+img_plot_gray = ax.imshow(X[35].reshape(28, 28), cmap='gray')
 
 # Create a mask for pixels greater than a threshold
 threshold = 1
-mask = X_changed[0].reshape(28, 28) > threshold
+mask = X_changed[35].reshape(28, 28) > threshold
 
-img_plot_blue = ax.imshow(np.ma.array(X_changed[0].reshape(28, 28), mask=~mask), cmap='Blues')
+img_plot_blue = ax.imshow(np.ma.array(X_changed[35].reshape(28, 28), mask=~mask), cmap='Blues')
 
 # annotation_string = ('Label = ' + str(error_label[0]) + '\n'
 #                      + 'Output = ' + str(error_output_nn[0]) + '\n'

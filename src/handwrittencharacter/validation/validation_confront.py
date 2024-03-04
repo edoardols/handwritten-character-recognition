@@ -25,7 +25,7 @@ def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array,
             matrix = np.concatenate((x, y), axis=0)
             coordinates.append(matrix)
         elif 'B' in weight_and_biases_path:
-            x, y = backprop(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, 50,
+            x, y = backprop(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, 10,
                             validation_threshold)
             matrix = np.concatenate((x, y), axis=0)
             coordinates.append(matrix)

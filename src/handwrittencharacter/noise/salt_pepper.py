@@ -27,7 +27,8 @@ pixelWidth = 28
 #A = np.random.uniform(low=-255, high=255, size=(pixelHeight, pixelWidth))
 
 
-percentage = 0.6
+percentage = 0.3
+
 pixelPercentage = int(percentage*(pixelHeight*pixelWidth))
 
 severity = 1
@@ -53,9 +54,9 @@ for l in range(0, len(X)):
 plt.imshow(255 - image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
 plt.show()
 
-# sp = pd.DataFrame(np.insert(X, 0, Y, axis=1))
+sp = pd.DataFrame(np.insert(X, 0, Y, axis=1))
 
 # W-1L-batch-epochs
-# new_file_name = file_name + '-' + 'sp-s-' + str(severity) + '-p-' + str(percentage)
+new_file_name = file_name + '-' + 'sp-s-' + str(severity) + '-p-' + str(percentage)
 
-# sp.to_csv('../../../dataset/salt_pepper/' + new_file_name + '.csv', encoding='utf-8', header=False, index=False)
+sp.to_csv('../../../dataset/salt_pepper/' + new_file_name + '.csv', encoding='utf-8', header=False, index=False)

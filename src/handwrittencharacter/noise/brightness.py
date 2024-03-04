@@ -21,20 +21,20 @@ image = X[0].reshape(28, 28)
 pixelHeight = 28
 pixelWidth = 28
 
-image = X[0].reshape(28, 28)
+image = X[3].reshape(28, 28)
 
-plt.imshow(255 - image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
+plt.imshow(image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
 plt.show()
 
-percentage = 0.1
+percentage = 0.3
 
 for l in range(0, len(X)):
-    if l == 1:
-        break
+    # if l == 1:
+    #     break
     X[l] = X[l]*percentage
 
-image = X[0].reshape(28, 28)
-plt.imshow(255 - image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
+image = X[3].reshape(28, 28)
+plt.imshow(image, cmap='gray', interpolation='nearest', vmin=0, vmax=255)
 plt.show()
 
 br = pd.DataFrame(np.insert(X, 0, Y, axis=1))
