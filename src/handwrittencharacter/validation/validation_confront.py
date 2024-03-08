@@ -34,12 +34,17 @@ def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array,
             exit()
 
         plt.plot(x, y)
-        str_legend.append(nn_array[i])
+        name = nn_array[i].split('/')[0]
+        name_part1 = name.split('-')[0]
+        name_part2 = name.split('-')[1]
+        name_part3 = name.split('-')[3]
+        name_legend = name_part1 + "-" + name_part2 + "-" + name_part3
+        str_legend.append(name_legend)
 
     plt.xlabel('Epochs')
     plt.ylabel('Empirical risk')
     plt.title('Threshold: ' + str(int(validation_threshold * 100)) + '%')
-    plt.legend(str_legend)
+    plt.legend(str_legend, fontsize='15')
 
     plt.show()
 

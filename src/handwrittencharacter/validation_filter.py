@@ -61,13 +61,14 @@ validation_array = [classic, blob, brightness, obscure, salt_pepper, thickness]
 # nn2 = 'B-mini=128-l=60000-eta=0.1/epochs=' + str(epochs)
 # nn3 = 'B-mini=1024-l=60000-eta=0.001/epochs=' + str(epochs)
 
-epochs = 500  # epochs
+epochs = 2000  # epochs
 
-nn1 = 'F-batch-l=60000-eta=0.0001/epochs=' + str(epochs)
-nn2 = 'F-mini=128-l=60000-eta=0.1/epochs=' + str(epochs)
-nn3 = 'F-mini=1024-l=60000-eta=0.001/epochs=' + str(epochs)
+nn1 = 'F-batch-l=60000-eta=0.01/epochs=' + str(epochs)
+nn2 = 'F-batch-l=60000-eta=0.001/epochs=' + str(epochs)
+nn3 = 'F-batch-l=60000-eta=0.0001/epochs=' + str(epochs)
+nn4 = 'F-batch-l=60000-eta=0.00001/epochs=' + str(epochs)
 
-nn_array = [nn1, nn2, nn3]
+nn_array = [nn1, nn2, nn3, nn4]
 # endregion
 
 # endregion
