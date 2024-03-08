@@ -18,19 +18,19 @@ PATH_MAIN_FILE = os.path.dirname(__file__)
 Type = 'B'
 
 # Program ( train / validation / graph / all )
-program = 'graph'
+program = 'all'
 
 # Parameters
 l = 60000  # Number of examples
-ETA = 0.001  # learning rate
-epochs = 500  # epochs
+ETA = 0.0001  # learning rate
+epochs = 1000  # epochs
 STEP = 10  # for validation graph
 
 # Learning method ( batch / mini / online )
-learning_mode = 'mini'
-batch_dimension = 128
+learning_mode = 'batch'
+batch_dimension = 1024
 
-# Validation ( mnist_test / blob/mnist_test-bl-p-0.2 / ... )
+# Validation ( mnist_test )
 validation_dataset = 'mnist_test'
 validation_threshold = 0.0
 # endregion
@@ -77,9 +77,9 @@ elif Type == 'B':
         backpropagation_validation_graph(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, epochs, STEP,
                                          validation_threshold)
     else:
-        print('Wrong settings: try use one of the following --> train / validation / both')
+        print('Wrong settings: try use one of the following --> train / validation / graph / all / filter')
         exit()
 else:
     print('Wrong settings: try use one of the following --> F / B')
     exit()
-# endregion
+# endregion

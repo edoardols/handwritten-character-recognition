@@ -31,7 +31,7 @@ percentage = 0.3
 
 pixelPercentage = int(percentage*(pixelHeight*pixelWidth))
 
-severity = 1
+severity = 0.5
 
 
 def bound(pixel):
