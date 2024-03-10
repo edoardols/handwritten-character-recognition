@@ -2,34 +2,34 @@
 import os
 
 from src.handwrittencharacter.validation.forward import forward_validation_single
-from src.handwrittencharacter.validation.forward import forward_validation_graph
 
 from src.handwrittencharacter.validation.backprop import backpropagation_validation_single
-from src.handwrittencharacter.validation.backprop import backpropagation_validation_graph
 
 from src.handwrittencharacter.validation.validation_confront import validation_confront_graph
+from src.handwrittencharacter.validation.validation_confront import validation_confront_noise_graph
 # endregion
 
 PATH_MAIN_FILE = os.path.dirname(__file__)
 
 # region SETTINGS
 
-# region What u want to do? ( validation / confrontation )
-program_type = 'confrontation'
+# What u want to do? ( validation / confrontation / confrontation_noise )
+program_type = 'confrontation_noise'
 
 # region Trained NN
 # Type ( B / F )
-Type = 'F'
+Type = 'B'
+
+# Learning method ( batch / mini / online )
+learning_mode = 'mini'
+batch_dimension = 128
 
 # Parameters
 l = 60000  # Number of examples
-ETA = 0.0001  # learning rate
+ETA = 0.001  # learning rate
 epochs = 500  # epochs
-STEP = 10  # for validation graph
 
-# Learning method ( batch / mini / online )
-learning_mode = 'batch'
-batch_dimension = 1024
+STEP = 10  # for validation graph
 
 # region Creating the path
 if learning_mode == 'mini':
@@ -45,23 +45,27 @@ print('Object of the program: ' + weight_and_biases_path)
 
 # region Validation library
 classic = 'mnist_test'
+# blob = 'blob/mnist_test-bl-p-0.2'
+# brightness = 'brightness/mnist_test-br-p-0.3'
+# obscure = 'obscure/mnist_test-ob'
+# salt_pepper = 'salt_pepper/mnist_test-sp-s-0.5-p-0.6'
+# thickness = 'thickness/mnist_test-th-step=2'
+
 blob = 'blob/mnist_test-bl-p-0.2'
-brightness = 'brightness/mnist_test-br-p=0.6'
-obscure = 'obscure/mnist_test-ob'
-salt_pepper = 'salt_pepper/mnist_test-sp-s-0.5-p-0.6'
-thickness = 'thickness/mnist_test-th-step=2'
+blob1 = 'blob/mnist_test-bl-p-0.3'
+blob2 = 'blob/mnist_test-bl-p-0.4'
+blob3 = 'blob/mnist_test-bl-p-0.5'
+blob4 = 'blob/mnist_test-bl-p-0.8'
 
 validation_threshold = 0.0
 
-validation_array = [classic, blob, brightness, obscure, salt_pepper, thickness]
+validation_array = [classic, blob, blob1, blob2, blob3, blob4]
 # endregion
 
 # region Confrontation library
 # nn1 = 'B-batch-l=60000-eta=0.0001/epochs=' + str(epochs)
 # nn2 = 'B-mini=128-l=60000-eta=0.1/epochs=' + str(epochs)
 # nn3 = 'B-mini=1024-l=60000-eta=0.001/epochs=' + str(epochs)
-
-epochs = 2000  # epochs
 
 nn1 = 'F-batch-l=60000-eta=0.01/epochs=' + str(epochs)
 nn2 = 'F-batch-l=60000-eta=0.001/epochs=' + str(epochs)
@@ -87,6 +91,8 @@ if program_type == 'validation':
         exit()
 elif program_type == 'confrontation':
     validation_confront_graph(PATH_MAIN_FILE, classic, nn_array, epochs, STEP, validation_threshold)
+elif program_type == 'confrontation_noise':
+    validation_confront_noise_graph(PATH_MAIN_FILE, validation_array, weight_and_biases_path, epochs, STEP, validation_threshold)
 else:
     print('Invalid Type: you write ' + program_type + '\nTry: validation or confrontation')
     exit()

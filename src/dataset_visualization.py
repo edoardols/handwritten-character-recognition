@@ -16,6 +16,7 @@ step = 2
 # region FIGURE/SUBPLOTS
 fig = plt.figure()
 outer = gridspec.GridSpec(2, 3)
+
 inner_classic = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=outer[0])
 inner_blob = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=outer[1])
 inner_brightness = gridspec.GridSpecFromSubplotSpec(1, 1, subplot_spec=outer[2])

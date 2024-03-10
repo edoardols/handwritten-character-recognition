@@ -48,6 +48,38 @@ def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array,
 
     plt.show()
 
+def validation_confront_noise_graph(PATH_MAIN_FILE, validation_array, weight_and_biases_path, epochs, STEP, validation_threshold):
+
+    coordinates = []
+    str_legend = []
+    for i in range(0, len(validation_array)):
+        validation_dataset = validation_array[i]
+
+        if 'F' in weight_and_biases_path:
+            x, y = forward(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, epochs, 100,
+                                       validation_threshold)
+            matrix = np.concatenate((x, y), axis=0)
+            coordinates.append(matrix)
+        elif 'B' in weight_and_biases_path:
+            x, y = backprop(PATH_MAIN_FILE, validation_dataset, weight_and_biases_path, epochs, 10,
+                            validation_threshold)
+            matrix = np.concatenate((x, y), axis=0)
+            coordinates.append(matrix)
+        else:
+            print('Something went wrong...')
+            exit()
+
+        plt.plot(x, y)
+        name_legend = validation_dataset
+        str_legend.append(name_legend)
+
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.title('Threshold: ' + str(int(validation_threshold * 100)) + '%')
+    plt.legend(str_legend, fontsize='15')
+
+    plt.show()
+
 # region FUNCTIONS
 
 
