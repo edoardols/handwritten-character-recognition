@@ -1,23 +1,24 @@
+# region COMMENT
+# This code is used to visualize different noise dataset all together.
+# It is possible to visualize each character by using the right and left arrows of the keyboard.
+# Is possible to choose the datasets, by modifying the parameters inside the region SETTINGS
+# endregion
+
 from matplotlib import pyplot as plt
 import pandas as pd
 import matplotlib.gridspec as gridspec
 import matplotlib
 matplotlib.use("TkAgg")  # Usa il backend TkAgg
 
-# region SETTINGS
-
 file_name = 'mnist_test'
+
+# region SETTINGS
 p = 0.3
 s = 0.5
 step = 2
-
 # endregion
 
-inner = []
-ax = []
 dataset = []
-X = []
-plot = []
 
 # region DATASET
 dataset.append(pd.read_csv('../dataset/' + file_name + '.csv', header=None))
@@ -27,6 +28,11 @@ dataset.append(pd.read_csv('../dataset/obscure/' + file_name + '-ob' + '.csv', h
 dataset.append(pd.read_csv('../dataset/salt_pepper/' + file_name + '-sp-s-' + str(s) + '-p-' + str(p) + '.csv', header=None))
 dataset.append(pd.read_csv('../dataset/thickness/' + file_name + '-th-step=' + str(step) + '.csv', header=None))
 # endregion
+
+inner = []
+ax = []
+X = []
+plot = []
 
 fig = plt.figure()
 outer = gridspec.GridSpec(2, 3)
@@ -43,6 +49,7 @@ for i in range(0, 6):
 
     current_index = 0
 
+# function that uses the keyboard event of the right/left arrow to change the images
 def on_arrow_key(event, ):
     global current_index
     if event.key == 'right':

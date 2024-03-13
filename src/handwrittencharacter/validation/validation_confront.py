@@ -1,18 +1,16 @@
 # region IMPORTS
 import pandas as pd
 import numpy as np
-
 import matplotlib
 matplotlib.use("TkAgg")  # Usa il backend TkAgg
 from matplotlib import pyplot as plt
-
 from src.handwrittencharacter.lib.backprop.accuracy import accuracy as backpropagation_accuracy
 from src.handwrittencharacter.lib.forward.accuracy import accuracy as forward_accuracy
 from src.handwrittencharacter.lib.mapping import input_normalization_Matrix
 # endregion
 
 
-def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array, epochs, STEP, validation_threshold):
+def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array, epochs, validation_threshold):
 
     coordinates = []
     str_legend = []
@@ -48,8 +46,9 @@ def validation_confront_graph(PATH_MAIN_FILE, validation_dataset_name, nn_array,
 
     plt.show()
 
-def validation_confront_noise_graph(PATH_MAIN_FILE, validation_array, weight_and_biases_path, epochs, STEP, validation_threshold):
 
+def validation_confront_noise_graph(PATH_MAIN_FILE, validation_array, weight_and_biases_path, epochs,
+                                    validation_threshold):
     coordinates = []
     str_legend = []
     for i in range(0, len(validation_array)):
@@ -81,8 +80,6 @@ def validation_confront_noise_graph(PATH_MAIN_FILE, validation_array, weight_and
     plt.show()
 
 # region FUNCTIONS
-
-
 def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epochs, STEP, validation_threshold):
 
     print('Validation with ' + validation_dataset_name + ': Start')
@@ -128,10 +125,6 @@ def forward(PATH_MAIN_FILE, validation_dataset_name, weight_and_biases_path, epo
         percentage, error_label, images, error_output_nn = forward_accuracy(YV, WB, XV_hat, validation_threshold)
 
         accuracy[(i // STEP) - 1] = percentage
-
-        # print('Validation: Done')
-
-        # display_validation(percentage, error_label, images, error_output_nn)
 
     # plot
     x = np.arange(STEP, epochs + STEP, STEP)
