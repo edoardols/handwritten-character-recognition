@@ -1,3 +1,16 @@
+<img width="592" alt="image" src="https://github.com/edoardols/handwritten-character-recognition/assets/150338322/ebaef4d4-44e0-45b8-95ee-098a01c767cc">
+A Machine Learning project for the ML course at the University of Siena
+Goal of the project: Train MNIST dataset with two types of neural networks (in our specific case, we trained two types of Neural Networks: one with input-output layers and the other with two hidden layers with 16 neurons each)
+1)In the "dataset" folder you will find the MNIST dataset loaded (training set and validation set) and the noised dataset (Blob, Brightness, Obscure, Salt and pepper, Thickness) where the way how noise is added can be found in the noise folder contained in handwrittencharacter folder.
+2) In the "handwrittencharacter" folder you can find the training folders (backpropagation and forward) where also trained data are present; while to run training/validation selecting a trained dataset, can be done in main initializing all parameters. To produce graph comparison, validation_filter contains all plot functions.
+#############################################################################################################
+src/handwrittencharacter/backpropagation/training -> trained datasets of backpropagation Neural network
+src/handwrittencharacter/forward/training -> trained datasets of forward Neural network
+src/handwrittencharacter/main.py -> the main to make training and validation (single graph)
+src/handwrittencharacter/validation_filter.py -> graph comparison
+src/XOR -> to see XOR test on Backpropagation Neural Network
+
+#############################################################################################################
 # handwritten-character-recognition
 A Machine Learning project for the ML course of the University of Siena
 
