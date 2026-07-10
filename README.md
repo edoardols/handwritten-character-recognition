@@ -48,9 +48,3 @@ This project was developed collaboratively by:
 ## License
 
 This project is licensed under the **GPL-3.0 License**. See the `LICENSE` file in the root repository for complete terms and details.
-
-Start > "env" > Edit the system environment variables > add folder /bin and /libnvvp to "Path"
-
-Youtube video
-[1](https://www.youtube.com/watch?v=IubEtS2JAiY)
-[2](https://www.youtube.com/watch?v=ctQi9mU7t9o)
