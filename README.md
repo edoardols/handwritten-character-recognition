@@ -41,7 +41,7 @@ The evaluation suite captures extensive execution data to generate direct compar
 ## Contributors
 
 This project was developed collaboratively by:
-* **Edoardo Lascala** - [@edoardols](https://github.com/edoardols)
+* **Edoardo Lascala** - [edoardols](https://github.com/edoardols)
 * **Tiberio Di Pisello** - [TiberioDiPisello](https://github.com/TiberioDiPisello)
 * **gsalvatore99** - [gsalvatore99](https://github.com/gsalvatore99)
 
