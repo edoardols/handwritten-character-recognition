@@ -1,37 +1,53 @@
+# Handwritten Character Recognition
 
-A Machine Learning project for the ML course at the University of Siena
-Goal of the project: Train MNIST dataset with two types of neural networks (in our specific case, we trained two types of Neural Networks: one with input-output layers and the other with two hidden layers with 16 neurons each)
-#In the "dataset" folder you will find the MNIST dataset loaded (training set and validation set) and the noised dataset (Blob, Brightness, Obscure, Salt and pepper, Thickness) where the way how noise is added can be found in the noise folder contained in handwrittencharacter folder.
-#In the "handwrittencharacter" folder you can find the training folders (backpropagation and forward) where also trained data are present; while to run training/validation selecting a trained dataset, can be done in main initializing all parameters. To produce graph comparison, validation_filter contains all plot functions.
-#############################################################################################################
-src/handwrittencharacter/backpropagation/training -> trained datasets of backpropagation Neural network
-src/handwrittencharacter/forward/training -> trained datasets of forward Neural network
-src/handwrittencharacter/main.py -> the main to make training and validation (single graph)
-src/handwrittencharacter/validation_filter.py -> graph comparison
-src/XOR -> to see XOR test on Backpropagation Neural Network
+A Machine Learning project developed in Python. The core objective of this project is to implement, train, and evaluate multi-layer feedforward neural networks using the classic MNIST dataset under various levels of synthetic noise.
 
-#############################################################################################################
-# handwritten-character-recognition
-A Machine Learning project for the ML course of the University of Siena
+This software was developed as a project for the course *Machine Learning* during the MSc in *Artificial Intelligence and Automation Engineering* at the *University of Siena*.
 
-## Installation guide for TensorFlow for windows
+## Architectural & Project Characteristics
 
-[TensorFlow official guide](https://www.tensorflow.org/install/pip?hl=it)
+### 1. Neural Network Topologies
+The project evaluates and compares two distinct structural configurations built from scratch (implementing manual forward and backpropagation passes):
+* **Single-Layer Topology:** A baseline network configuration consisting solely of direct input-to-output mapping.
+* **Multi-Layer Topology (Two Hidden Layers):** An architecture integrating two hidden processing layers, each containing 16 hidden neurons, designed to learn complex, non-linear pixel boundary representations.
+* **XOR Verification:** Includes isolated sanity-check implementations (located in the XOR module) to benchmark the backpropagation algorithm's capability to converge on non-linearly separable functions.
 
-### Required for TensorFlow (CPU)
-[Python 3.10.11](https://www.python.org/downloads/release/python-31011/)
-pip >= 19.0
-[Visual Studio](https://visualstudio.microsoft.com/it/)
-[Microsoft Visual C++ Redistributable](https://learn.microsoft.com/it-IT/cpp/windows/latest-supported-vc-redist?view=msvc-170)
+### 2. Robustness Analysis & Noised Datasets
+To evaluate model generalization and degradation profiles, the baseline MNIST training and validation sets are subjected to five distinct synthetic degradation models:
+* **Blob:** Clusters of structural distortions.
+* **Brightness:** Global illumination changes.
+* **Obscure:** Block-wise occlusions.
+* **Salt & Pepper:** High-frequency impulse noise.
+* **Thickness:** Structural thinning and widening of structural handwritten pen strokes.
 
-### Required for TensorFlow (Nvidia GPU)
-Nvidia Driver
-[CUDA 11.8](https://developer.nvidia.com/cuda-11-8-0-download-archive)
-[SDK cuDNN 8.6.0 for CUDA 11.x](https://developer.nvidia.com/rdp/cudnn-archive)
+### 3. Analytics & Visualization Engine
+The evaluation suite captures extensive execution data to generate direct comparative performance graphs, evaluating:
+* Accuracy degradation across scaling noise filters.
+* Convergence rate comparison between topologies.
+* Comparative plotting logic isolated within dedicated validation modules.
 
-Install cuDNN
+## Repository Structure
 
-C: OS > Program Files > Nvidia GPU Computing Toolkit > CUDA > v11.8 > copy
++-- dataset/                      # Baseline MNIST train/validation sets along with noised datasets
++-- src/
+    +-- handwrittencharacter/
+        +-- backpropagation/      # Multi-layer networks with backpropagation training artifacts
+        +-- forward/              # Implementation of forward propagation variants
+        +-- main.py               # Main execution entry point for configuring hyperparameters
+        +-- validation_filter.py  # Plotting suite containing comparative analytical functions
+        +-- XOR/                  # Minimal neural network validation testing on the XOR problem
+
+
+## Contributors
+
+This project was developed collaboratively by:
+* **Edoardo Lascala** - [@edoardols](https://github.com/edoardols)
+* **Tiberio Di Pisello** - [TiberioDiPisello](https://github.com/TiberioDiPisello)
+* **gsalvatore99** - [gsalvatore99](https://github.com/gsalvatore99)
+
+## License
+
+This project is licensed under the **GPL-3.0 License**. See the `LICENSE` file in the root repository for complete terms and details.
 
 Start > "env" > Edit the system environment variables > add folder /bin and /libnvvp to "Path"
 
